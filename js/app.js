@@ -401,7 +401,15 @@
     $("#folioCount").textContent = "共 " + S.folios.length + " 件";
     list.innerHTML = "";
     if (!S.folios.length) {
-      list.innerHTML = '<div class="card muted">还没有作品。从今天的标题练习开始——写完的标题截图，就是你的第一件作品。</div>';
+      list.innerHTML = '<div class="card folio-empty">' +
+        '<svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#f9a8d4"/></linearGradient></defs>' +
+        '<rect x="28" y="18" width="118" height="96" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="2.5" transform="rotate(-5 87 66)"/>' +
+        '<rect x="44" y="28" width="118" height="96" rx="8" fill="#ffffff" stroke="#a78bfa" stroke-width="2.5" transform="rotate(4 103 76)"/>' +
+        '<path d="M96 62 l7 15 16 3.5 -11.5 12 2.5 16.5 -14 -7.5 -14 7.5 2.5 -16.5 -11.5 -12 16 -3.5 Z" fill="url(#fg1)"/>' +
+        '<circle cx="200" cy="30" r="7" fill="#fde68a"/>' +
+        '<circle cx="26" cy="120" r="5" fill="#c4b5fd"/>' +
+        '<path d="M182 108 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4 Z" fill="#a78bfa" opacity=".8"/></svg>' +
+        '<p class="muted" style="margin-top:12px">还没有作品。从今天的标题练习开始——写完的标题截图，就是你的第一件作品。</p></div>';
       return;
     }
     S.folios.forEach((f, i) => {

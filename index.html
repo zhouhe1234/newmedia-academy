@@ -44,7 +44,23 @@
       <span class="search-kbd">目录</span>
     </div>
 
-    <div class="card quote-card">
+    <div class="card quote-card hero-card">
+      <svg class="hero-deco" viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f9a8d4"/></linearGradient>
+          <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".9"/><stop offset="1" stop-color="#ffffff" stop-opacity=".5"/></linearGradient>
+        </defs>
+        <path d="M30 140 A 90 90 0 0 1 190 128" stroke="url(#hg1)" stroke-width="2" fill="none" stroke-dasharray="1 7" stroke-linecap="round" opacity=".9"/>
+        <path d="M60 128 C 80 108, 110 108, 118 126 L 118 152 C 100 140, 80 140, 60 152 Z" fill="url(#hg2)" opacity=".85"/>
+        <path d="M118 126 C 128 112, 156 110, 170 124 L 170 150 C 154 140, 132 140, 118 152 Z" fill="url(#hg2)" opacity=".55"/>
+        <path d="M118 126 L 118 152" stroke="#7c3aed" stroke-width="2" opacity=".5"/>
+        <path d="M186 62 l3.5 8.5 8.5 3.5 -8.5 3.5 -3.5 8.5 -3.5 -8.5 -8.5 -3.5 8.5 -3.5 Z" fill="url(#hg1)" opacity=".95"/>
+        <path d="M148 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5 Z" fill="#ffffff" opacity=".8"/>
+        <circle cx="96" cy="52" r="5" fill="#fde68a" opacity=".8"/>
+        <circle cx="76" cy="76" r="3" fill="#f9a8d4" opacity=".7"/>
+        <circle cx="204" cy="108" r="4" fill="#ffffff" opacity=".55"/>
+        <path d="M52 60 c 8 -14, 26 -14, 34 0" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".5"/>
+      </svg>
       <p class="quote-en" id="quoteEn"></p>
       <p class="quote-cn" id="quoteCn"></p>
     </div>
@@ -183,7 +199,20 @@
 
   <!-- ================= 课业速通 ================= -->
   <section class="page" id="page-course" hidden>
-    <div class="card">
+    <div class="card course-intro">
+      <svg class="intro-deco" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="ig1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#f9a8d4"/></linearGradient>
+        </defs>
+        <rect x="14" y="30" width="86" height="58" rx="8" fill="#ede9fe"/>
+        <path d="M50 46 l6 12 13 2 -9.5 9 2.2 13 -11.7 -6.2 -11.7 6.2 2.2 -13 -9.5 -9 13 -2 Z" fill="url(#ig1)"/>
+        <rect x="112" y="44" width="70" height="8" rx="4" fill="#ddd6fe"/>
+        <rect x="112" y="60" width="56" height="8" rx="4" fill="#ede9fe"/>
+        <rect x="112" y="76" width="62" height="8" rx="4" fill="#f5f3ff"/>
+        <circle cx="168" cy="26" r="10" fill="#fde68a" opacity=".9"/>
+        <circle cx="30" cy="18" r="4" fill="#c4b5fd"/>
+        <path d="M150 12 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z" fill="#a78bfa" opacity=".7"/>
+      </svg>
       <p class="card-title">课业速通 · 大一已修课程复习库</p>
       <p class="muted small">学过 ≠ 学会。每门课三件套：概念速览（考前扫一遍）→ 重点理论（人话解读 + 考试怎么考 + 新媒体怎么用）→ 自测（先想再看答案）。点课程卡片展开。</p>
     </div>
