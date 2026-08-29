@@ -38,6 +38,12 @@
       <span class="search-kbd">Ctrl K</span>
     </div>
 
+    <div class="card search-card" id="catalogEntry" role="button">
+      <span class="search-ico">🗂</span>
+      <span class="search-hint">全站内容目录——看看这个网站到底有什么</span>
+      <span class="search-kbd">目录</span>
+    </div>
+
     <div class="card quote-card">
       <p class="quote-en" id="quoteEn"></p>
       <p class="quote-cn" id="quoteCn"></p>
@@ -161,6 +167,7 @@
       <button class="subtab" data-t="clinic">坏文案门诊</button>
       <button class="subtab" data-t="script">短视频脚本</button>
       <button class="subtab" data-t="poster">海报实验室</button>
+      <button class="subtab" data-t="prompt">提示词学院</button>
       <button class="subtab" data-t="adlab">广告创意坊</button>
       <button class="subtab" data-t="growth">增长运营</button>
       <button class="subtab" data-t="topics">选题库</button>
@@ -240,6 +247,13 @@
   <div class="search-panel">
     <input type="text" id="searchInput" placeholder="搜索概念、公式、资源、案例…（Esc 关闭）" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<div class="search-overlay" id="catalogOverlay" hidden>
+  <div class="search-panel">
+    <div class="catalog-head">🗂 全站内容目录</div>
+    <div class="search-results" id="catalogBody"></div>
   </div>
 </div>
 

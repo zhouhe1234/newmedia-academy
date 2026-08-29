@@ -294,6 +294,32 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
 .sch-one{font-size:13px;line-height:1.75;margin-top:5px}
 .sch-work{font-size:11.5px;color:var(--muted);margin-top:3px}
 
+/* ---- 海报五步工作台 / 提示词学院 / 目录 ---- */
+.step-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.step-btn{border:1.5px solid var(--line);background:var(--card);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;transition:transform .12s var(--ease-pop),background-color .15s ease,border-color .15s ease,color .15s ease}
+.step-btn:active{transform:scale(.96)}
+.step-btn.active{background:var(--v);border-color:var(--v);color:#fff}
+.scheme-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.scheme-item{display:flex;gap:12px;align-items:flex-start}
+.scheme-item svg{width:120px;height:auto;flex-shrink:0;border-radius:8px;box-shadow:0 2px 8px rgba(80,40,160,.15)}
+.scheme-txt b{font-size:14px;color:var(--v-dark)}
+.scheme-txt p{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:3px}
+.pal-item{margin-bottom:14px}
+.pal-item>b{font-size:14px}
+.pal-colors{display:flex;gap:6px;margin:8px 0 4px}
+.pal-sw{flex:1;height:44px;border-radius:8px;display:flex;align-items:flex-end;padding:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.pal-sw span{font-size:9px;color:#fff;background:rgba(0,0,0,.35);border-radius:4px;padding:1px 4px;width:100%;text-align:center}
+.pt-item{background:var(--v-bg);border:1px solid var(--v-light);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.pt-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pt-head b{font-size:14.5px;color:var(--v-dark)}
+.pt-prompt{background:var(--card);border:1px dashed var(--line);border-radius:9px;padding:10px 12px;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;word-break:break-all;margin-top:4px}
+.catalog-head{padding:16px 18px 12px;font-weight:800;font-size:16px;border-bottom:1px solid var(--line);color:var(--v-dark)}
+.cat-sec{padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer}
+.cat-sec:hover{background:var(--v-bg)}
+.cat-title{font-weight:800;font-size:14.5px;color:var(--v-dark)}
+.cat-item{font-size:12.5px;color:var(--muted);line-height:1.8;margin-top:2px}
+.cat-go{font-size:11.5px;color:var(--v);font-weight:700;margin-top:6px}
+
 /* ---- 海报实验室 ---- */
 .layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
 .layout-item{background:var(--v-bg);border:1px solid var(--v-light);border-radius:12px;padding:8px}

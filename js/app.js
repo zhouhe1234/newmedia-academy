@@ -245,6 +245,7 @@
     else if (curTrain === "open") area.innerHTML = M.openings.map((o) => '<div class="open-card"><span class="ot">' + o.type + '</span><div class="theme">练习主题：' + o.theme + '</div><div class="demo">' + o.demo + '</div><div class="why">技巧：' + o.why + "</div></div>").join("");
     else if (curTrain === "script") renderScript(area);
     else if (curTrain === "poster") renderPoster(area);
+    else if (curTrain === "prompt") renderPrompt(area);
     else if (curTrain === "adlab") renderAdLab(area);
     else if (curTrain === "growth") renderGrowth(area);
     else if (curTrain === "topics") renderTopics(area);
@@ -484,27 +485,104 @@
     });
   }
 
-  /* 海报实验室 */
+  /* 海报实验室（五步工作台） */
+  let posterStep = "purpose";
   function renderPoster(area) {
-    const P = M.posterKit;
+    const P = M.posterKit, C = M.colorDeep;
+    const bar = '<div class="step-bar">' + M.posterSteps.map((s) => '<button class="step-btn' + (posterStep === s.id ? " active" : "") + '" data-s="' + s.id + '">' + s.name + "</button>").join("") + "</div>";
+    let body = "";
+    if (posterStep === "purpose") {
+      body = '<div class="card"><p class="card-title">第一步：先写一张 5 分钟简报</p>' +
+        '<p class="muted small" style="line-height:1.9">' + M.posterPurpose.brief + "</p>" +
+        '<div class="tip-box" style="margin-top:10px">⚠ ' + M.posterPurpose.wrong + "</div>" +
+        '<div class="starter-item" style="margin-top:8px"><div class="starter-num">✎</div><div><b>' + P.rules[0].name + "</b><p>" + P.rules[0].detail + "</p></div></div></div>";
+    } else if (posterStep === "layout") {
+      body = '<div class="card"><p class="card-title">第二步：6 种经典版式骨架</p>' +
+        '<p class="muted small">示意图画的是「骨架」不是成品：色块代表信息区。选一个骨架，往里填内容——和写作先列提纲是一个道理。</p>' +
+        '<div class="layout-grid">' + P.layouts.map((l) => '<div class="layout-item">' + l.svg + "<b>" + l.name + "</b><p>" + l.desc + "</p></div>").join("") + "</div>" +
+        '<div class="starter-item" style="margin-top:10px"><div class="starter-num">✎</div><div><b>' + P.rules[2].name + "</b><p>" + P.rules[2].detail + "</p></div></div></div>";
+    } else if (posterStep === "color") {
+      body = '<div class="card"><p class="card-title">先懂三个旋钮</p><p class="muted small" style="line-height:1.9">' + C.basics + "</p></div>" +
+        '<div class="card"><p class="card-title">配色六法（附色卡）</p><div class="scheme-list">' +
+        C.schemes.map((s) => '<div class="scheme-item">' + s.svg + '<div class="scheme-txt"><b>' + s.name + "</b><p>" + s.desc + '</p><p class="sch-work">适用：' + s.scene + "</p></div></div>").join("") + "</div></div>" +
+        '<div class="card"><p class="card-title">三套实战色板</p>' +
+        C.palettes.map((p) => '<div class="pal-item"><b>' + p.theme + '</b><div class="pal-colors">' + p.colors.map((c) => '<div class="pal-sw" style="background:' + c[0] + '"><span>' + c[0] + "</span></div>").join("") + '</div><p class="muted small">' + p.note + "</p></div>").join("") + "</div>" +
+        '<div class="card"><p class="card-title">色彩心理</p><div class="color-list">' +
+        P.colorPsych.map((c) => '<div class="color-item"><span class="color-dot" style="background:' + c.c + '"></span><b>' + c.name + "</b><span>" + c.use + "</span></div>").join("") + "</div>" +
+        '<div class="road-sub" style="margin-top:12px">配色工具（搜索名字即达）</div>' +
+        C.tools.map((t) => '<div class="starter-item"><div class="starter-num">🧰</div><div><b>' + t.name + "</b><p>" + t.note + "</p></div></div>").join("") + "</div>";
+    } else if (posterStep === "type") {
+      const T = M.posterType;
+      body = '<div class="card"><p class="card-title">排版四门功课</p>' +
+        '<div class="starter-item"><div class="starter-num">1</div><div><b>信息层级</b><p>' + T.hierarchy + "</p></div></div>" +
+        '<div class="starter-item"><div class="starter-num">2</div><div><b>字体</b><p>' + T.font + "</p></div></div>" +
+        '<div class="starter-item"><div class="starter-num">3</div><div><b>对齐</b><p>' + T.align + "</p></div></div>" +
+        '<div class="starter-item"><div class="starter-num">4</div><div><b>亲密性</b><p>' + T.spacing + "</p></div></div></div>";
+    } else {
+      body = '<div class="card"><p class="card-title">发布前自查清单</p>' +
+        P.checklist.map((c, i) => '<div class="starter-item"><div class="starter-num">' + (i + 1) + '</div><div><p>' + c + "</p></div></div>").join("") + "</div>" +
+        '<div class="card"><p class="card-title">用 AI 提效</p>' +
+        P.aiWorkflow.steps.map((s) => '<div class="starter-item"><div class="starter-num">▸</div><div><p>' + s + "</p></div></div>").join("") +
+        '<div class="tip-box" style="margin-top:10px">💡 ' + P.aiWorkflow.promptTips + "</div></div>";
+    }
+    area.innerHTML = bar + body;
+    area.querySelectorAll(".step-btn").forEach((b) => { b.onclick = () => { posterStep = b.dataset.s; renderPoster(area); }; });
+  }
+
+  /* 提示词学院 */
+  function renderPrompt(area) {
+    const P = M.promptLab;
+    const copy = (text) => {
+      const done = () => toast("已复制！去粘贴给 AI 吧");
+      if (navigator.clipboard && location.protocol.indexOf("http") === 0) navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+      else fallbackCopy(text, done);
+    };
+    const fallbackCopy = (text, done) => {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { toast("复制失败，请长按手动选择"); }
+      ta.remove();
+    };
     area.innerHTML =
-      '<div class="card"><p class="card-title">海报核心原则</p>' +
-      P.rules.map((r) => '<div class="starter-item"><div class="starter-num">✎</div><div><b>' + r.name + "</b><p>" + r.detail + "</p></div></div>").join("") +
-      "</div>" +
-      '<div class="card"><p class="card-title">6 种经典版式骨架</p>' +
-      '<p class="muted small">示意图画的是「骨架」不是成品：色块代表信息区。动笔前先选骨架，再往里填内容——这和写作先列提纲是一个道理。</p>' +
-      '<div class="layout-grid">' +
-      P.layouts.map((l) => '<div class="layout-item">' + l.svg + "<b>" + l.name + "</b><p>" + l.desc + "</p></div>").join("") +
-      "</div></div>" +
-      '<div class="card"><p class="card-title">用 AI 做海报的工作流</p>' +
-      P.aiWorkflow.steps.map((s) => '<div class="starter-item"><div class="starter-num">▸</div><div><p>' + s + "</p></div></div>").join("") +
-      '<div class="tip-box" style="margin-top:10px">💡 ' + P.aiWorkflow.promptTips + "</div></div>" +
-      '<div class="card"><p class="card-title">色彩心理速查</p><div class="color-list">' +
-      P.colorPsych.map((c) => '<div class="color-item"><span class="color-dot" style="background:' + c.c + '"></span><b>' + c.name + "</b><span>" + c.use + "</span></div>").join("") +
-      '</div></div>' +
-      '<div class="card"><p class="card-title">发布前自查清单</p>' +
-      P.checklist.map((c, i) => '<div class="starter-item"><div class="starter-num">' + (i + 1) + '</div><div><p>' + c + "</p></div></div>").join("") +
-      "</div>";
+      '<div class="card"><p class="card-title">工作 AI：五条心法</p>' +
+      P.core.map((c) => '<div class="starter-item"><div class="starter-num">✦</div><div><b>' + c.name + "</b><p>" + c.detail + "</p></div></div>").join("") + "</div>" +
+      '<div class="card"><p class="card-title">工作 AI 模板库（点「复制」直接用）</p>' +
+      P.workTemplates.map((t, i) => '<div class="pt-item"><div class="pt-head"><b>' + t.name + '</b><button class="mini-btn cp-btn" data-i="' + i + '">复制</button></div><p class="muted small" style="margin:4px 0 6px">场景：' + t.scene + '</p><div class="pt-prompt">' + esc(t.prompt) + '</div><p class="ad-why">为什么这样写：' + t.why + "</p></div>").join("") + "</div>" +
+      '<div class="card"><p class="card-title">图像 AI：六要素公式</p>' +
+      '<p class="muted small">一个提示词 = 主体 + 场景 + 风格 + 构图 + 光线 + 色调。不是每项都必须，但缺的项 AI 就自己脑补。</p>' +
+      P.imageFormula.map((f) => '<div class="starter-item"><div class="starter-num">' + f.k.slice(0, 1) + '</div><div><b>' + f.k + "</b><p>" + f.v + "</p></div></div>").join("") + "</div>" +
+      '<div class="card"><p class="card-title">图像提示词实例（可直接抄改）</p>' +
+      P.imageExamples.map((e, i) => '<div class="pt-item"><div class="pt-head"><b>' + e.use + '</b><button class="mini-btn cp-img" data-i="' + i + '">复制</button></div><div class="pt-prompt">' + esc(e.prompt) + "</div></div>").join("") + "</div>" +
+      '<div class="card"><p class="card-title">避坑四条</p>' +
+      P.imageTips.map((t) => '<div class="starter-item"><div class="starter-num">⚠</div><div><p>' + t + "</p></div></div>").join("") + "</div>" +
+      '<div class="card"><p class="card-title">继续学（真实存在的资源）</p>' +
+      P.learnMore.map((l) => '<div class="starter-item"><div class="starter-num">📚</div><div><b>' + l.name + "</b><p>" + l.desc + '</p><p class="sch-work">怎么找：' + l.how + "</p></div></div>").join("") + "</div>";
+    area.querySelectorAll(".cp-btn").forEach((b) => { b.onclick = () => copy(P.workTemplates[+b.dataset.i].prompt); });
+    area.querySelectorAll(".cp-img").forEach((b) => { b.onclick = () => copy(P.imageExamples[+b.dataset.i].prompt); });
+  }
+
+  /* 全站内容目录 */
+  function renderCatalog() {
+    const trainItems = [
+      "标题实验室 · " + M.titleLabs.length + " 组素材（AI 点评）", "爆款公式 · " + M.formulas.length + " 个", "开头训练营 · " + M.openings.length + " 种",
+      "坏文案门诊 · " + M.clinics.length + " 组", "短视频脚本 · " + M.scriptKit.rules.length + " 条规则 + " + M.scriptKit.drills.length + " 个练习",
+      "海报实验室 · 5 步工作台 + " + M.posterKit.layouts.length + " 种版式 + 配色六法", "提示词学院 · " + M.promptLab.workTemplates.length + " 个工作模板 + 图像公式",
+      "广告创意坊 · " + M.adLab.classics.length + " 案例 + slogan 五法 + 策划案七步", "选题库 · " + M.topics.length + " 条（可标记已做）",
+      "增长运营 · 冷启动/节奏/粉丝/变现/红线",
+    ];
+    const secs = [
+      ["今日", "page-home", ["每日概念（" + M.courses.reduce((n, c) => n + c.concepts.length, 0) + " 个概念轮换）", "打卡 + 热力图 + 学习图表", "网站体检 · 数据备份 · AI 教练设置"]],
+      ["课业速通", "page-course", M.courses.map((c) => c.icon + " " + c.name + "（" + c.concepts.length + " 概念 · " + c.theories.length + " 理论 · " + c.quiz.length + " 自测）").concat(["必考学者速查 × " + M.scholars.length])],
+      ["路线图", "page-road", M.roadmap.map((r) => r.term + "：" + r.skills.map((s) => s.name).join("/")).concat(["专业认知 · 五大就业方向"])],
+      ["训练场", "page-train", trainItems],
+      ["资源库", "page-res", [...new Set(M.resources.map((r) => r.cat))].map((c) => c + "（" + M.resources.filter((r) => r.cat === c).length + " 项）")],
+      ["作品集", "page-folio", ["作品条目管理（名称/类型/链接/亮点）"]],
+    ];
+    $("#catalogBody").innerHTML = secs.map((s) =>
+      '<div class="cat-sec" data-page="' + s[1] + '"><div class="cat-title">' + s[0] + "</div>" + s[2].map((i) => '<p class="cat-item">· ' + i + "</p>").join("") + '<p class="cat-go">点击进入 →</p></div>'
+    ).join("");
+    document.querySelectorAll("#catalogBody .cat-sec").forEach((el) => {
+      el.onclick = () => { $("#catalogOverlay").hidden = true; document.querySelector('#tabbar .tab[data-page="' + el.dataset.page + '"]').click(); };
+    });
   }
 
   /* 广告创意坊 */
@@ -724,6 +802,8 @@
       toast("备份已下载，妥善保存！");
     };
     $("#restoreBtn").onclick = () => $("#restoreFile").click();
+    $("#catalogEntry").onclick = () => { $("#catalogOverlay").hidden = false; renderCatalog(); };
+    $("#catalogOverlay").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.hidden = true; });
     $("#restoreFile").onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
