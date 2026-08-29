@@ -195,6 +195,11 @@
     return Math.max(0, Math.min(M.roadmap.length - 1, idx));
   }
   function renderRoad() {
+    // 专业认知卡
+    $("#majorLiner").textContent = M.majorIntro.oneLiner;
+    $("#evoLine").innerHTML = M.majorIntro.evolution.map((e) => '<div class="evo-item"><span class="evo-era">' + e.era + "</span><span>" + e.text + "</span></div>").join("");
+    $("#majorInsights").innerHTML = '<div class="road-sub">三条关键认知</div>' + M.majorIntro.insights.map((x) => '<div class="skill-item"><p class="how">◆ ' + x + "</p></div>").join("");
+    // 学期路线
     const cur = currentTermIndex(), box = $("#roadList");
     box.innerHTML = "";
     M.roadmap.forEach((r, i) => {
@@ -214,6 +219,10 @@
       el.querySelector(".road-head").onclick = () => el.classList.toggle("open");
       box.appendChild(el);
     });
+    // 就业方向
+    $("#careerList").innerHTML = M.careers.map((c) =>
+      '<div class="skill-item"><b>' + c.name + '</b><div class="how" style="margin-top:4px">' + c.what + '</div><div class="why">薪资参考：' + c.salary + '</div><div class="how">要练：' + c.need + "</div></div>"
+    ).join("");
   }
 
   /* ---------- 训练场 ---------- */
@@ -235,6 +244,7 @@
     else if (curTrain === "open") area.innerHTML = M.openings.map((o) => '<div class="open-card"><span class="ot">' + o.type + '</span><div class="theme">练习主题：' + o.theme + '</div><div class="demo">' + o.demo + '</div><div class="why">技巧：' + o.why + "</div></div>").join("");
     else if (curTrain === "script") renderScript(area);
     else if (curTrain === "poster") renderPoster(area);
+    else if (curTrain === "adlab") renderAdLab(area);
     else if (curTrain === "topics") renderTopics(area);
     else renderClinic(area);
   }
@@ -492,6 +502,25 @@
       '</div></div>' +
       '<div class="card"><p class="card-title">发布前自查清单</p>' +
       P.checklist.map((c, i) => '<div class="starter-item"><div class="starter-num">' + (i + 1) + '</div><div><p>' + c + "</p></div></div>").join("") +
+      "</div>";
+  }
+
+  /* 广告创意坊 */
+  function renderAdLab(area) {
+    const A = M.adLab;
+    area.innerHTML =
+      '<div class="card"><p class="card-title">经典广告案例拆解</p>' +
+      A.classics.map((c) => '<div class="ad-item"><div class="ad-brand">' + c.brand + '</div><div class="ad-slogan">「' + c.slogan + '」</div><p class="ad-why">' + c.analysis + "</p></div>").join("") +
+      "</div>" +
+      '<div class="card"><p class="card-title">Slogan 写作五法</p>' +
+      A.sloganMethods.map((m) => '<div class="starter-item"><div class="starter-num">✎</div><div><b>' + m.name + '</b><p>' + m.pattern + '</p><p class="ad-ex">例：' + m.example + '　·　' + m.tip + "</p></div></div>").join("") +
+      "</div>" +
+      '<div class="card"><p class="card-title">广告策划案七步结构</p>' +
+      '<p class="muted small">课程的期末作业、比赛提案、求职笔试，用的都是这套骨架。</p>' +
+      A.planStructure.map((s) => '<div class="starter-item"><div class="starter-num">' + s.step.split(" · ")[0] + '</div><div><b>' + s.step.split(" · ")[1] + "</b><p>" + s.detail + "</p></div></div>").join("") +
+      "</div>" +
+      '<div class="card"><p class="card-title">练习主题</p>' +
+      A.drills.map((d) => '<div class="starter-item"><div class="starter-num">▸</div><div><b>' + d.theme + "</b><p>" + d.hint + "</p></div></div>").join("") +
       "</div>";
   }
 
