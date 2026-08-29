@@ -5,6 +5,7 @@
   --card:#ffffff; --amber:#f59e0b; --red:#ef4444; --green:#10b981;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:76px;font-size:15px}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input,textarea,select{font-family:inherit}
@@ -239,6 +240,51 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
   .task-list>.task{animation-delay:0s!important}
   .btn:active,.tab:active,.subtab:active,.mini-btn:active,.qn-grid button:active,.cat-chips button:active{transform:none}
 }
+
+/* ---- 广告创意坊 / 专业认知 ---- */
+.ad-item{background:var(--v-bg);border:1px solid var(--v-light);border-radius:12px;padding:12px 14px;margin-bottom:9px}
+.ad-brand{font-size:11.5px;font-weight:800;color:var(--v-dark);letter-spacing:.08em}
+.ad-slogan{font-size:16px;font-weight:800;margin:5px 0 7px;line-height:1.5}
+.ad-why{font-size:12.5px;color:var(--muted);line-height:1.7}
+.ad-ex{color:#b45309;background:#fffbeb;border-radius:7px;padding:5px 9px;margin-top:5px}
+[data-theme="dark"] .ad-ex{background:var(--tip-bg);color:var(--ink)}
+.evo-line{display:flex;flex-direction:column;gap:7px;margin:12px 0 4px}
+.evo-item{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.7}
+.evo-era{background:var(--v);color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.major-card{background:linear-gradient(135deg,#fdfcff,var(--v-bg));border:1px solid var(--v-light)}
+[data-theme="dark"] .major-card{background:var(--card)}
+
+/* ---- 全局搜索 / 图表 / 学者 ---- */
+.search-card{display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform .12s var(--ease-pop),border-color .15s ease}
+.search-card:hover{border-color:var(--v)}
+.search-ico{font-size:16px}
+.search-hint{flex:1;color:var(--muted);font-size:14px}
+.search-kbd{font-family:Consolas,monospace;font-size:11px;background:var(--v-bg);border:1px solid var(--v-light);color:var(--v-dark);border-radius:6px;padding:3px 7px;font-weight:700}
+.search-overlay{position:fixed;inset:0;background:rgba(10,8,20,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:100;display:flex;justify-content:center;align-items:flex-start;padding:10vh 16px 16px}
+.search-panel{background:var(--card);border-radius:18px;width:100%;max-width:560px;box-shadow:0 24px 60px -12px rgba(0,0,0,.5);overflow:hidden;animation:riseIn .18s var(--ease-pop) both}
+#searchInput{width:100%;border:none;outline:none;padding:16px 18px;font-size:16px;background:transparent;color:var(--ink);border-bottom:1px solid var(--line)}
+.search-results{max-height:56vh;overflow-y:auto;padding:8px}
+.sr-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;cursor:pointer}
+.sr-item:hover{background:var(--v-bg)}
+.sr-cat{font-size:10.5px;font-weight:800;color:var(--v-dark);background:var(--v-light);border-radius:6px;padding:2px 7px;white-space:nowrap;margin-top:2px}
+.sr-item b{font-size:14px}
+.sr-item p{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.6}
+.sr-hint{padding:22px;text-align:center;color:var(--muted);font-size:13.5px}
+.bars14{display:flex;gap:4px;align-items:flex-end;margin-top:8px}
+.b14{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.b14-bar{width:100%;height:52px;border-radius:5px;background:#eceef5;transition:.2s}
+[data-theme="dark"] .b14-bar{background:#262335}
+.b14-bar.on{background:linear-gradient(180deg,#a78bfa,#7c3aed)}
+.b14 span{font-size:9.5px;color:var(--muted)}
+.trend-svg{width:100%;height:auto;display:block}
+.scholar-item{padding:10px 0;border-bottom:1px dashed var(--line)}
+.scholar-item:last-child{border-bottom:none}
+.sch-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sch-head b{font-size:14.5px}
+.sch-years{font-family:Consolas,monospace;font-size:11px;color:var(--muted)}
+.sch-tag{font-size:10.5px;font-weight:800;color:var(--v-dark);background:var(--v-light);border-radius:6px;padding:2px 7px}
+.sch-one{font-size:13px;line-height:1.75;margin-top:5px}
+.sch-work{font-size:11.5px;color:var(--muted);margin-top:3px}
 
 /* ---- 海报实验室 ---- */
 .layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}

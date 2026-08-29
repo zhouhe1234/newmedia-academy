@@ -165,6 +165,7 @@
       [S.folios.length, "作品数"],
     ];
     $("#statRow").innerHTML = items.map((x) => '<div class="stat-item"><b>' + x[0] + "</b><span>" + x[1] + "</span></div>").join("");
+    renderBars14();
     renderHeatmap();
   }
   function renderHeatmap() {
@@ -293,7 +294,7 @@
       '<div class="lab-label">第二步：给自己的标题打分（诚实一点，5 星 = 不比参考差）</div>' +
       '<div class="stars" id="labStars">' + [1, 2, 3, 4, 5].map((n) => '<button data-s="' + n + '">★</button>').join("") + '<span class="star-label" id="starLabel"></span></div>' +
       '<div class="lab-actions"><button class="btn btn-ghost" id="labNext">保存，来下一组</button></div>' +
-      "</div></div>";
+      "</div>" + renderTrend() + "</div>";
     const reveal = $("#labReveal");
     reveal.onclick = () => {
       if (!$("#labMine").value.trim()) { toast("先写一个你自己的标题，写烂也比不写强"); return; }
@@ -524,6 +525,100 @@
       "</div>";
   }
 
+  /* ---------- 全局搜索 ---------- */
+  let searchIndex = null;
+  function esc(s) { return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function buildIndex() {
+    if (searchIndex) return searchIndex;
+    const idx = [];
+    const add = (cat, title, sub, page) => idx.push({ cat, title, sub, page, hay: (title + " " + sub).toLowerCase() });
+    M.courses.forEach((c) => {
+      c.concepts.forEach((k) => add("概念 · " + c.name, k.t, k.d, "page-course"));
+      c.theories.forEach((t) => add("理论 · " + c.name, t.name, t.say, "page-course"));
+    });
+    M.formulas.forEach((f) => add("爆款公式", f.name, f.pattern + " " + f.examples.join(" "), "page-train"));
+    M.titleLabs.forEach((l) => add("标题训练", l.material, l.tip, "page-train"));
+    M.openings.forEach((o) => add("开头方法", o.type, o.theme + " " + o.demo, "page-train"));
+    M.scriptKit.rules.forEach((r) => add("脚本规则", r.name, r.detail, "page-train"));
+    M.posterKit.rules.forEach((r) => add("海报原则", r.name, r.detail, "page-train"));
+    M.posterKit.layouts.forEach((l) => add("海报版式", l.name, l.desc, "page-train"));
+    M.adLab.classics.forEach((c) => add("广告案例", c.brand, c.slogan + " " + c.analysis, "page-train"));
+    M.adLab.sloganMethods.forEach((m) => add("Slogan 方法", m.name, m.pattern + " " + m.example, "page-train"));
+    M.resources.forEach((r) => add("资源 · " + r.cat, r.name, r.note, "page-res"));
+    M.topics.forEach((t) => add("选题 · " + t.cat, t.t, "", "page-train"));
+    M.scholars.forEach((s) => add("学者", s.name, s.tag + " " + s.one, "page-course"));
+    M.careers.forEach((c) => add("就业方向", c.name, c.what, "page-road"));
+    searchIndex = idx;
+    return idx;
+  }
+  function openSearch() {
+    const ov = $("#searchOverlay");
+    ov.hidden = false;
+    $("#searchInput").value = "";
+    renderSearch("");
+    setTimeout(() => $("#searchInput").focus(), 60);
+  }
+  function closeSearch() { $("#searchOverlay").hidden = true; }
+  function renderSearch(q) {
+    const query = q.trim().toLowerCase();
+    const box = $("#searchResults");
+    if (!query) { box.innerHTML = '<div class="sr-hint">输入关键词试试：议程设置 / 剪映 / 海报版式 / slogan / 避风港</div>'; return; }
+    const hits = buildIndex().filter((x) => x.hay.includes(query)).slice(0, 24);
+    box.innerHTML = hits.length
+      ? hits.map((h) => '<div class="sr-item" data-page="' + h.page + '"><span class="sr-cat">' + h.cat + '</span><div><b>' + esc(h.title) + "</b><p>" + esc(h.sub).slice(0, 90) + "</p></div></div>").join("")
+      : '<div class="sr-hint">没找到「' + esc(q) + '」，换个词试试</div>';
+    box.querySelectorAll(".sr-item").forEach((el) => {
+      el.onclick = () => { closeSearch(); document.querySelector('#tabbar .tab[data-page="' + el.dataset.page + '"]').click(); };
+    });
+  }
+  function initSearch() {
+    $("#searchEntry").onclick = openSearch;
+    $("#searchOverlay").addEventListener("click", (e) => { if (e.target === e.currentTarget) closeSearch(); });
+    $("#searchInput").addEventListener("input", (e) => renderSearch(e.target.value));
+    document.addEventListener("keydown", (e) => {
+      const typing = /input|textarea|select/i.test(document.activeElement.tagName);
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); $("#searchOverlay").hidden ? openSearch() : closeSearch(); }
+      else if (e.key === "Escape") closeSearch();
+      else if (e.key === "/" && !typing && $("#searchOverlay").hidden) { e.preventDefault(); openSearch(); }
+    });
+  }
+
+  /* ---------- 学习图表 ---------- */
+  function renderBars14() {
+    const box = $("#bars14");
+    const cells = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = dayOffset(-i);
+      const hit = !!S.checkins[d];
+      cells.push('<div class="b14" title="' + d + (hit ? " 已打卡" : "") + '"><div class="b14-bar' + (hit ? " on" : "") + '"></div><span>' + (i === 0 ? "今" : d.slice(8)) + "</span></div>");
+    }
+    box.innerHTML = '<div class="bars14">' + cells.join("") + "</div>";
+  }
+  function renderTrend() {
+    const list = S.labArchive.slice(0, 12).reverse();
+    if (list.length < 2) return "";
+    const w = 320, h = 84, pad = 10;
+    const pts = list.map((a, i) => [pad + i * ((w - pad * 2) / (list.length - 1)), h - pad - (a.stars - 1) * ((h - pad * 2) / 4)]);
+    const line = pts.map((p) => p.join(",")).join(" ");
+    const dots = pts.map((p) => '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="#7c3aed" stroke="#fff" stroke-width="1.5"/>').join("");
+    return '<svg viewBox="0 0 ' + w + " " + h + '" class="trend-svg"><polyline points="' + line + '" fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' + dots + "</svg>" +
+      '<p class="muted small">1 星在下、5 星在上。折线往上走，说明你的标题眼光在进化。</p>';
+  }
+
+  /* ---------- PWA 安装 ---------- */
+  let deferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault(); deferredPrompt = e;
+    const c = $("#installCard"); if (c) c.hidden = false;
+  });
+
+  /* 必考学者速查 */
+  function renderScholars() {
+    $("#scholarList").innerHTML = M.scholars.map((s) =>
+      '<div class="scholar-item"><div class="sch-head"><b>' + s.name + '</b><span class="sch-years">' + s.years + '</span><span class="sch-tag">' + s.tag + '</span></div><p class="sch-one">' + s.one + '</p><p class="sch-work">代表作：' + s.work + "</p></div>"
+    ).join("");
+  }
+
   /* ---------- 外观与备份 ---------- */
   function applyTheme() {
     document.documentElement.setAttribute("data-theme", S.theme);
@@ -532,6 +627,14 @@
   function initMisc() {
     applyTheme();
     $("#themeBtn").onclick = () => { S.theme = S.theme === "dark" ? "light" : "dark"; save(); applyTheme(); };
+    $("#installBtn").onclick = async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const r = await deferredPrompt.userChoice;
+      if (r.outcome === "accepted") toast("安装成功！桌面见 👋");
+      deferredPrompt = null;
+      $("#installCard").hidden = true;
+    };
     $("#backupBtn").onclick = () => {
       const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
       const a = document.createElement("a");
@@ -580,9 +683,9 @@
 
   /* ---------- 启动 ---------- */
   load();
-  initTabs(); initTrainTabs(); initFolioForm(); initMisc();
+  initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch();
   $("#resSearch").addEventListener("input", renderRes);
-  renderHome(); renderRoad(); renderCourses(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
+  renderHome(); renderRoad(); renderCourses(); renderScholars(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   }

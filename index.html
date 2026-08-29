@@ -32,6 +32,12 @@
 
   <!-- ================= 今日 ================= -->
   <section class="page" id="page-home">
+    <div class="card search-card" id="searchEntry" role="button">
+      <span class="search-ico">🔍</span>
+      <span class="search-hint">搜索全站：概念 / 公式 / 资源 / 选题…</span>
+      <span class="search-kbd">Ctrl K</span>
+    </div>
+
     <div class="card quote-card">
       <p class="quote-en" id="quoteEn"></p>
       <p class="quote-cn" id="quoteCn"></p>
@@ -58,8 +64,16 @@
     <div class="card-lite">
       <p class="sec-label">学习数据</p>
       <div class="stat-row" id="statRow"></div>
+      <p class="sec-label" style="margin-top:12px">近 14 天打卡</p>
+      <div id="bars14"></div>
       <p class="sec-label" style="margin-top:12px">最近 12 周打卡</p>
       <div class="heatmap" id="heatmap"></div>
+    </div>
+
+    <div class="card install-card" id="installCard" hidden>
+      <p class="sec-label">📲 安装到桌面</p>
+      <p class="muted small">把新媒学园装成桌面应用：独立窗口、离线可用。点击下面的按钮即刻安装。</p>
+      <button class="btn btn-primary" id="installBtn" style="width:100%">安装应用</button>
     </div>
 
     <p class="sec-label">今日任务 <span class="muted" id="taskProgress"></span></p>
@@ -159,6 +173,12 @@
       <p class="card-title">课业速通 · 大一已修课程复习库</p>
       <p class="muted small">学过 ≠ 学会。每门课三件套：概念速览（考前扫一遍）→ 重点理论（人话解读 + 考试怎么考 + 新媒体怎么用）→ 自测（先想再看答案）。点课程卡片展开。</p>
     </div>
+    <div class="card">
+      <p class="card-title">必考学者速查</p>
+      <p class="muted small">新传考试名单上的常客：记住「人名 → 理论 → 一句话贡献」的对应关系。</p>
+      <div id="scholarList"></div>
+    </div>
+
     <div id="courseList"></div>
   </section>
 
@@ -208,6 +228,13 @@
   <button class="tab" data-page="page-res"><span class="tab-ico">🧰</span>资源</button>
   <button class="tab" data-page="page-folio"><span class="tab-ico">📁</span>作品</button>
 </nav>
+
+<div class="search-overlay" id="searchOverlay" hidden>
+  <div class="search-panel">
+    <input type="text" id="searchInput" placeholder="搜索概念、公式、资源、案例…（Esc 关闭）" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
