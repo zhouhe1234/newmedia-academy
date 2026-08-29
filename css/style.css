@@ -313,6 +313,41 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
 .sch-one{font-size:13px;line-height:1.75;margin-top:5px}
 .sch-work{font-size:11.5px;color:var(--muted);margin-top:3px}
 
+/* ============================================================
+   配色体系 v2（Refactoring UI / Radix 原则）
+   1. 中性色带主色相（紫灰），全站气质统一
+   2. 板块色彩分区：每个 tab 一个身份色，紫色退守品牌锚点
+   3. 组件只引用 --sec / --sec-bg，页面级变量自动切换
+   ============================================================ */
+:root{
+  --ink:#221e33; --muted:#6f6a85; --line:#e7e3f0;
+}
+[data-theme="dark"]{
+  --ink:#ece9f5; --muted:#a29cb9; --line:#2e2a40;
+}
+#page-home{--sec:#7c3aed;--sec-soft:#f3efff}
+#page-road{--sec:#1d5fdb;--sec-soft:#edf4ff}
+#page-course{--sec:#0a8560;--sec-soft:#eafaf2}
+#page-train{--sec:#d95a0a;--sec-soft:#fff3ea}
+#page-res{--sec:#0b83a0;--sec-soft:#e8f7fb}
+#page-folio{--sec:#cc2f7d;--sec-soft:#fdeff7}
+[data-theme="dark"] #page-home{--sec:#b394f8;--sec-soft:#241f38}
+[data-theme="dark"] #page-road{--sec:#82aaff;--sec-soft:#1b2438}
+[data-theme="dark"] #page-course{--sec:#43d69b;--sec-soft:#12271e}
+[data-theme="dark"] #page-train{--sec:#fb9a4b;--sec-soft:#2c1d12}
+[data-theme="dark"] #page-res{--sec:#3ecfe3;--sec-soft:#0f272e}
+[data-theme="dark"] #page-folio{--sec:#f06bb0;--sec-soft:#2c1522}
+
+/* 应用点一：小节标题前的身份色点 */
+.sec-label::before{content:"";display:inline-block;width:7px;height:7px;border-radius:2.5px;background:var(--sec,var(--v));margin-right:7px;vertical-align:1.5px}
+/* 应用点二：板块卡片标题使用身份色（自带 600 级深浅适配） */
+.page .card-title{color:var(--sec)}
+/* 应用点三：任务/快捷入口图标底色跟随板块 */
+.task .t-ico{background:var(--sec-soft);color:var(--sec)}
+.qn-grid button{background:var(--sec-soft);border-color:transparent}
+/* 应用点四：板块 hover 边框跟色 */
+[data-theme="light"] .task:hover,[data-theme="light"] .road-item:hover,[data-theme="light"] .card:hover{border-color:color-mix(in srgb,var(--sec) 35%,transparent)}
+
 /* ---- 页脚 / 番茄钟 / 关于日志 ---- */
 .footer{max-width:680px;margin:6px auto 26px;padding:0 14px;position:relative;z-index:1}
 .footer-inner{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;text-align:center;box-shadow:var(--shadow-card)}
