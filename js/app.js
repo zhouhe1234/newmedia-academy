@@ -234,6 +234,7 @@
     else if (curTrain === "formula") renderFormula(area);
     else if (curTrain === "open") area.innerHTML = M.openings.map((o) => '<div class="open-card"><span class="ot">' + o.type + '</span><div class="theme">练习主题：' + o.theme + '</div><div class="demo">' + o.demo + '</div><div class="why">技巧：' + o.why + "</div></div>").join("");
     else if (curTrain === "script") renderScript(area);
+    else if (curTrain === "poster") renderPoster(area);
     else if (curTrain === "topics") renderTopics(area);
     else renderClinic(area);
   }
@@ -469,6 +470,29 @@
         aiBtn.disabled = false; aiBtn.textContent = "🤖 AI 判卷";
       };
     });
+  }
+
+  /* 海报实验室 */
+  function renderPoster(area) {
+    const P = M.posterKit;
+    area.innerHTML =
+      '<div class="card"><p class="card-title">海报核心原则</p>' +
+      P.rules.map((r) => '<div class="starter-item"><div class="starter-num">✎</div><div><b>' + r.name + "</b><p>" + r.detail + "</p></div></div>").join("") +
+      "</div>" +
+      '<div class="card"><p class="card-title">6 种经典版式骨架</p>' +
+      '<p class="muted small">示意图画的是「骨架」不是成品：色块代表信息区。动笔前先选骨架，再往里填内容——这和写作先列提纲是一个道理。</p>' +
+      '<div class="layout-grid">' +
+      P.layouts.map((l) => '<div class="layout-item">' + l.svg + "<b>" + l.name + "</b><p>" + l.desc + "</p></div>").join("") +
+      "</div></div>" +
+      '<div class="card"><p class="card-title">用 AI 做海报的工作流</p>' +
+      P.aiWorkflow.steps.map((s) => '<div class="starter-item"><div class="starter-num">▸</div><div><p>' + s + "</p></div></div>").join("") +
+      '<div class="tip-box" style="margin-top:10px">💡 ' + P.aiWorkflow.promptTips + "</div></div>" +
+      '<div class="card"><p class="card-title">色彩心理速查</p><div class="color-list">' +
+      P.colorPsych.map((c) => '<div class="color-item"><span class="color-dot" style="background:' + c.c + '"></span><b>' + c.name + "</b><span>" + c.use + "</span></div>").join("") +
+      '</div></div>' +
+      '<div class="card"><p class="card-title">发布前自查清单</p>' +
+      P.checklist.map((c, i) => '<div class="starter-item"><div class="starter-num">' + (i + 1) + '</div><div><p>' + c + "</p></div></div>").join("") +
+      "</div>";
   }
 
   /* ---------- 外观与备份 ---------- */

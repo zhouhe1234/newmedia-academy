@@ -240,6 +240,19 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
   .btn:active,.tab:active,.subtab:active,.mini-btn:active,.qn-grid button:active,.cat-chips button:active{transform:none}
 }
 
+/* ---- 海报实验室 ---- */
+.layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.layout-item{background:var(--v-bg);border:1px solid var(--v-light);border-radius:12px;padding:8px}
+.layout-item svg{width:100%;height:auto;display:block;border-radius:6px;box-shadow:0 2px 8px rgba(80,40,160,.12)}
+.layout-item b{display:block;font-size:13.5px;color:var(--v-dark);margin-top:8px}
+.layout-item p{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:3px}
+.color-list{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.color-item{display:flex;gap:10px;align-items:baseline;font-size:13px}
+.color-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;position:relative;top:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.color-item b{white-space:nowrap}
+.color-item span:last-child{color:var(--muted);line-height:1.6}
+[data-theme="dark"] .layout-item{background:var(--soft)}
+
 /* ---- 深色模式（覆盖法：变量 + 硬编码底色重写） ---- */
 [data-theme="dark"]{
   --bg:#0f0e16; --card:#191726; --ink:#eae8f2; --muted:#9d99b0; --line:#2a2739;
