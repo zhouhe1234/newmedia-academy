@@ -293,3 +293,83 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
   .topbar h1{font-size:19px}
   .qn-grid{grid-template-columns:repeat(4,1fr)}
 }
+
+/* ============================================================
+   视觉升级 2.0 · 依据 Apple Design 原则（emilkowalski/skills）
+   材质半透明 / 排版分级 / 多层投影 / 可访问性三信号
+   ============================================================ */
+:root{
+  --shadow-card:0 1px 2px rgba(30,10,60,.05),0 10px 30px -12px rgba(80,40,160,.16);
+  --card-border:rgba(124,58,237,.09);
+  --tabbar-bg:rgba(255,255,255,.72);
+  --tabbar-edge:rgba(255,255,255,.45);
+  --accent-hi:#a855f7; --accent-lo:#6d28d9;
+}
+[data-theme="dark"]{
+  --shadow-card:0 1px 2px rgba(0,0,0,.45),0 12px 32px -14px rgba(0,0,0,.55);
+  --card-border:rgba(168,85,247,.16);
+  --tabbar-bg:rgba(25,23,38,.74);
+  --tabbar-edge:rgba(168,85,247,.14);
+  --accent-hi:#a78bfa; --accent-lo:#8b5cf6;
+}
+
+/* 排版分级：正文行高、数字等宽位 + 负字距、中文标题微正字距 */
+body{line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.card-title{letter-spacing:.01em;line-height:1.35}
+.streak-num,.cd-num b,.stat-item b,.word-status b,.folio-tag{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+::selection{background:rgba(168,85,247,.25)}
+:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px;border-radius:8px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,.28);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* 背景氛围光斑（固定层，极淡） */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(620px 420px at 88% -6%,rgba(168,85,247,.10),transparent 62%),
+             radial-gradient(520px 380px at -12% 32%,rgba(99,102,241,.07),transparent 60%)}
+main{position:relative;z-index:1}
+
+/* 卡片：多层柔和投影 + 半透明描边（比实色边框更轻） */
+.card,.card-lite,.lab-card,.open-card,.road-item,.formula-item,.res-group,.task{
+  box-shadow:var(--shadow-card);border:1px solid var(--card-border)}
+
+/* 顶栏：三色渐变 + 顶部高光晕（光落在材质上） */
+.topbar{position:relative;overflow:hidden;background:linear-gradient(135deg,#5b21b6 0%,#7c3aed 45%,#a855f7 100%)}
+.topbar::after{content:"";position:absolute;top:-45%;right:-8%;width:62%;height:150%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,255,255,.16),transparent)}
+.topbar-inner{position:relative;z-index:1}
+
+/* 按钮渐变 + 内高光（可按压的"实体感"） */
+.btn-primary{background:linear-gradient(135deg,var(--accent-lo),var(--accent-hi));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 3px 10px -3px rgba(124,58,237,.55)}
+.btn-primary:hover{background:linear-gradient(135deg,var(--accent-lo),var(--accent-hi));filter:brightness(1.07)}
+.btn-ghost{border-color:rgba(124,58,237,.25)}
+
+/* 导航：半透明毛玻璃层，内容从下滚过；顶边受光线 */
+.tabbar{background:var(--tabbar-bg);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+  border-top:1px solid var(--tabbar-edge)}
+.tab.active{background:rgba(124,58,237,.10)}
+[data-theme="dark"] .tab.active{background:rgba(168,85,247,.14)}
+
+/* 统计数字渐变字 */
+.stat-item b{background:linear-gradient(135deg,var(--accent-lo),var(--accent-hi));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="dark"] .stat-item b{background:linear-gradient(135deg,#c4b5fd,#a78bfa);-webkit-background-clip:text;background-clip:text}
+.heat-cell.l2{background:#8b5cf6}
+
+/* 可访问性：减弱透明度 → 实底；高对比 → 明显描边 */
+@media (prefers-reduced-transparency: reduce){
+  .tabbar{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  body::before{display:none}
+}
+@media (prefers-contrast: more){
+  .card,.card-lite,.task,.road-item,.formula-item{border:1px solid var(--muted)}
+  .muted{color:var(--ink)}
+}
+
+@media (max-width:480px){
+  .topbar{padding:16px 14px 54px}
+  .topbar h1{font-size:19px}
+  .qn-grid{grid-template-columns:repeat(4,1fr)}
+}
