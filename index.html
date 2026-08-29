@@ -238,9 +238,15 @@
       <p class="card-title">课业速通 · 大一已修课程复习库</p>
       <p class="muted small">学过 ≠ 学会。每门课三件套：概念速览（考前扫一遍）→ 重点理论（人话解读 + 考试怎么考 + 新媒体怎么用）→ 自测（先想再看答案）。点课程卡片展开。</p>
     </div>
+    <div class="card flash-entry-card">
+      <p class="sec-label">⚡ 速记闪卡</p>
+      <p class="muted small">112 个概念随机翻卡自测：看名字回忆定义，翻面对答案。主动回忆比反复看列表记得牢——考前过一轮神器。</p>
+      <button class="btn btn-primary" id="flashEntry" style="width:100%">开始闪卡</button>
+    </div>
+
     <div class="card">
       <p class="card-title">必考学者速查</p>
-      <p class="muted small">新传考试名单上的常客：记住「人名 → 理论 → 一句话贡献」的对应关系。</p>
+      <p class="muted small">新传考试名单上的常客。点学者卡片展开：理论详解 + 考试怎么考 + 记忆点。</p>
       <div id="scholarList"></div>
     </div>
 
@@ -340,7 +346,17 @@
   </div>
 </div>
 
-
+<div class="search-overlay" id="flashOverlay" hidden>
+  <div class="search-panel" style="max-width:420px">
+    <div class="flash-top"><span id="flashCourse" class="sr-cat">—</span><span id="flashStat" class="muted small"></span></div>
+    <div class="flash-card" id="flashCardBox">
+      <div id="flashFront" class="flash-front">—</div>
+      <div id="flashBackWrap" hidden><p class="flash-back" id="flashBack">—</p></div>
+      <p class="flip-hint" id="flashHint">先自己回忆定义，再点「翻面」对照</p>
+    </div>
+    <div class="flash-btns"><button class="btn btn-primary" id="flashFlip" style="flex:1">翻面</button></div>
+  </div>
+</div>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>

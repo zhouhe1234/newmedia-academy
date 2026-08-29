@@ -699,11 +699,61 @@
     const c = $("#installCard"); if (c) c.hidden = false;
   });
 
-  /* 必考学者速查 */
+  /* 必考学者速查（可展开详解） */
   function renderScholars() {
-    $("#scholarList").innerHTML = M.scholars.map((s) =>
-      '<div class="scholar-item"><div class="sch-head"><b>' + s.name + '</b><span class="sch-years">' + s.years + '</span><span class="sch-tag">' + s.tag + '</span></div><p class="sch-one">' + s.one + '</p><p class="sch-work">代表作：' + s.work + "</p></div>"
-    ).join("");
+    $("#scholarList").innerHTML =
+      '<div class="motto-box">' + M.scholarsMotto + "</div>" +
+      M.scholars.map((s, i) =>
+        '<div class="scholar-item sch-expand" data-i="' + i + '">' +
+        '<div class="sch-head"><b>' + s.name + '</b><span class="sch-years">' + s.years + '</span><span class="sch-tag">' + s.tag + '</span><span class="sch-arrow">▾</span></div>' +
+        '<p class="sch-one">' + s.one + "</p>" +
+        '<div class="sch-more" hidden>' +
+        s.details.map((d) => '<div class="sch-detail"><b>' + d.t + "</b><p>" + d.d + "</p></div>").join("") +
+        '<div class="tip-box" style="margin-top:8px">📝 考试：' + s.exam + '</div>' +
+        '<p class="sch-work">💡 记忆点：' + s.memory + '</p><p class="sch-work">代表作：' + s.work + "</p>" +
+        "</div></div>"
+      ).join("");
+    document.querySelectorAll(".sch-expand .sch-head").forEach((h) => {
+      h.style.cursor = "pointer";
+      h.onclick = () => {
+        const more = h.parentElement.querySelector(".sch-more");
+        more.hidden = !more.hidden;
+        h.querySelector(".sch-arrow").textContent = more.hidden ? "▾" : "▴";
+      };
+    });
+  }
+
+  /* 速记闪卡 */
+  let flashPool = null, flashCur = null, flashFlipped = false, flashSeen = 0;
+  function openFlash() {
+    if (!flashPool) {
+      flashPool = [];
+      M.courses.forEach((c) => c.concepts.forEach((k) => flashPool.push({ front: k.t, back: k.d, course: c.name, icon: c.icon })));
+    }
+    $("#flashOverlay").hidden = false;
+    nextFlash();
+  }
+  function nextFlash() {
+    flashCur = flashPool[Math.floor(Math.random() * flashPool.length)];
+    flashFlipped = false;
+    renderFlash();
+  }
+  function renderFlash() {
+    $("#flashFront").textContent = flashCur.front;
+    $("#flashBack").textContent = flashCur.back;
+    $("#flashCourse").textContent = flashCur.icon + " " + flashCur.course;
+    $("#flashBackWrap").hidden = !flashFlipped;
+    $("#flashHint").hidden = flashFlipped;
+    $("#flashFlip").textContent = flashFlipped ? "下一个" : "翻面";
+    $("#flashStat").textContent = "本轮已过 " + flashSeen + " 张 · 概念池 " + flashPool.length;
+  }
+  function initFlash() {
+    $("#flashEntry").onclick = openFlash;
+    $("#flashFlip").onclick = () => {
+      if (!flashFlipped) { flashFlipped = true; renderFlash(); }
+      else { flashSeen++; nextFlash(); }
+    };
+    $("#flashOverlay").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.hidden = true; });
   }
 
   /* ---------- 安全保障：错误黑匣子 ---------- */
@@ -922,7 +972,7 @@
   /* ---------- 启动（带安全保护） ---------- */
   function boot() {
     load();
-    initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch(); initPomo(); initAbout();
+    initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch(); initPomo(); initAbout(); initFlash();
     $("#resSearch").addEventListener("input", renderRes);
     $("#diagBtn").onclick = renderDiag;
     renderHome(); renderRoad(); renderCourses(); renderScholars(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
