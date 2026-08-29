@@ -241,6 +241,14 @@ main{max-width:680px;margin:-40px auto 0;padding:0 14px;position:relative}
   .btn:active,.tab:active,.subtab:active,.mini-btn:active,.qn-grid button:active,.cat-chips button:active{transform:none}
 }
 
+/* ---- 体检 / 安全横幅 ---- */
+.diag-sum{font-weight:800;font-size:15px;margin-bottom:8px}
+.diag-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.diag-item:last-child{border-bottom:none}
+.diag-ico{font-size:15px;flex-shrink:0}
+.diag-item b{font-size:13.5px}
+.diag-item p{font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:2px}
+
 /* ---- 广告创意坊 / 专业认知 ---- */
 .ad-item{background:var(--v-bg);border:1px solid var(--v-light);border-radius:12px;padding:12px 14px;margin-bottom:9px}
 .ad-brand{font-size:11.5px;font-weight:800;color:var(--v-dark);letter-spacing:.08em}

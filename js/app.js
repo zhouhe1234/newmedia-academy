@@ -246,6 +246,7 @@
     else if (curTrain === "script") renderScript(area);
     else if (curTrain === "poster") renderPoster(area);
     else if (curTrain === "adlab") renderAdLab(area);
+    else if (curTrain === "growth") renderGrowth(area);
     else if (curTrain === "topics") renderTopics(area);
     else renderClinic(area);
   }
@@ -619,6 +620,83 @@
     ).join("");
   }
 
+  /* ---------- 安全保障：错误黑匣子 ---------- */
+  function logError(msg) {
+    try {
+      const logs = JSON.parse(localStorage.getItem(KEY + "_errors") || "[]");
+      logs.unshift({ t: new Date().toISOString().slice(0, 19).replace("T", " "), msg: String(msg).slice(0, 300) });
+      localStorage.setItem(KEY + "_errors", JSON.stringify(logs.slice(0, 20)));
+    } catch (e) {}
+  }
+  window.addEventListener("error", (e) => logError("运行时: " + e.message + (e.filename ? " @" + (e.filename.split("/").pop()) + ":" + e.lineno : "")));
+  window.addEventListener("unhandledrejection", (e) => logError("Promise: " + ((e.reason && e.reason.message) || e.reason)));
+  function showSafeBanner(err) {
+    try {
+      logError("启动失败: " + (err && err.message));
+      const b = document.createElement("div");
+      b.style.cssText = "position:relative;z-index:200;background:#7f1d1d;color:#fff;padding:14px 16px;font-size:13px;line-height:1.8";
+      b.innerHTML = "<b>⚠ 网站启动遇到问题，部分功能不可用</b><br>错误信息：" + esc(err && err.message || "未知") +
+        '<br><button onclick="location.reload()" style="margin:8px 8px 0 0;padding:7px 14px;border:none;border-radius:8px;font-weight:700;cursor:pointer">重新加载</button>' +
+        '<button id="safeReset" style="padding:7px 14px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;font-weight:700;cursor:pointer">安全模式（清空本机数据重建）</button>' +
+        '<p style="opacity:.85;margin-top:6px">自救三步：① 强制刷新（Ctrl+Shift+R）② 用备份文件恢复（若之前导出过）③ 把 js/data.js 发给 AI 检查格式。若反复出问题：先点「数据备份」导出现有记录再重置。</p>';
+      document.body.insertBefore(b, document.body.firstChild);
+      b.querySelector("#safeReset").onclick = () => {
+        if (confirm("将清空本机学习数据并重建页面。\n如果你之前导出过备份文件，之后可以用「导入恢复」找回。\n继续吗？")) {
+          localStorage.removeItem(KEY);
+          location.reload();
+        }
+      };
+    } catch (e) { document.title = "⚠ 启动异常：" + (err && err.message); }
+  }
+
+  /* ---------- 网站体检 ---------- */
+  function runDiagnostics() {
+    const items = [];
+    const add = (name, pass, note) => items.push({ name, pass: !!pass, note });
+    try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); add("本地存储", true, "读写正常，学习数据可保存"); }
+    catch (e) { add("本地存储", false, "不可用（无痕模式？）——打卡与档案无法保存"); }
+    try { JSON.parse(localStorage.getItem(KEY) || "{}"); add("学习数据", true, "可正常解析"); }
+    catch (e) { add("学习数据", false, "已损坏——请导入备份，或用安全模式重置"); }
+    add("内容库", !!window.MEDIA, window.MEDIA ? "v" + window.MEDIA.version + " · " + window.MEDIA.courses.length + " 门课 · " + window.MEDIA.resources.length + " 项资源" : "未加载——检查 js/data.js 是否被改动");
+    const missing = ["searchEntry", "themeBtn", "taskList", "heatmap", "bars14", "roadList", "courseList", "scholarList", "trainArea", "resList", "folioList", "aiCard", "searchOverlay"].filter((id) => !document.getElementById(id));
+    add("页面结构", missing.length === 0, missing.length ? "缺失元素：" + missing.join("、") + "（HTML 可能被改动）" : "13 个关键元素齐全");
+    const swOk = "serviceWorker" in navigator && location.protocol.indexOf("http") === 0;
+    add("离线缓存", swOk || location.protocol === "file:", swOk ? "已就绪（线上/服务器环境）" : "file:// 本地模式无离线缓存（正常现象）");
+    let errs = [];
+    try { errs = JSON.parse(localStorage.getItem(KEY + "_errors") || "[]"); } catch (e) {}
+    add("错误日志", errs.length === 0, errs.length ? "有 " + errs.length + " 条记录，最新：" + errs[0].msg : "运行无错误记录");
+    const lastBk = localStorage.getItem(KEY + "_backupAt");
+    if (lastBk) {
+      const days = Math.round((new Date() - new Date(lastBk)) / 86400000);
+      add("备份新鲜度", days <= 7, "上次备份：" + lastBk + (days > 7 ? "（已超过 7 天，建议导出）" : ""));
+    } else {
+      add("备份新鲜度", false, "从未导出过备份——建议现在去「数据备份」导出一次");
+    }
+    return items;
+  }
+  function renderDiag() {
+    const items = runDiagnostics();
+    const bad = items.filter((x) => !x.pass).length;
+    $("#diagResult").innerHTML =
+      '<div class="diag-sum">' + (bad === 0 ? "✅ 全部通过，网站很健康" : "⚠ 发现 " + bad + " 项需要关注") + "</div>" +
+      items.map((x) => '<div class="diag-item"><span class="diag-ico">' + (x.pass ? "✅" : "❌") + '</span><div><b>' + x.name + "</b><p>" + x.note + "</p></div></div>").join("") +
+      '<div class="diag-item"><span class="diag-ico">🛟</span><div><p>出问题时的自救顺序：强制刷新（Ctrl+Shift+R）→ 数据备份导入恢复 → 把本页红叉内容截图发给任意 AI。错误黑匣子会自动记录最近 20 条运行错误，体检时会一起展示。</p></div></div>';
+  }
+
+  /* ---------- 增长运营手册 ---------- */
+  function renderGrowth(area) {
+    const G = M.growthKit;
+    const sec = (title, arr, ico) =>
+      '<div class="card"><p class="card-title">' + title + "</p>" +
+      arr.map((x, i) => '<div class="starter-item"><div class="starter-num">' + (ico || i + 1) + '</div><div><b>' + x.name + "</b><p>" + x.detail + "</p></div></div>").join("") + "</div>";
+    area.innerHTML =
+      sec("冷启动三板斧（0→500 粉）", G.coldStart) +
+      sec("运营节奏（把随机变日常）", G.rhythm) +
+      sec("粉丝运营：从围观到铁粉", G.fans) +
+      sec("变现路径（按门槛从低到高）", G.monetize) +
+      sec("封号红线（先活着，再谈增长）", G.redlines, "⚠");
+  }
+
   /* ---------- 外观与备份 ---------- */
   function applyTheme() {
     document.documentElement.setAttribute("data-theme", S.theme);
@@ -642,6 +720,7 @@
       a.download = "新媒学园备份-" + todayStr() + ".json";
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      try { localStorage.setItem(KEY + "_backupAt", todayStr()); } catch (e) {}
       toast("备份已下载，妥善保存！");
     };
     $("#restoreBtn").onclick = () => $("#restoreFile").click();
@@ -681,12 +760,19 @@
     });
   }
 
-  /* ---------- 启动 ---------- */
-  load();
-  initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch();
-  $("#resSearch").addEventListener("input", renderRes);
-  renderHome(); renderRoad(); renderCourses(); renderScholars(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
-  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+  /* ---------- 启动（带安全保护） ---------- */
+  function boot() {
+    load();
+    initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch();
+    $("#resSearch").addEventListener("input", renderRes);
+    $("#diagBtn").onclick = renderDiag;
+    renderHome(); renderRoad(); renderCourses(); renderScholars(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
+    if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  }
+  try { boot(); } catch (err) {
+    console.error(err);
+    showSafeBanner(err);
   }
 })();
