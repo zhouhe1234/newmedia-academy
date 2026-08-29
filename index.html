@@ -11,6 +11,10 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:title" content="新媒学园 · 网络与新媒体学习站">
+<meta property="og:description" content="网新专业四年成长地图：课业速通、文案训练场、海报实验室、AI 提示词学院、增长运营手册。数据存本机，免费无广告。">
+<meta property="og:image" content="assets/icon-512.png">
+<meta name="description" content="网络与新媒体专业学习站：路线图、课业速通、AI 批改、训练场、资源库。数据存本机。">
 </head>
 <body>
 
@@ -81,6 +85,24 @@
         <span class="streak-unit">今日任务完成即自动打卡</span>
       </div>
       <button class="btn btn-primary" id="checkinBtn">手动打卡</button>
+    </div>
+
+    <div class="card-lite">
+      <p class="sec-label">专注番茄钟</p>
+      <div class="pomo-wrap">
+        <div class="pomo-ring">
+          <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="9"/><circle id="pomoArc" cx="60" cy="60" r="52" fill="none" stroke="url(#pomoG)" stroke-width="9" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" transform="rotate(-90 60 60)"/><defs><linearGradient id="pomoG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+          <div class="pomo-time" id="pomoTime">25:00</div>
+        </div>
+        <div class="pomo-side">
+          <p class="muted small" id="pomoHint">25 分钟专注 + 5 分钟休息。<br>开始后别切走，和自己较个劲。</p>
+          <div class="pomo-btns">
+            <button class="btn btn-primary" id="pomoBtn" style="padding:9px 16px;font-size:13.5px">开始专注</button>
+            <button class="btn btn-ghost" id="pomoReset" style="padding:9px 14px;font-size:13.5px">重置</button>
+          </div>
+          <p class="muted small" id="pomoCount">今日已完成 0 个番茄</p>
+        </div>
+      </div>
     </div>
 
     <div class="card-lite">
@@ -285,6 +307,40 @@
     <div class="search-results" id="catalogBody"></div>
   </div>
 </div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="f-brand">新媒学园 <span id="fVersion">v1.2</span></p>
+    <p class="f-note">所有学习数据仅存于你的浏览器本机，我们不收集任何信息。</p>
+    <p class="f-links">
+      <button id="fAbout">关于本站</button>·<button id="fChangelog">更新日志</button>·<button id="fKeys">快捷键</button>·<a href="https://github.com/zhouhe1234/newmedia-academy" target="_blank" rel="noopener">GitHub</a>
+    </p>
+    <p class="f-note small">由 ZCode × GLM 构建 · 网络与新媒体专业 · 2026</p>
+  </div>
+</footer>
+
+<div class="search-overlay" id="aboutOverlay" hidden>
+  <div class="search-panel">
+    <div class="catalog-head">关于本站</div>
+    <div class="about-body" id="aboutBody"></div>
+  </div>
+</div>
+
+<div class="search-overlay" id="logOverlay" hidden>
+  <div class="search-panel">
+    <div class="catalog-head">更新日志</div>
+    <div class="search-results" id="changelogBody"></div>
+  </div>
+</div>
+
+<div class="search-overlay" id="keysOverlay" hidden>
+  <div class="search-panel">
+    <div class="catalog-head">快捷键</div>
+    <div class="search-results" id="keysBody"></div>
+  </div>
+</div>
+
+
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>

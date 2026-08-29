@@ -783,6 +783,77 @@
       sec("封号红线（先活着，再谈增长）", G.redlines, "⚠");
   }
 
+  /* ---------- 番茄钟 ---------- */
+  const POMO_TOTAL = 25 * 60;
+  let pomoLeft = POMO_TOTAL, pomoTimer = null;
+  function pomoRender() {
+    const m = Math.floor(pomoLeft / 60), s = pomoLeft % 60;
+    $("#pomoTime").textContent = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    $("#pomoArc").style.strokeDashoffset = 326.7 * (1 - pomoLeft / POMO_TOTAL);
+  }
+  function initPomo() {
+    const cnt = S.pomoCount || {};
+    $("#pomoCount").textContent = "今日已完成 " + (cnt[todayStr()] || 0) + " 个番茄";
+    pomoRender();
+    $("#pomoBtn").onclick = () => {
+      if (pomoTimer) { clearInterval(pomoTimer); pomoTimer = null; $("#pomoBtn").textContent = "继续"; return; }
+      $("#pomoBtn").textContent = "暂停";
+      pomoTimer = setInterval(() => {
+        pomoLeft--;
+        if (pomoLeft <= 0) {
+          clearInterval(pomoTimer); pomoTimer = null;
+          pomoLeft = POMO_TOTAL;
+          cnt[todayStr()] = (cnt[todayStr()] || 0) + 1;
+          S.pomoCount = cnt; save();
+          $("#pomoBtn").textContent = "开始专注";
+          toast("🍅 完成一个番茄！起来走走，休息 5 分钟");
+        }
+        pomoRender();
+        const c2 = S.pomoCount || {};
+        $("#pomoCount").textContent = "今日已完成 " + (c2[todayStr()] || 0) + " 个番茄";
+      }, 1000);
+    };
+    $("#pomoReset").onclick = () => {
+      if (pomoTimer) { clearInterval(pomoTimer); pomoTimer = null; }
+      pomoLeft = POMO_TOTAL; $("#pomoBtn").textContent = "开始专注"; pomoRender();
+    };
+  }
+
+  /* ---------- 关于 / 日志 / 快捷键 ---------- */
+  const CHANGELOG = [
+    { v: "v1.2", d: "2026-08-29", items: ["海报实验室升级五步工作台，新增配色六法与三套实战色板", "新增「AI 提示词学院」：工作 AI 模板库 + 图像 AI 六要素公式", "新增全站内容目录，一屏看清网站有什么", "手绘 SVG 插画与 hover 微交互，去除模板感"] },
+    { v: "v1.1", d: "2026-08-29", items: ["安全保障体系上线：启动保护、错误黑匣子、一键体检、安全模式", "新增《传播学研究方法》《媒介伦理与法规》《广告学概论》等课业速通", "新增增长运营手册：冷启动、运营节奏、粉丝分层、变现路径、封号红线", "新传必考学者速查 8 位"] },
+    { v: "v1.0", d: "2026-08-29", items: ["网站正式部署上线：zhouhe1234.github.io/newmedia-academy", "全局搜索（Ctrl+K）、学习数据图表、PWA 一键安装", "深色模式、数据备份恢复、课程速通扩充至 8 门"] },
+    { v: "v0.9", d: "2026-08-28", items: ["新媒学园诞生：路线图、课业速通、训练场、资源库、作品集五大板块", "AI 批改教练接入（智谱 GLM-4-Flash）", "按本校实际调整路线图：理论课前置、广告学基因纳入"] },
+  ];
+  function initAbout() {
+    $("#fVersion").textContent = "v" + M.version.split(".").slice(0, 2).join(".") + " · 内容库 " + M.version;
+    $("#fAbout").onclick = () => {
+      $("#aboutBody").innerHTML =
+        '<div class="about-p">「新媒学园」是为网络与新媒体专业学生做的个人学习站：把四年该学什么、每天练什么、毕业后去哪，装进一个离线也能用的网页里。</div>' +
+        '<div class="about-p">它由 ZCode（AI 编程智能体）与它的主人——武汉设计工程学院网络与新媒体专业的一名学生——在 2026 年 8 月的两个夜晚协作完成，之后由主人长期使用与维护。</div>' +
+        '<div class="about-p">技术上它是纯静态网站：零依赖、数据只存本机、可部署到任何托管平台。内容与代码分离（js/data.js），随时可以让 AI 帮忙更新。</div>' +
+        '<div class="about-p">——愿它陪你从大二上到大四下。</div>';
+      $("#aboutOverlay").hidden = false;
+    };
+    $("#fChangelog").onclick = () => {
+      $("#changelogBody").innerHTML = CHANGELOG.map((c) =>
+        '<div class="cl-item"><div class="cl-head"><b>' + c.v + '</b><span class="cl-date">' + c.d + "</span></div>" + c.items.map((i) => '<p class="cat-item">· ' + i + "</p>").join("") + "</div>"
+      ).join("");
+      $("#logOverlay").hidden = false;
+    };
+    $("#fKeys").onclick = () => {
+      $("#keysBody").innerHTML = [
+        ["Ctrl + K（Mac ⌘K）", "打开全局搜索"], ["/", "快速打开全局搜索"], ["Esc", "关闭搜索 / 目录 / 弹层"],
+        ["点左上角月亮", "切换深色 / 浅色模式"], ["点击目录任意分区", "直接跳转到对应板块"],
+      ].map((k) => '<div class="sr-item" style="cursor:default"><span class="sr-cat">' + k[0] + '</span><div><b>' + k[1] + "</b></div></div>").join("");
+      $("#keysOverlay").hidden = false;
+    };
+    [$("#aboutOverlay"), $("#logOverlay"), $("#keysOverlay")].forEach((ov) => {
+      ov.addEventListener("click", (e) => { if (e.target === e.currentTarget) ov.hidden = true; });
+    });
+  }
+
   /* ---------- 外观与备份 ---------- */
   function applyTheme() {
     document.documentElement.setAttribute("data-theme", S.theme);
@@ -851,7 +922,7 @@
   /* ---------- 启动（带安全保护） ---------- */
   function boot() {
     load();
-    initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch();
+    initTabs(); initTrainTabs(); initFolioForm(); initMisc(); initSearch(); initPomo(); initAbout();
     $("#resSearch").addEventListener("input", renderRes);
     $("#diagBtn").onclick = renderDiag;
     renderHome(); renderRoad(); renderCourses(); renderScholars(); renderTrain(); renderStarter(); renderRes(); renderFolio(); renderAICard();
