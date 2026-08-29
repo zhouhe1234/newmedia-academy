@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>新媒学园 · 网络与新媒体学习站</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7c3aed">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>新媒学园</h1>
+      <p class="subtitle">网络与新媒体 · 四年成长地图</p>
+    </div>
+    <div class="countdown-box" id="streakBox" title="切换深色/浅色模式" role="button" style="cursor:pointer">
+      <span class="cd-label">连续学习</span>
+      <span class="cd-num"><b id="streakDays">0</b> 天</span>
+    </div>
+    <button class="mini-btn" id="themeBtn" title="切换深色/浅色">🌙</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= 今日 ================= -->
+  <section class="page" id="page-home">
+    <div class="card quote-card">
+      <p class="quote-en" id="quoteEn"></p>
+      <p class="quote-cn" id="quoteCn"></p>
+    </div>
+
+    <div class="card daily-concept">
+      <p class="sec-label">今日概念 <span class="muted small" id="dcCourse"></span></p>
+      <p class="dc-term" id="dcTerm"></p>
+      <p class="dc-def" id="dcDef"></p>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <button class="btn btn-ghost" id="dcShuffle" style="flex:0 0 auto;padding:8px 14px;font-size:13px">换一个</button>
+        <button class="btn btn-ghost" id="dcGo" style="flex:1;padding:8px 14px;font-size:13px">去复习这门课 →</button>
+      </div>
+    </div>
+
+    <div class="card streak-card">
+      <div class="streak-left">
+        <span class="streak-num" id="homeStreak">0</span>
+        <span class="streak-unit">今日任务完成即自动打卡</span>
+      </div>
+      <button class="btn btn-primary" id="checkinBtn">手动打卡</button>
+    </div>
+
+    <div class="card-lite">
+      <p class="sec-label">学习数据</p>
+      <div class="stat-row" id="statRow"></div>
+      <p class="sec-label" style="margin-top:12px">最近 12 周打卡</p>
+      <div class="heatmap" id="heatmap"></div>
+    </div>
+
+    <p class="sec-label">今日任务 <span class="muted" id="taskProgress"></span></p>
+    <div class="task-list" id="taskList"></div>
+
+    <div class="card quick-nav">
+      <p class="sec-label">快捷入口</p>
+      <div class="qn-grid">
+        <button data-go="page-road">🗺 路线图</button>
+        <button data-go="page-train">✍ 标题实验室</button>
+        <button data-go="page-res">🧰 资源库</button>
+        <button data-go="page-folio">📁 作品集</button>
+      </div>
+    </div>
+
+    <div class="card ai-card" id="aiCard">
+      <p class="sec-label">AI 批改教练 <span class="muted" id="aiStatus"></span></p>
+      <p class="muted small">填入你自己的免费 AI Key（存本机浏览器，不上传），标题实验室即可获得 AI 一对一点评，课业自测可让 AI 判卷。推荐智谱 GLM-4-Flash：免费、快。</p>
+      <div class="form-col">
+        <label class="row-between">服务商
+          <select id="aiProvider">
+            <option value="zhipu">智谱 GLM-4-Flash（免费推荐）</option>
+            <option value="siliconflow">硅基流动（有免费模型）</option>
+            <option value="deepseek">DeepSeek（低价）</option>
+          </select>
+        </label>
+        <input type="password" id="aiKey" placeholder="粘贴 API Key（sk-... 或 id.xxx）">
+        <p class="muted small" id="aiHelp"></p>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary" id="aiSave" style="flex:1">保存 Key</button>
+          <button class="btn btn-ghost" id="aiClear" style="display:none">清除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="sec-label">数据备份 <span class="muted small">学习记录只存在本机浏览器，清缓存前先导出！</span></p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" id="backupBtn" style="flex:1">导出备份文件</button>
+        <button class="btn btn-ghost" id="restoreBtn" style="flex:1">导入恢复</button>
+      </div>
+      <input type="file" id="restoreFile" accept=".json" style="display:none">
+    </div>
+
+    <div class="card data-info">
+      <p class="sec-label">内容库</p>
+      <p class="muted small" id="dataInfo"></p>
+    </div>
+  </section>
+
+  <!-- ================= 路线图 ================= -->
+  <section class="page" id="page-road" hidden>
+    <div class="card">
+      <p class="card-title">四年成长地图</p>
+      <p class="muted small">基于网络与新媒体专业通用培养方案整理，<b>具体课程以你所在学校的培养方案为准</b>。点击学期卡片展开详情。</p>
+    </div>
+    <div id="roadList"></div>
+  </section>
+
+  <!-- ================= 训练场 ================= -->
+  <section class="page" id="page-train" hidden>
+    <div class="subtabs" id="trainTabs">
+      <button class="subtab active" data-t="lab">标题实验室</button>
+      <button class="subtab" data-t="formula">爆款公式</button>
+      <button class="subtab" data-t="open">开头训练</button>
+      <button class="subtab" data-t="clinic">坏文案门诊</button>
+      <button class="subtab" data-t="script">短视频脚本</button>
+      <button class="subtab" data-t="topics">选题库</button>
+    </div>
+    <div id="trainArea"></div>
+
+    <div class="card" style="margin-top:4px">
+      <p class="card-title">从零开号 · 七步任务线</p>
+      <p class="muted small">你还没有账号？按这七步走，从选平台到第一次复盘。</p>
+      <div id="starterList"></div>
+    </div>
+  </section>
+
+  <!-- ================= 课业速通 ================= -->
+  <section class="page" id="page-course" hidden>
+    <div class="card">
+      <p class="card-title">课业速通 · 大一已修课程复习库</p>
+      <p class="muted small">学过 ≠ 学会。每门课三件套：概念速览（考前扫一遍）→ 重点理论（人话解读 + 考试怎么考 + 新媒体怎么用）→ 自测（先想再看答案）。点课程卡片展开。</p>
+    </div>
+    <div id="courseList"></div>
+  </section>
+
+  <!-- ================= 资源库 ================= -->
+  <section class="page" id="page-res" hidden>
+    <div class="card">
+      <p class="card-title">资源与工具库</p>
+      <input type="search" id="resSearch" placeholder="搜索工具或用途，如：剪辑 / 图库 / AI">
+      <div class="cat-chips" id="catChips"></div>
+    </div>
+    <div id="resList"></div>
+    <p class="muted small" style="padding:0 4px">不放具体网址（容易失效），直接搜索名称即可找到官网。使用素材时注意授权范围。</p>
+  </section>
+
+  <!-- ================= 作品集 ================= -->
+  <section class="page" id="page-folio" hidden>
+    <div class="card">
+      <p class="card-title">添加作品</p>
+      <p class="muted small">课程作业、账号内容、比赛成果都算作品。数据好的优先记录（播放量、比赛名次）。</p>
+      <div class="form-col">
+        <input type="text" id="folioName" placeholder="作品名称（如：期末纪录片《食堂故事》）">
+        <select id="folioType">
+          <option>图文 / 推文</option>
+          <option>短视频</option>
+          <option>账号运营</option>
+          <option>设计作品</option>
+          <option>网页 / H5</option>
+          <option>比赛 / 获奖</option>
+          <option>其他</option>
+        </select>
+        <input type="text" id="folioLink" placeholder="链接或位置（可选，如：B站链接 / 相册编号）">
+        <textarea id="folioNote" rows="3" placeholder="一句话亮点（可选，如：完播率 40%，被学院账号转发）"></textarea>
+        <button class="btn btn-primary" id="folioAdd">加入作品集</button>
+      </div>
+    </div>
+    <p class="sec-label">我的作品 <span class="muted" id="folioCount"></span></p>
+    <div class="task-list" id="folioList"></div>
+  </section>
+
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab active" data-page="page-home"><span class="tab-ico">◎</span>今日</button>
+  <button class="tab" data-page="page-road"><span class="tab-ico">🗺</span>路线</button>
+  <button class="tab" data-page="page-course"><span class="tab-ico">📚</span>课业</button>
+  <button class="tab" data-page="page-train"><span class="tab-ico">✍</span>训练</button>
+  <button class="tab" data-page="page-res"><span class="tab-ico">🧰</span>资源</button>
+  <button class="tab" data-page="page-folio"><span class="tab-ico">📁</span>作品</button>
+</nav>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
