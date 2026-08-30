@@ -160,6 +160,14 @@
     </div>
 
     <div class="card">
+      <p class="sec-label">📊 学习报告</p>
+      <p class="muted small" style="font-size:12px">一键生成你的学习小结，可复制发朋友圈 / 给自己存档。</p>
+      <button class="btn btn-ghost" id="reportBtn" style="width:100%">生成我的学习报告</button>
+      <textarea id="reportOut" rows="5" hidden style="margin-top:10px;width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:12.5px;font-family:inherit;background:#fff;color:var(--ink)"></textarea>
+      <button class="btn btn-primary" id="reportCopy" hidden style="width:100%;margin-top:8px">复制报告</button>
+    </div>
+
+    <div class="card">
       <p class="sec-label">数据备份 <span class="muted small">学习记录只存在本机浏览器，清缓存前先导出！</span></p>
       <div style="display:flex;gap:10px">
         <button class="btn btn-primary" id="backupBtn" style="flex:1">导出备份文件</button>

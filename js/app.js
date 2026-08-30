@@ -920,6 +920,36 @@
       deferredPrompt = null;
       $("#installCard").hidden = true;
     };
+    $("#reportBtn").onclick = () => {
+      const t = todayStr();
+      const lg = S.log[t] || { lab: 0, formula: 0, clinic: 0 };
+      const learned = Object.keys(S.labDone).length;
+      let streakN = 0;
+      while (S.checkins[dayOffset(-streakN)]) streakN++;
+      const totalDays = Object.keys(S.checkins).length;
+      const d = new Date();
+      let y = d.getFullYear(), m = d.getMonth() + 1;
+      if (m === 8) { m = 9; }
+      const ac = y - 2025 + (m >= 9 || m <= 1 ? 0 : -1);
+      const tIdx = Math.max(0, Math.min(M.roadmap.length - 1, ac * 2 + (m >= 9 || m <= 1 ? 0 : 1) - 2));
+      const rep = [
+        "📚 新媒学园学习报告 · " + t,
+        "连续打卡 " + streakN + " 天（累计 " + totalDays + " 天）",
+        "今日：标题练习 " + lg.lab + " 组 · 公式研究 " + lg.formula + " 个",
+        "累计：标题档案 " + learned + " 条 · 作品 " + S.folios.length + " 件",
+        "当前阶段：" + (M.roadmap[tIdx] ? M.roadmap[tIdx].term : "大一"),
+        "",
+        "明天见，继续加油。",
+      ].join("\n");
+      const out = document.getElementById("reportOut");
+      out.value = rep; out.hidden = false;
+      const cp = document.getElementById("reportCopy");
+      cp.hidden = false;
+      cp.onclick = () => {
+        if (navigator.clipboard) navigator.clipboard.writeText(rep).then(() => toast("报告已复制")).catch(() => { out.select(); document.execCommand("copy"); toast("已复制"); });
+        else { out.select(); document.execCommand("copy"); toast("已复制"); }
+      };
+    };
     $("#backupBtn").onclick = () => {
       const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
       const a = document.createElement("a");

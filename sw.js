@@ -1,5 +1,5 @@
 /* 新媒学园 Service Worker：离线缓存（file:// 下不会注册，部署/本地服务器后生效） */
-const CACHE = "newmedia-v14";
+const CACHE = "newmedia-v17";
 const ASSETS = [
   "./",
   "./index.html",
