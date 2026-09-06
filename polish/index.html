@@ -409,7 +409,7 @@ for(const [v,lab] of [["all","全部"],["teacher","📩 发老师"],["notice","�
   document.getElementById("tplCats").appendChild(c);
 }
 let tplCat="all";
-function inferCat(t){if(t.includes("发老师"))return"teacher";if(t.includes("请假")||t.includes("申请"))return"request";return"notice"}
+function inferCat(t){if(t.includes("请假条")||t.includes("申请"))return"request";if(t.includes("发老师"))return"teacher";return"notice"}
 function renderMyTpls(){
   const m=getMy();const frag=document.createDocumentFragment();
   m.forEach((x,i)=>{
