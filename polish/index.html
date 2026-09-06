@@ -176,6 +176,7 @@ salt:"Z2RIQ82mf+eEowk0go8peA==",iv:"QQJlslSvcd44cpcZ",ct:"Z/h5x3JsO+IiiXOUtDslVl
 let scene="teacher",tone="得体、真诚、有分寸";
 // ===== 个人信息与偏好 =====
 function getProf(){try{return JSON.parse(localStorage.getItem("bw_profile")||"{}")}catch{return{}}}
+function getMy(){try{return JSON.parse(localStorage.getItem("bw_mytpls")||"[]")}catch{return[]}}
 function getUse(){try{return JSON.parse(localStorage.getItem("bw_tpluse")||"{}")}catch{return{}}}
 function applyProf(v){const p=getProf();
   if(p.name)v=v.split("【姓名】").join(p.name);
