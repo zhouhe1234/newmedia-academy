@@ -87,6 +87,16 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
   <button id="themeBtn" title="切换深色/浅色">🌙</button>
 </header>
 
+<div class="card" style="display:flex;gap:14px;align-items:center">
+  <div style="font-size:34px;flex:none">📖</div>
+  <div style="flex:1">
+    <div style="font-size:12.5px;color:var(--mut)">今日四级词 · 每天一个，过级不是梦</div>
+    <div style="font-size:19px;font-weight:700;margin:3px 0" id="cetWord"></div>
+    <div style="font-size:13.5px" id="cetMean"></div>
+    <div style="font-size:13px;color:var(--mut);margin-top:2px" id="cetEx"></div>
+  </div>
+</div>
+
 <div class="card">
   <div class="label"><span>📋 常用模板（点一下直接填入，改掉【】里的内容再润色）</span><span id="tplCount"></span></div>
   <div class="chips" id="tplCats" style="margin-bottom:10px"></div>
@@ -142,7 +152,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
 </div>
 
 <div class="card" id="out">
-  <div class="label"><span>④ 润色结果</span><span class="linkbtn" id="saveHist">存入历史</span><span class="linkbtn" id="saveTpl">💾 存为我的模板</span></div>
+  <div class="label"><span>④ 润色结果</span><span class="linkbtn" id="saveHist">存入历史</span><span class="linkbtn" id="saveTpl">💾 存为我的模板</span><span class="linkbtn" id="xlsxBtn" style="display:none">⬇ 导出名单（Excel）</span></div>
   <div class="polished" id="polished"></div>
   <div id="notes"></div>
   <div id="tune">
@@ -242,7 +252,7 @@ const SCENES={teacher:"这是大学班长要发给老师/辅导员的正式消�
 notice:"这是班长要发到班群里的通知。要求：信息要点清晰、可加序号分条，重点信息（时间/地点/事项）突出，语气亲切有号召力，结尾可加收到请回复之类的提醒。",
 request:"这是班长代同学或自己向老师/学院提出的申请或请求。要求：说明事由简洁清楚，理由充分诚恳，明确诉求，语气正式礼貌，符合书面申请的格式感。",
 casual:"这是日常沟通场景（同学、群里闲聊、非正式沟通）。要求：保持原意，改掉错别字和标点，让表达通顺自然即可，不要过度正式化。",
-jielong:"这是班长在整理班级接龙/报名/统计的结果。用户会粘贴一堆零散的群聊回复。要求：1) 提取每位同学的姓名和所填内容，重复的只保留一条；2) 整理成编号清晰的名单；3) 末尾统计总人数；4) 信息不全或有疑问的单独列在最后提醒补充；5) 不遗漏、不虚构任何人名。"};
+jielong:"这是班长在整理班级接龙/报名/统计的结果。用户会粘贴一堆零散的群聊回复。要求：1) 提取每位同学的姓名和所填内容，重复的只保留一条；2) 整理成编号清晰的名单；3) 末尾统计总人数；4) 信息不全或有疑问的单独列在最后提醒补充；5) 不遗漏、不虚构任何人名；6) 名单整理完后，另起一行单独输出 ===名单数据===，其下每行一条「姓名,内容」（没有额外内容的只写姓名），方便导出表格。"};
 
 $("go").onclick=async()=>{await doPolish()};
 $("clear").onclick=()=>{$("in").value="";localStorage.removeItem("bw_draft");$("in").dispatchEvent(new Event("input"));$("out").style.display="none";$("copy").style.display="none";$("tune").style.display="none";$("err").style.display="none"};
@@ -266,6 +276,11 @@ async function doPolish(extra){
     const i=out.indexOf("===修改说明===");
     const polished=(i>=0?out.slice(0,i):out).replace(/={3,}润色后={3,}/g,"").trim();
     const notes=i>=0?out.slice(i).replace(/={3,}修改说明={3,}/,"").trim():"";
+    if(scene==="jielong"){
+      const di=out.indexOf("===名单数据===");
+      window.__rows=di>=0?out.slice(di+"===名单数据===".length).split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{const c=l.split(",");return [c[0].trim(),c.slice(1).join(",").trim()]}).filter(r=>r[0]):[];
+      $("xlsxBtn").style.display=window.__rows.length?"inline":"none";
+    }
     $("polished").textContent=polished;
     $("notes").textContent=notes&&!extra?"📝 "+notes:"";
     $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("readBtn").style.display="block";$("imgBtn").style.display="block";$("tune").style.display="block";
@@ -288,6 +303,15 @@ $("in").addEventListener("input",()=>{clearTimeout(draftTimer);draftTimer=setTim
 try{const draft=localStorage.getItem("bw_draft");
   if(draft&&draft.trim()){$("in").value=draft;$("in").dispatchEvent(new Event("input"));$("err").style.display="block";$("err").style.color="var(--ok)";$("err").style.background="#ecfdf5";$("err").textContent="已自动恢复上次未发送的草稿";setTimeout(()=>{$("err").style.display="none"},4000)}
 }catch{}
+$("xlsxBtn").onclick=()=>{
+  const rows=window.__rows||[];
+  const esc=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const csv="\uFEFF姓名,内容\n"+rows.map(r=>esc(r[0])+","+esc(r[1]||"")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="名单统计-"+new Date().toISOString().slice(0,10)+".csv";a.click();
+  URL.revokeObjectURL(a.href);
+};
 $("copy").onclick=async()=>{
   try{await navigator.clipboard.writeText($("polished").textContent);$("copy").textContent="✅ 已复制";}
   catch{$("copy").textContent="请手动选中复制";}
@@ -455,6 +479,14 @@ $("impFile").onchange=e=>{
   };
   rd.readAsText(file);
 };
+
+// ===== 今日四级词 =====
+const CET4=[["abandon","v. 放弃，抛弃","Never abandon your dreams."],["academic","adj. 学术的","Academic research takes time."],["accomplish","v. 完成，实现","She accomplished the task on time."],["acquire","v. 获得，习得","Children acquire language quickly."],["adequate","adj. 足够的，适当的","Make sure you get adequate sleep."],["anticipate","v. 预期，预料","We anticipate some delays."],["approach","n./v. 方法；接近","Try a different approach."],["appropriate","adj. 恰当的","Wear appropriate clothes for the event."],["assess","v. 评估","Teachers assess student progress."],["assume","v. 假定，认为","Don't assume anything."],["available","adj. 可用的","The room is available now."],["barrier","n. 障碍","Language is not a barrier."],["beneficial","adj. 有益的","Exercise is beneficial to health."],["circumstance","n. 环境，情况","Under no circumstances give up."],["commute","v./n. 通勤","I commute by subway."],["comprehensive","adj. 全面的","A comprehensive review helps a lot."],["consequence","n. 后果","Every choice has consequences."],["contribute","v. 贡献","Everyone can contribute ideas."],["efficient","adj. 高效的","Try to be more efficient."],["emphasize","v. 强调","The teacher emphasized safety."],["establish","v. 建立","They established a new club."],["evaluate","v. 评价","We evaluate results carefully."],["flexible","adj. 灵活的","The schedule is flexible."],["fundamental","adj. 基本的","Practice is fundamental."],["implement","v. 实施","Implement the plan step by step."],["inevitable","adj. 不可避免的","Change is inevitable."],["negotiate","v. 谈判，协商","They negotiated a better price."],["potential","n./adj. 潜力；潜在的","You have great potential."],["significant","adj. 重要的","A significant improvement!"],["strategy","n. 策略","A good strategy wins games."]];
+const day=Math.floor(Date.now()/86400000);
+const w=CET4[day%CET4.length];
+$("cetWord").textContent=w[0];
+$("cetMean").textContent=w[1];
+$("cetEx").textContent="例句："+w[2];
 
 // ===== 快捷礼貌语 =====
 for(const ph of ["麻烦老师了","谢谢老师！","收到请回复","祝老师工作顺利","请各位同学互相转告","辛苦大家了"]){
