@@ -207,7 +207,7 @@ async function doPolish(extra){
     ],2000);
     const i=out.indexOf("===修改说明===");
     const polished=(i>=0?out.slice(0,i):out).replace(/={3,}润色后={3,}/g,"").trim();
-    const notes=i>=0?out.slice(i+9).trim():"";
+    const notes=i>=0?out.slice(i).replace(/={3,}修改说明={3,}/,"").trim():"";
     $("polished").textContent=polished;
     $("notes").textContent=notes&&!extra?"📝 "+notes:"";
     $("out").style.display="block";$("copy").style.display="block";$("tune").style.display="block";
