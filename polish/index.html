@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>班长文案润色助手</title>
 <meta name="theme-color" content="#7c3aed">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="../assets/icon-192.png">
 <style>
 :root{--p:#7c3aed;--p2:#a78bfa;--bg:#f6f4fb;--card:#fff;--txt:#1e1b2e;--mut:#6b6880;--ok:#059669}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -104,6 +106,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
 <div class="card">
   <div class="label"><span>① 输入你想说的话（草稿就行，不用修饰）</span><span id="cnt">0 字</span></div>
   <textarea id="in" placeholder="比如：老师您好，我是网媒2502班的周何，想问一下下周写生的集合时间是几点…"></textarea>
+  <div class="chips" id="quickPhrases" style="margin-top:10px"></div>
 </div>
 
 <div class="card">
@@ -124,6 +127,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
     <button class="main" id="go">✨ 一键润色（Ctrl+Enter）</button>
     <button class="ghost" id="copy" style="display:none">📋 复制</button>
     <button class="ghost" id="printBtn" style="display:none">🖨 打印/PDF</button>
+    <button class="ghost" id="readBtn" style="display:none">🔊 朗读</button>
     <button class="ghost" id="clear">🗑 清空</button>
   </div>
   <div id="err"></div>
@@ -245,7 +249,7 @@ async function doPolish(extra){
     const notes=i>=0?out.slice(i).replace(/={3,}修改说明={3,}/,"").trim():"";
     $("polished").textContent=polished;
     $("notes").textContent=notes&&!extra?"📝 "+notes:"";
-    $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("tune").style.display="block";
+    $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("readBtn").style.display="block";$("tune").style.display="block";
     $("out").scrollIntoView({behavior:"smooth"});
     if(!extra)pushHist(text,polished);
   }catch(e){
@@ -298,7 +302,17 @@ $("histToggle").onclick=()=>{
   if(!open)renderHist();
 };
 
-// ===== 模板库（20 个，支持搜索）=====
+// ===== 朗读 =====
+let speaking=false;
+$("readBtn").onclick=()=>{
+  if(speaking){speechSynthesis.cancel();speaking=false;$("readBtn").textContent="🔊 朗读";return}
+  const u=new SpeechSynthesisUtterance($("polished").textContent);
+  u.lang="zh-CN";u.rate=0.95;
+  u.onend=()=>{speaking=false;$("readBtn").textContent="🔊 朗读"};
+  speechSynthesis.speak(u);speaking=true;$("readBtn").textContent="⏹ 停止";
+};
+
+// ===== 模板库（26 个，支持搜索）=====
 const TPL=[
  {t:"📢 集合时间通知",v:"【网媒2502班】写生集合通知\n\n各位同学：\n明天（X月X日）写生集合，请注意以下事项：\n1. 集合时间：早上【7:30】\n2. 集合地点：【学校东门】\n3. 请携带：【画板、身份证、学生证】等必要物品\n4. 大巴不等迟到同学，请务必提前10分钟到场\n\n收到请回复“收到”，谢谢配合！"},
  {t:"📁 收材料通知",v:"【重要】关于收取【XX材料】的通知\n\n各位同学：\n现需收取【XX材料/表格】，请按以下要求提交：\n1. 提交内容：【XX复印件/电子版表格】\n2. 提交方式：【纸质版交给我 / 电子版发我QQ邮箱】\n3. 截止时间：【X月X日 晚上10点前】\n\n逾期会影响整体提交，请大家抓紧时间，谢谢配合！"},
@@ -325,7 +339,13 @@ const TPL=[
 {"t":"📊 班级周报（发老师）","v":"尊敬的【X老师】：\n\n您好！现将本周班级情况向您汇报：\n1. 学习方面：【概况】\n2. 活动方面：【概况】\n3. 需要关注：【有无特殊情况】\n\n本周班级整体运行平稳，如有问题我会及时向您汇报。\n\n祝您工作顺利！\n网媒2502班 周何"},
 {"t":"🕐 协调会议时间（发老师）","v":"尊敬的【X老师】：\n\n您好！关于【会议/谈话事项】，想和您约定一个时间。\n同学们【X月X日下午】和【X月X日上午】都有空，不知哪个时间方便老师？如您时间都不合适，我们完全配合您的安排。\n\n麻烦老师了，谢谢！"},
 {"t":"📢 二次催交（发班群）","v":"【再催一次！】关于【XX材料/事项】\n\n各位同学：\n之前发的【XX材料】还有部分同学没有提交，名单我就不点名了哈😊\n截止时间就在【今晚10点】，拜托大家抓紧！\n有什么困难来不及的，单独私聊我，我们想办法。"},
-{"t":"🎉 节日祝福（发班群/老师）","v":"【节日祝福】\n\n各位同学：【节日名】快乐！\n【放假安排：X月X日至X月X日放假，X月X日正常上课】\n假期请注意安全，合理安排学习，返校后我们继续加油！\n\n祝大家假期愉快！"}
+{"t":"🎉 节日祝福（发班群/老师）","v":"【节日祝福】\n\n各位同学：【节日名】快乐！\n【放假安排：X月X日至X月X日放假，X月X日正常上课】\n假期请注意安全，合理安排学习，返校后我们继续加油！\n\n祝大家假期愉快！"},
+{"t":"🎓 四六级成绩查询提醒","v":"【四六级成绩查询提醒】\n\n各位同学：\n【X月X日 上午X点】起可以查四六级成绩啦！\n查询方式：【中国教育考试网 或微信小程序】\n需要的信息：【准考证号（忘了可以用身份证找回）】\n\n祝大家都是高分过！过级的同学别忘了群里报喜🎉"},
+{"t":"📮 快递代收提醒","v":"【快递代收提醒】\n\n各位同学：\n写生期间的快递会统一寄到【XX】，我每天晚上统一带回来，注意：\n1. 下单地址填【XX】\n2. 取件时报【姓名+手机尾号】\n3. 贵重物品建议不寄\n\n有急件单独跟我说。"},
+{"t":"🎤 晚会节目征集","v":"【晚会节目征集】\n\n【晚会名称】节目征集开始！\n时间：【X月X日】\n形式不限：唱歌、跳舞、小品、朗诵……只要有想法！\n报名方式：【私信我：姓名+节目形式】\n截止：【X月X日】\n\n上台的机会不多，展示自己的时候到了！"},
+{"t":"🛏 晚归/离校报备（发老师）","v":"尊敬的【X老师】：\n\n您好！向您报备：【X月X日】我们班【姓名】等【X】名同学因【事由，如：家长来校接/外出办事】，将于【晚上X点】后离校/晚归，已告知其注意安全并保持联系。\n\n特此报备，如有问题请您随时联系我。"},
+{"t":"🔌 网费/电费提醒","v":"【宿舍网费/电费提醒】\n\n各位同学：\n各宿舍【电费/网费】余额不足的请尽快充值：\n充值方式：【XX】\n建议：【一次充值覆盖到月底，避免断网断电影响休息和学习】\n\n特别是要打游戏开黑的同学，别到关键时刻掉链子哈😉"},
+{"t":"📚 图书/资料归还提醒","v":"【图书/资料归还提醒】\n\n之前借用的【XX书籍/资料】，请在【X月X日】前归还给【我/XX】。\n这些资料还要留给下一届同学使用，请保管好的同学按时归还，破损或丢失的需要按原价赔偿哦。\n\n谢谢配合！"}
 ];
 for(const [id,k] of [["myName","name"],["myId","id"],["mySign","sign"]]){
     const el=document.getElementById(id);const p0=getProf();
@@ -356,6 +376,19 @@ function renderTpls(filter){
 renderTpls();
 $("tplCount").textContent=TPL.length+" 个模板";
 searchTpl.oninput=e=>renderTpls(e.target.value);
+
+// ===== 快捷礼貌语 =====
+for(const ph of ["麻烦老师了","谢谢老师！","收到请回复","祝老师工作顺利","请各位同学互相转告","辛苦大家了"]){
+  const c=document.createElement("span");c.className="chip mini";c.textContent=ph;
+  c.onclick=()=>{const el=$("in");const p=el.selectionStart||el.value.length;
+    el.value=el.value.slice(0,p)+ph+el.value.slice(p);
+    el.dispatchEvent(new Event("input"));el.focus();el.selectionStart=el.selectionEnd=p+ph.length};
+  document.getElementById("quickPhrases").appendChild(c);
+}
+
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+  navigator.serviceWorker.register("sw.js").catch(function(){});
+}
 </script>
 </body>
 </html>
