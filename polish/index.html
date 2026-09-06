@@ -51,6 +51,18 @@ button.ghost:hover{border-color:var(--p2);color:var(--p)}
 #searchTpl:focus{border-color:var(--p2)}
 #histEmpty{color:var(--mut);font-size:13px;text-align:center;padding:20px 0}
 .linkbtn{color:var(--p);cursor:pointer;font-size:12.5px;user-select:none}
+.pinput{flex:1;min-width:140px;padding:9px 12px;border:1.5px solid #e5e0f5;border-radius:10px;font-size:13.5px;outline:none;font-family:inherit}
+.pinput:focus{border-color:var(--p2)}
+body.dark{--bg:#17141f;--card:#221e30;--txt:#ece9f5;--mut:#9a95b0}
+body.dark textarea,body.dark input{background:#1b1728;border-color:#3a3355;color:var(--txt)}
+body.dark .chip{background:#221e30;border-color:#3a3355;color:var(--txt)}
+body.dark .chip:not(.on):hover{border-color:var(--p2)}
+body.dark #out .polished{background:#1b1728}
+body.dark #histList .h-item{border-color:#3a3355}
+body.dark #lock .box{background:#221e30}
+body.dark button.ghost{background:#221e30;border-color:#3a3355;color:var(--mut)}
+#themeBtn{margin-left:auto;padding:8px 12px;border-radius:10px;border:1.5px solid #e5e0f5;background:#fff;cursor:pointer;font-size:15px}
+body.dark #themeBtn{background:#221e30;border-color:#3a3355}
 </style>
 </head>
 <body>
@@ -69,12 +81,22 @@ button.ghost:hover{border-color:var(--p2);color:var(--p)}
 <header>
   <div class="logo">✒️</div>
   <div><h1>班长文案润色助手<small>错别字 · 语病 · 语气，一键搞定</small></h1></div>
+  <button id="themeBtn" title="切换深色/浅色">🌙</button>
 </header>
 
 <div class="card">
   <div class="label"><span>📋 常用模板（点一下直接填入，改掉【】里的内容再润色）</span><span id="tplCount"></span></div>
   <input id="searchTpl" placeholder="🔍 搜模板，如：通知 / 请假 / 老师…">
   <div class="chips" id="tpls"></div>
+</div>
+
+<div class="card">
+  <div class="label"><span>🪪 我的常用信息（填一次，模板自动替换【姓名】【学号】）</span></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <input class="pinput" id="myName" placeholder="姓名，如：周何">
+    <input class="pinput" id="myId" placeholder="学号，如：2525110XX">
+    <input class="pinput" id="mySign" placeholder="落款，如：网媒2502班 周何" style="flex:2">
+  </div>
 </div>
 
 <div class="card">
@@ -132,6 +154,16 @@ button.ghost:hover{border-color:var(--p2);color:var(--p)}
 const CFG={url:"https://ws-mcyvrepj57llk2up.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions",model:"deepseek-v4-flash",
 salt:"Z2RIQ82mf+eEowk0go8peA==",iv:"QQJlslSvcd44cpcZ",ct:"Z/h5x3JsO+IiiXOUtDslVlIvtZ5sn580T5PhzYQR+tZSqI83Zn9uFB5A7JbbZdj02+ooqJ/7k/piEKvqPJ+8oNZxqE8LLzCF2kNrDQxSweLGMcQuZYbMjc2FAranYKXPnhJxNBHfZSG3c+QqcD76K4LOk/13sO9qOQqABxKzOf76/jQM"};
 let scene="teacher",tone="得体、真诚、有分寸";
+// ===== 个人信息与偏好 =====
+function getProf(){try{return JSON.parse(localStorage.getItem("bw_profile")||"{}")}catch{return{}}}
+function getUse(){try{return JSON.parse(localStorage.getItem("bw_tpluse")||"{}")}catch{return{}}}
+function applyProf(v){const p=getProf();
+  if(p.name)v=v.split("【姓名】").join(p.name);
+  if(p.id)v=v.split("【XXXX】").join(p.id);
+  if(p.sign){v=v.split("学生：【姓名】").join("学生："+p.sign).split("网媒2502班 周何").join(p.sign).split("网媒2502班班长周何").join(p.sign)}
+  return v;}
+if(localStorage.getItem("bw_theme")==="dark"){document.body.classList.add("dark");const b=document.getElementById("themeBtn");if(b)b.textContent="☀️"}
+document.getElementById("themeBtn").onclick=()=>{const d=document.body.classList.toggle("dark");document.getElementById("themeBtn").textContent=d?"☀️":"🌙";localStorage.setItem("bw_theme",d?"dark":"light")};
 const $=id=>document.getElementById(id);
 const te=new TextEncoder(),td=new TextDecoder();
 const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -271,25 +303,36 @@ const TPL=[
  {t:"💻 网课/线上会议通知",v:"【线上上课通知】\n\n各位同学：\n【X月X日】的【课程名称】改为线上进行，请注意：\n1. 平台：【腾讯会议/钉钉】，会议号：【XXX】\n2. 时间：【X点X分】开始，请提前5分钟进入并改为实名\n3. 上课期间请保持安静，认真听讲\n\n收到请回复。"},
  {t:"🧹 宿舍/值日安排",v:"【宿舍检查/值日安排】\n\n各位同学：\n【X月X日】将进行宿舍检查，请各宿舍提前做好卫生：\n1. 地面、桌面、阳台整洁\n2. 垃圾及时清理，不留外卖盒\n3. 违规电器请提前收好\n\n检查结果会全院通报，请大家重视！"},
  {t:"🚄 出行乘车统计",v:"【出行乘车统计】\n\n各位同学：\n为安排【写生/集体活动】乘车，现统计出行信息，请按格式接龙：\n姓名+【出发时间偏好/是否需要大巴座位】\n\n统计截止【X月X日】，逾期未接龙的视为自行前往，谢谢配合！"},
- {t:"🏆 评优/奖学金提醒",v:"【评优/奖学金申报提醒】\n\n各位同学：\n【XX评选/奖学金】开始申报，符合条件（【简述条件】）的同学请：\n1. 【X月X日前】提交申报材料至【提交方式】\n2. 材料包括：【清单】\n\n机会难得，符合条件千万别错过！有问题随时问我。"},
- {t:"❤️ 志愿活动招募",v:"【志愿活动招募】\n\n【活动名称】需要志愿者若干名！\n时间：【X月X日】\n地点：【XX】\n可加志愿时长：【X小时】\n\n想参加的同学请私信我报名，名额有限，先到先得！"},
- {t:"📚 补考/重修提醒",v:"【补考/重修提醒】\n\n相关同学请注意：\n【XX科目】补考/重修时间为【X月X日】，地点【XX】。\n请提前复习备考，带好学生证和考试用具，千万不要缺席。\n\n收到请单独回复我一声，谢谢！"},
- {t:"📊 班级周报（发老师）",v:"尊敬的【X老师】：\n\n您好！现将本周班级情况向您汇报：\n1. 学习方面：【概况】\n2. 活动方面：【概况】\n3. 需要关注：【有无特殊情况】\n\n本周班级整体运行平稳，如有问题我会及时向您汇报。\n\n祝您工作顺利！\n网媒2502班 周何"},
- {t:"🕐 协调会议时间（发老师）",v:"尊敬的【X老师】：\n\n您好！关于【会议/谈话事项】，想和您约定一个时间。\n同学们【X月X日下午】和【X月X日上午】都有空，不知哪个时间方便老师？如您时间都不合适，我们完全配合您的安排。\n\n麻烦老师了，谢谢！"},
- {t:"📢 二次催交（发班群）",v:"【再催一次！】关于【XX材料/事项】\n\n各位同学：\n之前发的【XX材料】还有部分同学没有提交，名单我就不点名了哈😊\n截止时间就在【今晚10点】，拜托大家抓紧！\n有什么困难来不及的，单独私聊我，我们想办法。"},
- {t:"🎉 节日祝福（发班群/老师）",v:"【节日祝福】\n\n各位同学：【节日名】快乐！\n【放假安排：X月X日至X月X日放假，X月X日正常上课】\n假期请注意安全，合理安排学习，返校后我们继续加油！\n\n祝大家假期愉快！"},
- {t:"🙏 致谢（发老师）",v:"尊敬的【X老师】：\n\n您好！非常感谢您对【事项】的支持和帮助，【事情已经顺利完成/问题已经解决】。\n同学们都特别开心，让我一定向您转达谢意！\n\n祝您工作顺利，万事如意！\n网媒2502班全体同学"}
+{"t":"🙏 致谢（发老师）","v":"尊敬的【X老师】：\n\n您好！非常感谢您对【事项】的支持和帮助，【事情已经顺利完成/问题已经解决】。\n同学们都特别开心，让我一定向您转达谢意！\n\n祝您工作顺利，万事如意！\n网媒2502班全体同学"},
+{"t":"📝 四六级报名提醒","v":"【四六级报名提醒】\n\n各位同学：\n【下半年/上半年】四六级考试开始报名啦！\n1. 报名时间：【X月X日-X月X日】\n2. 报名方式：【全国大学英语四六级考试官网 cet-bm.neea.edu.cn】\n3. 费用：【XX元】，请提前在报名系统里交\n\n名额有限，逾期不候！报名成功的同学群里说一声，我统计一下。"},
+{"t":"🚩 团日活动通知","v":"【团日活动通知】\n\n各位团员同学：\n定于【X月X日】开展本学期团日活动：\n活动主题：【XX】\n活动地点：【XX】\n注意事项：【着装/携带物品】\n\n本次团日活动计入团籍档案，请团员同学务必参加，非团员想参加的也欢迎！"},
+{"t":"📖 晚自习通知","v":"【晚自习安排】\n\n各位同学：\n本学期晚自习安排如下：\n时间：【每周日至周四 晚上7:00-9:00】\n地点：【XX教学楼 XX教室】\n要求：【手机上交/不得喧哗/考勤记录】\n\n有事不能来的提前跟我说，别无故缺席哦。"},
+{"t":"🏥 体检/疫苗通知","v":"【体检/疫苗通知】\n\n各位同学：\n学校安排【XX体检/疫苗接种】，具体如下：\n时间：【X月X日 上午X点】\n地点：【校医院/XX】\n注意：【空腹/带身份证/戴口罩】\n\n请按时间前往，错过需自行预约补检，谢谢配合！"},
+{"t":"🔁 转专业/分方向咨询（发老师）","v":"尊敬的【X老师】：\n\n您好！我是网媒2502班的周何。最近有几位同学在了解【转专业/专业分方向】的事情，想咨询您：\n1. 【具体问题一】\n2. 【具体问题二】\n\n方便的时候回复一下就好，不着急。同学们都很关心，谢谢老师！"},
+{"t":"🧾 教室调换通知","v":"【教室调换通知】\n\n各位同学：\n【X月X日至X月X日】的【课程名称】上课地点调整为：【XX教学楼XX教室】。\n其余时间课程安排不变，请互相转告，别走错教室啦！"},
+{"t":"🏆 评优/奖学金提醒","v":"【评优/奖学金申报提醒】\n\n各位同学：\n【XX评选/奖学金】开始申报，符合条件（【简述条件】）的同学请：\n1. 【X月X日前】提交申报材料至【提交方式】\n2. 材料包括：【清单】\n\n机会难得，符合条件千万别错过！有问题随时问我。"},
+{"t":"❤️ 志愿活动招募","v":"【志愿活动招募】\n\n【活动名称】需要志愿者若干名！\n时间：【X月X日】\n地点：【XX】\n可加志愿时长：【X小时】\n\n想参加的同学请私信我报名，名额有限，先到先得！"},
+{"t":"📚 补考/重修提醒","v":"【补考/重修提醒】\n\n相关同学请注意：\n【XX科目】补考/重修时间为【X月X日】，地点【XX】。\n请提前复习备考，带好学生证和考试用具，千万不要缺席。\n\n收到请单独回复我一声，谢谢！"},
+{"t":"📊 班级周报（发老师）","v":"尊敬的【X老师】：\n\n您好！现将本周班级情况向您汇报：\n1. 学习方面：【概况】\n2. 活动方面：【概况】\n3. 需要关注：【有无特殊情况】\n\n本周班级整体运行平稳，如有问题我会及时向您汇报。\n\n祝您工作顺利！\n网媒2502班 周何"},
+{"t":"🕐 协调会议时间（发老师）","v":"尊敬的【X老师】：\n\n您好！关于【会议/谈话事项】，想和您约定一个时间。\n同学们【X月X日下午】和【X月X日上午】都有空，不知哪个时间方便老师？如您时间都不合适，我们完全配合您的安排。\n\n麻烦老师了，谢谢！"},
+{"t":"📢 二次催交（发班群）","v":"【再催一次！】关于【XX材料/事项】\n\n各位同学：\n之前发的【XX材料】还有部分同学没有提交，名单我就不点名了哈😊\n截止时间就在【今晚10点】，拜托大家抓紧！\n有什么困难来不及的，单独私聊我，我们想办法。"},
+{"t":"🎉 节日祝福（发班群/老师）","v":"【节日祝福】\n\n各位同学：【节日名】快乐！\n【放假安排：X月X日至X月X日放假，X月X日正常上课】\n假期请注意安全，合理安排学习，返校后我们继续加油！\n\n祝大家假期愉快！"}
 ];
-const tplBox=$("tpls");const searchTpl=$("searchTpl");
+for(const [id,k] of [["myName","name"],["myId","id"],["mySign","sign"]]){
+    const el=document.getElementById(id);const p0=getProf();
+    if(p0[k])el.value=p0[k];
+    el.oninput=()=>{const p=getProf();p[k]=el.value.trim();localStorage.setItem("bw_profile",JSON.stringify(p))};
+  }
+  const tplBox=$("tpls");const searchTpl=$("searchTpl");
 function renderTpls(filter){
   tplBox.innerHTML="";
   const f=(filter||"").trim().toLowerCase();
-  const list=f?TPL.filter(x=>(x.t+x.v).toLowerCase().includes(f)):TPL;
+  const use=getUse();const base=f?TPL.filter(x=>(x.t+x.v).toLowerCase().includes(f)):TPL.slice();const list=base.sort((a,b)=>(use[b.t]||0)-(use[a.t]||0));
   if(!list.length){tplBox.innerHTML='<span style="font-size:13px;color:var(--mut)">没找到匹配的模板</span>';return}
   list.forEach(x=>{
     const s=document.createElement("span");
     s.className="chip";s.textContent=x.t;
-    s.onclick=()=>{$("in").value=x.v;$("in").dispatchEvent(new Event("input"));$("in").scrollIntoView({behavior:"smooth"});$("in").focus()};
+    s.onclick=()=>{const use=getUse();use[x.t]=(use[x.t]||0)+1;localStorage.setItem("bw_tpluse",JSON.stringify(use));$("in").value=applyProf(x.v);$("in").dispatchEvent(new Event("input"));$("in").scrollIntoView({behavior:"smooth"});$("in").focus()};
     tplBox.appendChild(s);
   });
 }
