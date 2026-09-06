@@ -36,6 +36,7 @@ button.ghost:hover{border-color:var(--p2);color:var(--p)}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:r 1s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes r{to{transform:rotate(360deg)}}
 .tip{font-size:12.5px;color:var(--mut);text-align:center;margin-top:18px;line-height:1.8}
+@media print{body{background:#fff}.wrap>*:not(#out){display:none!important}#out{display:block!important;box-shadow:none}#out .polished{border:none;background:#fff;font-size:16px;padding:0}#notes,#tune,#copy,.label .linkbtn{display:none!important}}
 #lock{position:fixed;inset:0;background:rgba(30,27,46,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9}
 #lock .box{background:#fff;border-radius:18px;padding:26px;width:min(340px,88vw);text-align:center}
 #lock .box .logo{margin:0 auto 10px}
@@ -86,6 +87,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
 
 <div class="card">
   <div class="label"><span>📋 常用模板（点一下直接填入，改掉【】里的内容再润色）</span><span id="tplCount"></span></div>
+  <div class="chips" id="tplCats" style="margin-bottom:10px"></div>
   <input id="searchTpl" placeholder="🔍 搜模板，如：通知 / 请假 / 老师…">
   <div class="chips" id="tpls"></div>
 </div>
@@ -121,6 +123,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
   <div class="row">
     <button class="main" id="go">✨ 一键润色（Ctrl+Enter）</button>
     <button class="ghost" id="copy" style="display:none">📋 复制</button>
+    <button class="ghost" id="printBtn" style="display:none">🖨 打印/PDF</button>
     <button class="ghost" id="clear">🗑 清空</button>
   </div>
   <div id="err"></div>
@@ -219,7 +222,7 @@ request:"这是班长代同学或自己向老师/学院提出的申请或请求�
 casual:"这是日常沟通场景（同学、群里闲聊、非正式沟通）。要求：保持原意，改掉错别字和标点，让表达通顺自然即可，不要过度正式化。"};
 
 $("go").onclick=async()=>{await doPolish()};
-$("clear").onclick=()=>{$("in").value="";$("in").dispatchEvent(new Event("input"));$("out").style.display="none";$("copy").style.display="none";$("tune").style.display="none";$("err").style.display="none"};
+$("clear").onclick=()=>{$("in").value="";localStorage.removeItem("bw_draft");$("in").dispatchEvent(new Event("input"));$("out").style.display="none";$("copy").style.display="none";$("tune").style.display="none";$("err").style.display="none"};
 $("in").addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter")$("go").click()});
 
 async function doPolish(extra){
@@ -242,7 +245,7 @@ async function doPolish(extra){
     const notes=i>=0?out.slice(i).replace(/={3,}修改说明={3,}/,"").trim():"";
     $("polished").textContent=polished;
     $("notes").textContent=notes&&!extra?"📝 "+notes:"";
-    $("out").style.display="block";$("copy").style.display="block";$("tune").style.display="block";
+    $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("tune").style.display="block";
     $("out").scrollIntoView({behavior:"smooth"});
     if(!extra)pushHist(text,polished);
   }catch(e){
@@ -256,6 +259,12 @@ document.querySelectorAll("#tune .chip").forEach(c=>c.onclick=async()=>{
   await doPolish(c.dataset.t);
 });
 
+$("printBtn").onclick=()=>window.print();
+let draftTimer=null;
+$("in").addEventListener("input",()=>{clearTimeout(draftTimer);draftTimer=setTimeout(()=>{try{localStorage.setItem("bw_draft",$("in").value)}catch{}},400)});
+try{const draft=localStorage.getItem("bw_draft");
+  if(draft&&draft.trim()){$("in").value=draft;$("in").dispatchEvent(new Event("input"));$("err").style.display="block";$("err").style.color="var(--ok)";$("err").style.background="#ecfdf5";$("err").textContent="已自动恢复上次未发送的草稿";setTimeout(()=>{$("err").style.display="none"},4000)}
+}catch{}
 $("copy").onclick=async()=>{
   try{await navigator.clipboard.writeText($("polished").textContent);$("copy").textContent="✅ 已复制";}
   catch{$("copy").textContent="请手动选中复制";}
@@ -324,10 +333,18 @@ for(const [id,k] of [["myName","name"],["myId","id"],["mySign","sign"]]){
     el.oninput=()=>{const p=getProf();p[k]=el.value.trim();localStorage.setItem("bw_profile",JSON.stringify(p))};
   }
   const tplBox=$("tpls");const searchTpl=$("searchTpl");
+for(const [v,lab] of [["all","全部"],["teacher","📩 发老师"],["notice","📢 发班群"],["request","📝 申请类"]]){
+  const c=document.createElement("span");c.className="chip mini"+(v==="all"?" on":"");c.textContent=lab;
+  c.onclick=()=>{tplCat=v;document.querySelectorAll("#tplCats .chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");renderTpls(searchTpl.value)};
+  document.getElementById("tplCats").appendChild(c);
+}
+let tplCat="all";
+function inferCat(t){if(t.includes("发老师"))return"teacher";if(t.includes("请假")||t.includes("申请"))return"request";return"notice"}
 function renderTpls(filter){
   tplBox.innerHTML="";
   const f=(filter||"").trim().toLowerCase();
-  const use=getUse();const base=f?TPL.filter(x=>(x.t+x.v).toLowerCase().includes(f)):TPL.slice();const list=base.sort((a,b)=>(use[b.t]||0)-(use[a.t]||0));
+  const use=getUse();
+  const list=TPL.filter(x=>tplCat==="all"||inferCat(x.t)===tplCat).filter(x=>!f||(x.t+x.v).toLowerCase().includes(f)).sort((a,b)=>(use[b.t]||0)-(use[a.t]||0));
   if(!list.length){tplBox.innerHTML='<span style="font-size:13px;color:var(--mut)">没找到匹配的模板</span>';return}
   list.forEach(x=>{
     const s=document.createElement("span");
