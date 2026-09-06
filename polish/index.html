@@ -104,12 +104,14 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
     <input class="pinput" id="myName" placeholder="姓名，如：周何">
     <input class="pinput" id="myId" placeholder="学号，如：2525110XX">
     <input class="pinput" id="mySign" placeholder="落款，如：网媒2502班 周何" style="flex:2">
+    <input class="pinput" id="myTeachers" placeholder="常找的老师，逗号隔开，如：王老师,李导员" style="flex:2">
   </div>
 </div>
 
 <div class="card">
   <div class="label"><span>① 输入你想说的话（草稿就行，不用修饰）</span><span id="cnt">0 字</span></div>
   <textarea id="in" placeholder="比如：老师您好，我是网媒2502班的周何，想问一下下周写生的集合时间是几点…"></textarea>
+  <div class="chips" id="teacherChips" style="margin-top:10px"></div>
   <div class="chips" id="quickPhrases" style="margin-top:10px"></div>
 </div>
 
@@ -120,6 +122,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
     <span class="chip" data-v="notice">📢 班级群通知</span>
     <span class="chip" data-v="request">📝 申请/请求</span>
     <span class="chip" data-v="casual">💬 日常沟通</span>
+    <span class="chip" data-v="jielong">🧮 接龙整理</span>
   </div>
   <div class="label" style="margin-top:14px"><span>③ 语气偏好</span></div>
   <div class="chips" id="tones">
@@ -132,6 +135,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
     <button class="ghost" id="copy" style="display:none">📋 复制</button>
     <button class="ghost" id="printBtn" style="display:none">🖨 打印/PDF</button>
     <button class="ghost" id="readBtn" style="display:none">🔊 朗读</button>
+    <button class="ghost" id="imgBtn" style="display:none">🖼 存为长图</button>
     <button class="ghost" id="clear">🗑 清空</button>
   </div>
   <div id="err"></div>
@@ -237,7 +241,8 @@ $("in").oninput=e=>{$("cnt").textContent=e.target.value.length+" 字"};
 const SCENES={teacher:"这是大学班长要发给老师/辅导员的正式消息。要求：开头加得体称呼和问候，语气恭敬但不卑微，条理清晰，结尾礼貌收束（如'麻烦老师了''祝老师工作顺利'），保持学生身份的真诚。",
 notice:"这是班长要发到班群里的通知。要求：信息要点清晰、可加序号分条，重点信息（时间/地点/事项）突出，语气亲切有号召力，结尾可加收到请回复之类的提醒。",
 request:"这是班长代同学或自己向老师/学院提出的申请或请求。要求：说明事由简洁清楚，理由充分诚恳，明确诉求，语气正式礼貌，符合书面申请的格式感。",
-casual:"这是日常沟通场景（同学、群里闲聊、非正式沟通）。要求：保持原意，改掉错别字和标点，让表达通顺自然即可，不要过度正式化。"};
+casual:"这是日常沟通场景（同学、群里闲聊、非正式沟通）。要求：保持原意，改掉错别字和标点，让表达通顺自然即可，不要过度正式化。",
+jielong:"这是班长在整理班级接龙/报名/统计的结果。用户会粘贴一堆零散的群聊回复。要求：1) 提取每位同学的姓名和所填内容，重复的只保留一条；2) 整理成编号清晰的名单；3) 末尾统计总人数；4) 信息不全或有疑问的单独列在最后提醒补充；5) 不遗漏、不虚构任何人名。"};
 
 $("go").onclick=async()=>{await doPolish()};
 $("clear").onclick=()=>{$("in").value="";localStorage.removeItem("bw_draft");$("in").dispatchEvent(new Event("input"));$("out").style.display="none";$("copy").style.display="none";$("tune").style.display="none";$("err").style.display="none"};
@@ -263,7 +268,7 @@ async function doPolish(extra){
     const notes=i>=0?out.slice(i).replace(/={3,}修改说明={3,}/,"").trim():"";
     $("polished").textContent=polished;
     $("notes").textContent=notes&&!extra?"📝 "+notes:"";
-    $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("readBtn").style.display="block";$("tune").style.display="block";
+    $("out").style.display="block";$("copy").style.display="block";$("printBtn").style.display="block";$("readBtn").style.display="block";$("imgBtn").style.display="block";$("tune").style.display="block";
     $("out").scrollIntoView({behavior:"smooth"});
     if(!extra)pushHist(text,polished);
   }catch(e){
@@ -463,6 +468,48 @@ for(const ph of ["麻烦老师了","谢谢老师！","收到请回复","祝老�
 if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
   navigator.serviceWorker.register("sw.js").catch(function(){});
 }
+
+// ===== 存为长图 =====
+function loadH2C(){
+  return new Promise((res,rej)=>{
+    if(window.html2canvas)return res(window.html2canvas);
+    const sc=document.createElement("script");
+    sc.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+    sc.onload=()=>res(window.html2canvas);
+    sc.onerror=()=>rej(new Error("渲染组件加载失败，请检查网络后重试"));
+    document.head.appendChild(sc);
+  });
+}
+$("imgBtn").onclick=async()=>{
+  $("imgBtn").disabled=true;$("imgBtn").textContent="⏳ 生成中…";
+  try{
+    const h2c=await loadH2C();
+    const canvas=await h2c(document.querySelector("#out .polished"),{backgroundColor:"#faf8ff",scale:2});
+    const a=document.createElement("a");
+    a.href=canvas.toDataURL("image/png");
+    a.download="通知长图-"+new Date().toISOString().slice(0,10)+".png";
+    a.click();
+    $("imgBtn").textContent="🖼 存为长图";
+  }catch(e){$("imgBtn").textContent="🖼 存为长图";alert("长图生成失败："+e.message)}
+  $("imgBtn").disabled=false;
+};
+
+// ===== 老师称呼速查 =====
+function renderTeacherChips(){
+  const box=document.getElementById("teacherChips");if(!box)return;
+  box.innerHTML="";
+  const p=getProf();
+  if(!p.teachers)return;
+  p.teachers.split(/[,，、]/).map(x=>x.trim()).filter(Boolean).forEach(t=>{
+    const c=document.createElement("span");c.className="chip mini";c.textContent=t+"：";
+    c.onclick=()=>{const el=$("in");const pos=el.selectionStart||0;
+      el.value=el.value.slice(0,pos)+t+"："+el.value.slice(pos);
+      el.dispatchEvent(new Event("input"));el.focus();el.selectionStart=el.selectionEnd=pos+t.length+1};
+    box.appendChild(c);
+  });
+}
+renderTeacherChips();
+$("myTeachers").addEventListener("input",()=>{const p=getProf();p.teachers=$("myTeachers").value.trim();localStorage.setItem("bw_profile",JSON.stringify(p));renderTeacherChips()});
 </script>
 </body>
 </html>
