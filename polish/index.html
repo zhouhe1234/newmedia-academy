@@ -91,6 +91,10 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
   <div class="label"><span>📋 常用模板（点一下直接填入，改掉【】里的内容再润色）</span><span id="tplCount"></span></div>
   <div class="chips" id="tplCats" style="margin-bottom:10px"></div>
   <input id="searchTpl" placeholder="🔍 搜模板，如：通知 / 请假 / 老师…">
+  <div id="myTplForm" style="display:none;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+    <input id="myTplName" class="pinput" placeholder="给这个模板起个名字，如：每周收作业通知" style="flex:2">
+    <button class="ghost" id="myTplSave" style="padding:8px 14px">💾 保存</button>
+  </div>
   <div class="chips" id="tpls"></div>
 </div>
 
@@ -134,7 +138,7 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
 </div>
 
 <div class="card" id="out">
-  <div class="label"><span>④ 润色结果</span><span class="linkbtn" id="saveHist">存入历史</span></div>
+  <div class="label"><span>④ 润色结果</span><span class="linkbtn" id="saveHist">存入历史</span><span class="linkbtn" id="saveTpl">💾 存为我的模板</span></div>
   <div class="polished" id="polished"></div>
   <div id="notes"></div>
   <div id="tune">
@@ -152,6 +156,15 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
   <div class="label"><span>🕘 润色历史（最多保留 10 条，存本机）</span><span class="linkbtn" id="histToggle">展开</span></div>
   <div id="histList" style="display:none"></div>
   <div id="histEmpty">还没有历史记录</div>
+</div>
+
+<div class="card">
+  <div class="label"><span>🛟 数据备份（润色历史 / 我的模板 / 个人信息 打包带走）</span></div>
+  <div class="row">
+    <button class="ghost" id="expBtn">⬇ 导出备份文件</button>
+    <button class="ghost" id="impBtn">⬆ 导入备份</button>
+    <input type="file" id="impFile" accept=".json" style="display:none">
+  </div>
 </div>
 
 <p class="tip">发送前请核对好时间、地点、人名等关键信息<br>本页可收藏到主屏幕，随时随地方便使用</p>
@@ -360,8 +373,20 @@ for(const [v,lab] of [["all","全部"],["teacher","📩 发老师"],["notice","�
 }
 let tplCat="all";
 function inferCat(t){if(t.includes("发老师"))return"teacher";if(t.includes("请假")||t.includes("申请"))return"request";return"notice"}
+function renderMyTpls(){
+  const m=getMy();const frag=document.createDocumentFragment();
+  m.forEach((x,i)=>{
+    const wrap=document.createElement("span");wrap.style.cssText="display:inline-flex;align-items:center;border:1.5px solid var(--p2);border-radius:999px;overflow:hidden";
+    const use=document.createElement("span");use.textContent="📌 "+x.t;use.style.cssText="padding:7px 8px 7px 14px;cursor:pointer;font-size:13.5px";
+    const del=document.createElement("span");del.textContent="✕";del.style.cssText="padding:7px 10px 7px 4px;cursor:pointer;color:#dc2626;font-size:12px";
+    use.onclick=()=>{$("in").value=applyProf(x.v);$("in").dispatchEvent(new Event("input"));$("in").focus()};
+    del.onclick=(e)=>{e.stopPropagation();const m2=getMy();m2.splice(i,1);localStorage.setItem("bw_mytpls",JSON.stringify(m2));renderTpls(searchTpl.value)};
+    wrap.appendChild(use);wrap.appendChild(del);frag.appendChild(wrap);
+  });
+  tplBox.insertBefore(frag,tplBox.firstChild);
+}
 function renderTpls(filter){
-  tplBox.innerHTML="";
+  tplBox.innerHTML="";renderMyTpls();
   const f=(filter||"").trim().toLowerCase();
   const use=getUse();
   const list=TPL.filter(x=>tplCat==="all"||inferCat(x.t)===tplCat).filter(x=>!f||(x.t+x.v).toLowerCase().includes(f)).sort((a,b)=>(use[b.t]||0)-(use[a.t]||0));
@@ -376,6 +401,54 @@ function renderTpls(filter){
 renderTpls();
 $("tplCount").textContent=TPL.length+" 个模板";
 searchTpl.oninput=e=>renderTpls(e.target.value);
+
+// ===== 我的模板：保存与删除 =====
+let pendingTpl="";
+$("saveTpl").onclick=()=>{
+  const v=$("in").value.trim();
+  if(!v){$("err").style.display="block";$("err").style.color="";$("err").style.background="";$("err").textContent="先在输入框写好内容，再保存为模板";return}
+  pendingTpl=v;$("myTplForm").style.display="flex";$("myTplName").value="";$("myTplName").focus();
+};
+$("myTplSave").onclick=()=>{
+  const n=$("myTplName").value.trim()||("我的模板"+(getMy().length+1));
+  const m=getMy();m.push({t:"📌 "+n,v:pendingTpl});
+  localStorage.setItem("bw_mytpls",JSON.stringify(m));
+  $("myTplForm").style.display="none";pendingTpl="";
+  renderTpls(searchTpl.value);
+};
+
+// ===== 数据备份：导出/导入 =====
+$("expBtn").onclick=()=>{
+  const data={app:"banzhang-wenan",exported:new Date().toISOString(),history:getHist(),mytpls:getMy(),profile:getProf(),tpluse:getUse()};
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="润色助手备份-"+new Date().toISOString().slice(0,10)+".json";a.click();
+  URL.revokeObjectURL(a.href);
+};
+$("impBtn").onclick=()=>$("impFile").click();
+$("impFile").onchange=e=>{
+  const file=e.target.files[0];if(!file)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const j=JSON.parse(rd.result);
+      if(!j.app||j.app!=="banzhang-wenan")throw new Error("不是本助手的备份文件");
+      if(Array.isArray(j.history))localStorage.setItem("bw_hist",JSON.stringify(j.history));
+      if(Array.isArray(j.mytpls))localStorage.setItem("bw_mytpls",JSON.stringify(j.mytpls));
+      if(j.profile)localStorage.setItem("bw_profile",JSON.stringify(j.profile));
+      if(j.tpluse)localStorage.setItem("bw_tpluse",JSON.stringify(j.tpluse));
+      renderHist();renderTpls(searchTpl.value);
+      $("err").style.display="block";$("err").style.color="var(--ok)";$("err").style.background="#ecfdf5";
+      $("err").textContent="✅ 导入成功，数据已恢复";
+      setTimeout(()=>{$("err").style.display="none"},3000);
+    }catch(err){
+      $("err").style.display="block";$("err").style.color="";$("err").style.background="";
+      $("err").textContent="导入失败："+err.message;
+    }
+    e.target.value="";
+  };
+  rd.readAsText(file);
+};
 
 // ===== 快捷礼貌语 =====
 for(const ph of ["麻烦老师了","谢谢老师！","收到请回复","祝老师工作顺利","请各位同学互相转告","辛苦大家了"]){
