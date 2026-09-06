@@ -27,36 +27,41 @@ h1{font-size:22px}h1 small{display:block;font-size:12px;color:var(--mut);font-we
 .tmeta b{font-size:14.5px}
 .tmeta p{font-size:12px;color:var(--mut);margin-top:3px}
 .slide{aspect-ratio:16/9;container-type:size;background:var(--bg);color:var(--fg);position:relative;overflow:hidden;font-family:var(--sfont);display:flex;flex-direction:column}
-.slide .deco-band{position:absolute;top:0;left:0;width:100%;height:4cqw;background:linear-gradient(90deg,var(--ac),var(--ac2))}
-.slide .deco-corner{position:absolute;right:-8cqw;bottom:-14cqw;width:34cqw;height:34cqw;border-radius:50%;background:var(--ac);opacity:.08}
-.slide .deco-dots{position:absolute;top:5cqw;right:5cqw;width:14cqw;height:5cqw;background-image:radial-gradient(var(--ac) 1px,transparent 1.4px);background-size:2.4cqw 2.4cqw;opacity:.5}
-.slide .pagenum{position:absolute;bottom:3cqw;right:4cqw;font-size:2.2cqw;color:var(--mut2)}
-.slide .inner{flex:1;padding:6cqw 7cqw;display:flex;flex-direction:column;min-height:0}
-.kicker{font-size:2.4cqw;letter-spacing:.4cqw;color:var(--ac);font-weight:700;margin-bottom:2cqw}
-.s-title{font-size:5.6cqw;font-weight:800;line-height:1.25}
-.s-sub{font-size:2.8cqw;color:var(--mut2);margin-top:2cqw}
-.s-who{margin-top:auto;font-size:2.4cqw;color:var(--mut2)}
-.big-num{font-size:16cqw;font-weight:800;color:var(--ac);opacity:.9;line-height:1}
-ol.toc{list-style:none;margin-top:3cqw}
-ol.toc li{font-size:3.2cqw;padding:1.6cqw 0;border-bottom:1px solid color-mix(in srgb,var(--fg) 12%,transparent);display:flex;gap:2cqw;align-items:baseline}
-ol.toc li b{color:var(--ac);font-size:3cqw}
-.body-list{margin-top:3cqw;display:flex;flex-direction:column;gap:2.2cqw}
-.body-list .li{display:flex;gap:2cqw;align-items:flex-start;font-size:3cqw;line-height:1.55}
-.body-list .li::before{content:"";flex:none;width:1.6cqw;height:1.6cqw;border-radius:50%;background:var(--ac);margin-top:1.1cqw}
-.body-text{margin-top:3cqw;font-size:3.1cqw;line-height:1.9;text-indent:2em}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:3cqw}
-.two .col{background:color-mix(in srgb,var(--ac) 7%,transparent);border-radius:2cqw;padding:3cqw;font-size:2.7cqw;line-height:1.7}
-.two .col b{display:block;color:var(--ac);margin-bottom:1.4cqw;font-size:3cqw}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3cqw;margin-top:4cqw}
-.stat{background:color-mix(in srgb,var(--ac) 8%,transparent);border-radius:2cqw;padding:3.4cqw 2cqw;text-align:center}
-.stat b{display:block;font-size:7cqw;color:var(--ac);line-height:1.1}
-.stat span{font-size:2.4cqw;color:var(--mut2)}
-blockquote{margin:auto 0;font-size:4.6cqw;line-height:1.7;font-weight:700}
-blockquote::before{content:"“";color:var(--ac);font-size:8cqw;display:block;line-height:.6}
-.attr{margin-top:3cqw;font-size:2.6cqw;color:var(--mut2);text-align:right}
+.bgl{position:absolute;inset:0;background:linear-gradient(155deg,var(--bg) 0%,var(--bg2) 100%)}
+.bgg1{position:absolute;inset:0;background:radial-gradient(72cqw 46cqh at 88% -8%,var(--g1),transparent 62%)}
+.bgg2{position:absolute;inset:0;background:radial-gradient(60cqw 42cqh at -6% 106%,var(--g2),transparent 58%)}
+.bgpat{position:absolute;inset:0;background-image:var(--pat);background-size:3.6cqw 3.6cqw;opacity:.55}
+.foot{position:absolute;left:0;right:0;bottom:0;height:1.3cqw;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.pgchip{position:absolute;bottom:3.4cqw;right:4.2cqw;font-size:2cqw;color:var(--mut2);background:color-mix(in srgb,var(--fg) 6%,transparent);padding:.5cqw 1.8cqw;border-radius:2cqw;z-index:3}
+.slide .inner{position:relative;z-index:2;flex:1;padding:5.4cqw 6.4cqw 4.4cqw;display:flex;flex-direction:column;min-height:0}
+.kickpill{align-self:flex-start;font-size:2.1cqw;letter-spacing:.5cqw;color:var(--ac);border:.25cqw solid var(--ac);padding:.7cqw 2.4cqw;border-radius:99cqw;font-weight:700;margin-bottom:2.4cqw}
+.s-title{font-size:6.4cqw;font-weight:900;line-height:1.18}
+.ac-line{width:13cqw;height:.65cqw;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:99cqw;margin:2.4cqw 0}
+.s-sub{font-size:3cqw;color:var(--mut2);margin-top:2cqw}
+.s-who{margin-top:auto;align-self:flex-start;background:color-mix(in srgb,var(--ac) 11%,transparent);padding:1.2cqw 2.8cqw;border-radius:99cqw;font-size:2.4cqw;color:var(--fg)}
+.big-num-o{font-size:19cqw;font-weight:800;line-height:1;color:transparent;-webkit-text-stroke:.45cqw var(--ac);opacity:.9}
+.sec-line{width:16cqw;height:.7cqw;background:var(--ac);border-radius:99cqw;margin:2.8cqw 0 2.4cqw}
+ol.toc{list-style:none;margin-top:3cqw;display:flex;flex-direction:column;gap:1.8cqw}
+ol.toc li{display:flex;align-items:center;gap:2.6cqw;background:color-mix(in srgb,var(--fg) 4%,transparent);border:1px solid color-mix(in srgb,var(--fg) 9%,transparent);border-radius:1.8cqw;padding:2.2cqw 3cqw;font-size:3.3cqw;font-weight:600}
+ol.toc li b{width:4.8cqw;height:4.8cqw;border-radius:1.3cqw;background:var(--ac);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2.5cqw;flex:none}
+.body-list{margin-top:3.2cqw;display:flex;flex-direction:column;gap:2.2cqw}
+.body-list .li{background:color-mix(in srgb,var(--fg) 4%,transparent);border-left:.9cqw solid var(--ac);border-radius:1.4cqw;padding:2.5cqw 3cqw;font-size:3.2cqw;line-height:1.62}
+.body-text{margin-top:3cqw;font-size:3.3cqw;line-height:1.95;background:color-mix(in srgb,var(--fg) 4%,transparent);border-left:.9cqw solid var(--ac);border-radius:1.4cqw;padding:3cqw 3.4cqw}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:3.4cqw;margin-top:3.2cqw;flex:1;min-height:0}
+.two .col{background:color-mix(in srgb,var(--fg) 4%,transparent);border:1px solid color-mix(in srgb,var(--fg) 9%,transparent);border-radius:2cqw;overflow:hidden;display:flex;flex-direction:column}
+.two .col b{display:block;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:1.8cqw 3cqw;font-size:2.9cqw}
+.two .col span{padding:2.6cqw 3cqw;font-size:2.9cqw;line-height:1.85;white-space:pre-wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3.2cqw;margin-top:3.4cqw}
+.stat{background:color-mix(in srgb,var(--fg) 4%,transparent);border:1px solid color-mix(in srgb,var(--fg) 9%,transparent);border-top:.8cqw solid var(--ac);border-radius:1.8cqw;padding:3.2cqw 2cqw;text-align:center}
+.stat b{display:block;font-size:8cqw;color:var(--ac);line-height:1.1}
+.stat span{font-size:2.5cqw;color:var(--mut2)}
+blockquote{margin:auto 0;background:color-mix(in srgb,var(--ac) 7%,transparent);border-radius:2.4cqw;padding:4.5cqw 5cqw;font-size:4.8cqw;line-height:1.75;font-weight:700;position:relative}
+blockquote::before{content:"“";position:absolute;top:-1cqw;left:2.4cqw;font-size:11cqw;color:var(--ac);opacity:.35;line-height:1}
+.attr{margin-top:2.6cqw;font-size:2.6cqw;color:var(--mut2);text-align:right}
 .endmsg{margin:auto;text-align:center}
-.endmsg b{font-size:9cqw;font-weight:800;color:var(--ac)}
-.endmsg p{margin-top:2cqw;font-size:3cqw;color:var(--mut2)}
+.endkick{display:inline-block;font-size:2.2cqw;letter-spacing:.6cqw;color:var(--ac);border:.25cqw solid var(--ac);padding:.7cqw 2.6cqw;border-radius:99cqw;font-weight:700;margin-bottom:3cqw}
+.endmsg b{display:block;font-size:10cqw;font-weight:900;line-height:1.15}
+.endmsg p{margin-top:2.4cqw;font-size:3cqw;color:var(--mut2)}
 #editor{display:none}
 #editor.on{display:block}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
@@ -147,16 +152,16 @@ body.present #present{display:block}
 <script>
 /* ================= 主题 ================= */
 const THEMES={
- academic:{name:"学术蓝",bg:"#f5f8ff",fg:"#1a2b4a",mut2:"#5b6b8c",ac:"#2563eb",ac2:"#7aa5f8",font:"sans",deco:"dots"},
- deepnavy:{name:"深空蓝",bg:"#0e1a2f",fg:"#e8eefb",mut2:"#8fa3c4",ac:"#5b9dff",ac2:"#2e5ea8",font:"sans",deco:"band",dark:true},
- fresh:{name:"清新绿",bg:"#f2faf4",fg:"#1c4a2c",mut2:"#5f8a70",ac:"#0f9d58",ac2:"#7fd6a4",font:"sans",deco:"corner"},
- energy:{name:"活力橙",bg:"#fff8f0",fg:"#4a2c0f",mut2:"#9a7b57",ac:"#f97316",ac2:"#fdba74",font:"sans",deco:"dots"},
- pink:{name:"温柔粉",bg:"#fdf5f8",fg:"#4a1f33",mut2:"#a0788d",ac:"#db2777",ac2:"#f9a8c9",font:"sans",deco:"corner"},
- mono:{name:"简约黑白",bg:"#ffffff",fg:"#171717",mut2:"#6b6b6b",ac:"#171717",ac2:"#a3a3a3",font:"sans",deco:"band"},
- darktech:{name:"科技暗黑",bg:"#0f1220",fg:"#e4e8f7",mut2:"#7d86a8",ac:"#22d3ee",ac2:"#6366f1",font:"sans",deco:"dots",dark:true},
- guochao:{name:"国潮红",bg:"#fff7f2",fg:"#5a1a10",mut2:"#a3705f",ac:"#c0392b",ac2:"#e8a87c",font:"serif",deco:"corner"},
- magazine:{name:"杂志米棕",bg:"#faf6ef",fg:"#33291c",mut2:"#8a7a63",ac:"#a16207",ac2:"#d6b98c",font:"serif",deco:"band"},
- mint:{name:"薄荷青",bg:"#f0fafb",fg:"#0f3d42",mut2:"#5f8f95",ac:"#0891b2",ac2:"#7dd3d8",font:"sans",deco:"dots"}
+ academic:{name:"学术蓝",bg:"#f6f9ff",bg2:"#e7f0fe",fg:"#182a4a",mut2:"#5b6b8c",ac:"#2563eb",ac2:"#7aa5f8",g1:"rgba(37,99,235,.13)",g2:"rgba(122,165,248,.16)",pat:"radial-gradient(rgba(37,99,235,.3) 1px,transparent 1.4px)",font:"sans"},
+ deepnavy:{name:"深空蓝",bg:"#0c1628",bg2:"#101f38",fg:"#e8eefb",mut2:"#8fa3c4",ac:"#5b9dff",ac2:"#2e5ea8",g1:"rgba(91,157,255,.15)",g2:"rgba(46,94,168,.22)",pat:"radial-gradient(rgba(122,165,248,.28) 1px,transparent 1.4px)",font:"sans",dark:true},
+ fresh:{name:"清新绿",bg:"#f3fbf5",bg2:"#e4f5e9",fg:"#164a2b",mut2:"#567d63",ac:"#0f9d58",ac2:"#7fd6a4",g1:"rgba(15,157,88,.12)",g2:"rgba(127,214,164,.17)",pat:"radial-gradient(rgba(15,157,88,.3) 1px,transparent 1.4px)",font:"sans"},
+ energy:{name:"活力橙",bg:"#fff9f2",bg2:"#ffeedd",fg:"#4a2a10",mut2:"#9a7b57",ac:"#f97316",ac2:"#fdba74",g1:"rgba(249,115,22,.13)",g2:"rgba(253,186,116,.19)",pat:"radial-gradient(rgba(249,115,22,.3) 1px,transparent 1.4px)",font:"sans"},
+ pink:{name:"温柔粉",bg:"#fdf4f8",bg2:"#fbe7f0",fg:"#4a1f33",mut2:"#a0788d",ac:"#db2777",ac2:"#f9a8c9",g1:"rgba(219,39,119,.11)",g2:"rgba(249,168,201,.18)",pat:"radial-gradient(rgba(219,39,119,.28) 1px,transparent 1.4px)",font:"sans"},
+ mono:{name:"简约黑白",bg:"#ffffff",bg2:"#f4f4f5",fg:"#171717",mut2:"#6b6b6b",ac:"#171717",ac2:"#a3a3a3",g1:"rgba(23,23,23,.06)",g2:"rgba(23,23,23,.05)",pat:"radial-gradient(rgba(0,0,0,.22) 1px,transparent 1.3px)",font:"sans"},
+ darktech:{name:"科技暗黑",bg:"#0d1120",bg2:"#11172b",fg:"#e4e8f7",mut2:"#7d86a8",ac:"#22d3ee",ac2:"#6366f1",g1:"rgba(34,211,238,.13)",g2:"rgba(99,102,241,.2)",pat:"radial-gradient(rgba(34,211,238,.3) 1px,transparent 1.4px)",font:"sans",dark:true},
+ guochao:{name:"国潮红",bg:"#fff8f3",bg2:"#ffeee3",fg:"#521a10",mut2:"#a3705f",ac:"#c0392b",ac2:"#e8a87c",g1:"rgba(192,57,43,.11)",g2:"rgba(232,168,124,.2)",pat:"radial-gradient(rgba(192,57,43,.28) 1px,transparent 1.4px)",font:"serif"},
+ magazine:{name:"杂志米棕",bg:"#fbf7ef",bg2:"#f3ecdd",fg:"#33291c",mut2:"#8a7a63",ac:"#a16207",ac2:"#d6b98c",g1:"rgba(161,98,7,.1)",g2:"rgba(214,185,140,.18)",pat:"radial-gradient(rgba(161,98,7,.26) 1px,transparent 1.4px)",font:"serif"},
+ mint:{name:"薄荷青",bg:"#f1fbfc",bg2:"#e2f5f7",fg:"#0f3d42",mut2:"#5f8f95",ac:"#0891b2",ac2:"#7dd3d8",g1:"rgba(8,145,178,.12)",g2:"rgba(125,211,216,.18)",pat:"radial-gradient(rgba(8,145,178,.28) 1px,transparent 1.4px)",font:"sans"}
 };
 const FONT={sans:'"PingFang SC","Microsoft YaHei",sans-serif',serif:'"Songti SC","STSong","SimSun",serif'};
 
@@ -175,92 +180,18 @@ const P={
 
 /* ================= 模板库 ================= */
 const TPL=[
- {id:"kecheng",name:"课程作业汇报",cat:"课程学习",theme:"academic",deco:"dots",
-  pages:[P.cover("《新媒体数据分析》课程作业汇报","数据驱动的校园媒体运营观察","网媒2502班 · 周何"),
-   P.toc("目录",["选题背景与思路","数据来源与方法","分析结果","问题与反思","下一步计划"]),
-   P.sec("01","选题背景与思路"),
-   P.list("选题背景",["校园公众号阅读量近三月持续下滑","同类高校账号均有爆款案例","希望用数据找到破局点","结合课程所学分析方法"]),
-   P.two("分析方法","数据来源","公众号后台近90天数据\n问卷星回收问卷 137 份\n3 位运营成员的深度访谈","描述统计+交叉分析\n文本情感分析\n对照爆款案例复盘"),
-   P.stats("关键数据",[{b:"137",d:"回收问卷"},{b:"-32%",d:"阅读量降幅"},{b:"3类",d:"高互动内容"}]),
-   P.text("问题与反思","样本以本班同学为主，代表性有限；情感分析的准确率依赖人工校对；下一步将扩大样本并引入更多维度的交叉验证。"),
-   P.end("谢谢观看","欢迎老师和同学们批评指正")]},
- {id:"xiesheng",name:"写生实践汇报",cat:"课程学习",theme:"fresh",deco:"corner",
-  pages:[P.cover("写生实践汇报","从教室走向真实的田野","网媒2502班 · 周何"),
-   P.toc("目录",["写生行程回顾","作品与收获","遇到的问题","同学反馈","总结与展望"]),
-   P.list("写生行程回顾",["Day1 抵达驻地，踩点取景","Day2-4 分组外出写生与采访","Day5 素材整理与初稿","全程共完成作品 23 幅、采访音频 9 段"]),
-   P.two("最大收获","踩过的坑","学会在真实场景里找选题\n画面叙事能力明显提升\n和陌生采访对象破冰的技巧","第一天设备没电白跑一趟\n取景时忽略了光线方向\n下次要提前一天检查设备清单"),
-   P.quote("最好的选题不在教室里，而在你愿意多走的那五百米。","写生手记"),
-   P.end("感谢相遇","期待下一次出发")]},
- {id:"banzhang",name:"班级工作总结",cat:"班级事务",theme:"energy",deco:"dots",
-  pages:[P.cover("班级工作期中总结","网媒2502班 · 班长周何","汇报人：周何"),
-   P.toc("汇报提纲",["班级整体情况","已完成的重点工作","存在的问题","下阶段计划"]),
-   P.stats("班级概况",[{b:"34",d:"班级人数"},{b:"98%",d:"关键通知触达"},{b:"12",d:"组织活动场次"}]),
-   P.list("已完成的重点工作",["建立班级通知三级触达机制（群公告+接龙+私聊提醒）","组织写生集体出行，全程零安全事故","搭建班费公示制度，每月 1 号公开明细","配合辅导员完成 3 次材料收集，按时率 100%"]),
-   P.text("存在的问题","部分同学参与积极性不高，活动报名常集中在少数人；宿舍之间的熟悉度还不均衡；个别通知的反馈时间偏长，需要在形式上做优化。"),
-   P.list("下阶段计划",["推行活动轮值制，让每个人都有参与感","以宿舍为单位开展小型团建","重要通知增加截止前 24 小时的二次提醒","建立班级意见匿名收集箱"]),
-   P.end("感谢辅导员的指导","也谢谢每一位配合工作的同学")]},
- {id:"ziwo",name:"自我介绍",cat:"个人展示",theme:"pink",deco:"corner",
-  pages:[P.cover("你好，我是周何","一个爱折腾的网络与新媒体学生","网媒2502班"),
-   P.list("关于我",["网媒2502班班长","平时喜欢拍视频、剪片子","正在自学数据分析","座右铭：先完成，再完美"]),
-   P.stats("关键词",[{b:"班长",d:"我的角色"},{b:"剪辑",d:"我的爱好"},{b:"数据",d:"我的方向"}]),
-   P.two("我能带来什么","我期待什么","班级事务的组织与协调\n活动策划与执行\n新媒体内容的制作经验","认识更多有趣的同学\n一起做有意思的项目\n互相学习共同成长"),
-   P.end("很高兴认识大家","期待和你们的每一次合作")]},
- {id:"zhaoxin",name:"社团招新",cat:"活动策划",theme:"mint",deco:"dots",
-  pages:[P.cover("新媒体运营社 · 招新啦","在这里，把创意变成作品","无需经验 · 只要热爱"),
-   P.list("加入我们你会得到",["从 0 到 1 的公众号运营实战","剪映/PS/数据分析工具培训","一群志同道合的伙伴","优秀作品可推荐校内平台展播"]),
-   P.stats("往届成绩",[{b:"3w+",d:"单篇最高阅读"},{b:"15+",d:"产出作品"},{b:"100%",d:"成员实践证明"}]),
-   P.two("适合谁加入","你只需要","对新媒体有好奇心\n愿意花时间学习和练习\n有责任心，能参与每周例会","带上热情来就行\n零基础没关系，我们有完整培养路径\n大二大三同样欢迎"),
-   P.end("扫码或私聊报名","期待与你在招新现场相遇")]},
- {id:"jingpin",name:"评优/竞聘答辩",cat:"个人展示",theme:"mono",deco:"band",
-  pages:[P.cover("竞聘答辩","网媒2502班班长 · 连任申请","答辩人：周何"),
-   P.toc("答辩提纲",["过去一年做了什么","数据与结果","不足与反思","如果继续连任"]),
-   P.stats("一年成绩单",[{b:"120+",d:"发布通知"},{b:"12场",d:"组织活动"},{b:"0",d:"重大失误"}]),
-   P.list("数据背后",["建立通知三级触达机制，触达率稳定在 98% 以上","全年组织活动 12 场，覆盖学习/团建/志愿三大类","班费收支每月公示，全年账目可追溯","配合学院完成各类材料收集，按时率 100%"]),
-   P.text("不足与反思","活动参与面还不够广，存在“熟面孔”现象；对个别同学的关注不够；下一步将推动活动轮值与意见匿名箱制度。"),
-   P.quote("班长不是一个头衔，而是 34 个人的默认信任。","我的竞聘宣言"),
-   P.end("恳请各位支持","无论结果如何，服务不会停")]},
- {id:"dushu",name:"读书分享",cat:"个人展示",theme:"magazine",deco:"band",
-  pages:[P.cover("读书分享","一本值得反复阅读的好书","分享人：周何"),
-   P.toc("分享脉络",["这本书讲了什么","最触动我的三个观点","我的实践与改变","推荐给谁读"]),
-   P.list("最触动我的三个观点",["观点一：用自己的话概括书中精华","观点二：结合书中的案例深入理解","观点三：联系现实场景学以致用"]),
-   P.text("我的实践与改变","读完之后我把书中的方法用在了班级通知的写作上：把长段落改成要点分条，把命令式语气改成邀请式表达，两周内班级反馈率提升了近三成。"),
-   P.two("推荐给谁读","阅读建议","想提升表达能力的人\n刚开始带团队的人\n对相关领域感兴趣的人","先读序言和目录建立框架\n重点读案例章节\n边读边记行动清单"),
-   P.end("谢谢聆听","愿我们都在书里遇见更好的自己")]},
- {id:"yunying",name:"新媒体运营方案",cat:"课程学习",theme:"darktech",deco:"dots",
-  pages:[P.cover("校园新媒体运营方案","从定位到增长的完整路径","策划：周何"),
-   P.toc("方案框架",["账号定位","内容策略","增长路径","数据指标","执行排期"]),
-   P.two("账号定位","内容策略","目标人群：本校大一至大三学生\n人设：有用的校园生活管家\n差异化：只做“看完就能用”的干货","固定栏目：周历/攻略/避坑\n形式：图文为主，短视频为辅\n发布节奏：每周 3 更"),
-   P.list("增长路径",["冷启动：班级+社团群矩阵分发","裂变：攻略类内容引导转发收藏","联动：与 3 个兄弟账号互推","沉淀：核心读者群运营"]),
-   P.stats("数据指标",[{b:"3000",d:"首月粉丝目标"},{b:"8%",d:"目标互动率"},{b:"500",d:"单篇平均阅读"}]),
-   P.end("谢谢观看","方案可执行版本见附录")]},
- {id:"wanhui",name:"迎新晚会策划",cat:"活动策划",theme:"guochao",deco:"corner",
-  pages:[P.cover("迎新晚会策划案","让新生感受到大学的第一份热情","策划：网媒2502班"),
-   P.toc("策划目录",["晚会定位与主题","节目单编排","分工与排期","预算与物料","应急预案"]),
-   P.list("晚会定位与主题",["主题：【星火初见】——每一束微光都值得被看见","基调：温暖、真诚、有参与感","时长：90 分钟，节目 12 个"]),
-   P.two("分工与排期","预算与物料","统筹组：流程把控\n节目组：节目跟进与彩排\n宣传组：预热推文与现场摄影\n后勤组：物资与场地","物料：荧光棒/气球/背景板\n预算总计：【XXXX】元\n宣传物料提前 5 天到位"),
-   P.text("应急预案","设备故障：备用话筒与音源，节目间无缝衔接；节目缺席：预留 2 个备用节目；停电：应急照明与秩序引导员。所有环节均指定第一责任人与备用方案。"),
-   P.end("预祝晚会圆满成功","欢迎提出修改意见")]},
- {id:"zhiyuan",name:"志愿支教总结",cat:"工作报告",theme:"fresh",deco:"band",
-  pages:[P.cover("志愿支教活动总结","十四天，双向奔赴的成长","汇报：志愿者代表 周何"),
-   P.toc("总结框架",["活动概况","我们做了什么","孩子们的改变","我们的收获","建议与展望"]),
-   P.stats("活动概况",[{b:"14天",d:"服务周期"},{b:"46名",d:"服务学生"},{b:"9门",d:"开设课程"}]),
-   P.list("我们做了什么",["开设绘画、音乐、科学实验等 9 门素质课程","组织趣味运动会与文艺汇演各 1 场","完成 46 名学生的家访全覆盖","建立课后答疑群，返程后持续陪伴"]),
-   P.quote("他们教会我们的，可能比我们教他们的更多。","支教日记 · Day12"),
-   P.end("谢谢每一个用心的人","我们明年再见")]},
- {id:"biye",name:"毕业答辩",cat:"课程学习",theme:"deepnavy",deco:"band",
-  pages:[P.cover("毕业论文答辩","【论文题目】：基于XX的XX研究","答辩人：周何 · 指导教师：【X老师】"),
-   P.toc("答辩框架",["研究背景与意义","研究方法","核心发现","创新与不足","致谢"]),
-   P.text("研究背景与意义","【用 3-4 句话说明：现实痛点是什么、现有研究缺什么、本文补了什么。数据或权威引用放这里增强说服力。】"),
-   P.list("核心发现",["发现一：【结论 + 关键数据支撑】","发现二：【结论 + 关键数据支撑】","发现三：【结论 + 关键数据支撑】"]),
-   P.two("创新点","不足与展望","研究视角的创新\n方法组合的创新\n数据层面的增量","样本规模有限\n研究周期较短\n后续可扩大样本并延长观察期"),
-   P.end("恳请各位老师批评指正","谢谢！")]},
- {id:"fupan",name:"学习经验分享",cat:"个人展示",theme:"magazine",deco:"dots",
-  pages:[P.cover("期末复盘与学习经验分享","把踩过的坑变成你的捷径","网媒2502班 · 周何"),
-   P.toc("分享提纲",["我这学期的成绩变化","三个踩过的坑","我的四步学习法","给你的行动清单"]),
-   P.stats("成绩变化",[{b:"+23",d:"平均分提升"},{b:"前10",d:"班级排名"},{b:"0门",d:"挂科"}]),
-   P.list("三个踩过的坑",["考前一周才复习，通宵也补不完","笔记只抄不想，抄完就忘","单打独斗，从不利用小组资源"]),
-   P.list("我的四步学习法",["当周知识当周整理，笔记只记框架和关键词","每章结束自测 10 题，错的进错题本","考前 10 天启动三轮复习（框架→细节→错题）","组队互讲：能把别人讲懂才是真的懂"]),
-   P.end("祝你期末顺利","有问题随时来找我")]}
+{"id":"kecheng","name":"课程作业汇报","cat":"课程学习","theme":"academic","deco":"dots","pages":[{"layout":"cover","title":"《新媒体数据分析》课程作业","sub":"校园公众号为什么没人看","who":"网媒2502班 周何"},{"layout":"toc","title":"目录","items":["问题是怎么发现的","数据从哪来","查出了什么","没做好的地方"]},{"layout":"section","n":"01","title":"问题是怎么发现的"},{"layout":"list","title":"起因很小","items":["3月班群里有人吐槽推送“看了个寂寞”","我翻了后台：阅读量从2月的1100掉到4月的620","正好课上讲了交叉分析，想拿来试一下"]},{"layout":"two","title":"数据从哪来","c1":"怎么分析的","c2":"公众号后台导出90天图文数据\n问卷星收回131份\n和运营组两个同学聊了一晚上"},{"layout":"stats","title":"几个关键数","stats":[{"b":"620","d":"4月阅读量"},{"b":"131","d":"收回问卷"},{"b":"3个","d":"对标账号"}]},{"layout":"text","title":"没做好的地方","body":"最大的问题是样本太窄——填问卷的基本是本班和隔壁班同学，代表不了全校。情感分析其实是我一条条人工标的，Excel只是打下手。下次要提前一周发问卷，把样本扩到年级大群。"},{"layout":"end","title":"汇报完毕","msg":"老师同学们随便提问"}]},
+{"id":"xiesheng","name":"写生实践汇报","cat":"课程学习","theme":"fresh","deco":"corner","pages":[{"layout":"cover","title":"写生十天，交作业了","sub":"网媒2502班 · 周何","who":""},{"layout":"toc","title":"目录","items":["十天干了啥","作业清单","踩过的坑","同学们怎么说"]},{"layout":"list","title":"十天干了啥","items":["第一天坐大巴到基地，下午踩点","第2-4天分组外出，我负责拍照加采访","第5-7天画速写（画得一般）","最后三天整理素材赶初稿"]},{"layout":"stats","title":"作业清单","stats":[{"b":"23张","d":"照片成片"},{"b":"9段","d":"采访录音"},{"b":"11张","d":"速写"}]},{"layout":"two","title":"踩过的坑","c1":"学到的","c2":"设备没电，白跑一趟\n中午太阳太大没法拍\n不好意思拦陌生人采访"},{"layout":"quote","q":"拍不到好照片的日子，也是写生的一部分。","a":"第4天的手记"},{"layout":"end","title":"谢谢","msg":"大家随便看随便问"}]},
+{"id":"banzhang","name":"班级工作总结","cat":"班级事务","theme":"energy","deco":"dots","pages":[{"layout":"cover","title":"班长这半年干了啥","sub":"网媒2502班期中总结 · 周何","who":""},{"layout":"toc","title":"目录","items":["先说结论","具体做了什么","三件没做好的事","下半年怎么办"]},{"layout":"list","title":"先说结论","items":["班级没出过安全事故","通知基本能触达，但回复越来越慢","活动来来回回总是那十几个人"]},{"layout":"stats","title":"数字一览","stats":[{"b":"34人","d":"全班"},{"b":"100+","d":"发过的通知"},{"b":"6场","d":"班级活动"}]},{"layout":"list","title":"具体做了什么","items":["重要通知改成群公告+接龙+私信三连","写生的大巴、保险、集合全程跟下来","班费每月1号在群里贴明细","辅导员要的材料都按时交了"]},{"layout":"text","title":"三件没做好的事","body":"一是活动报名总是前几排那十几个人，新同学插不上手；二是4月收材料拖了两轮才收齐，是我催的时间点没掐准；三是除了发通知很少和大家聊天，存在感只在群里出现我名字的时候。"},{"layout":"list","title":"下半年怎么办","items":["活动按宿舍轮流出人牵头","每月搞一次不吃工作的班级小聚","重要通知截止前24小时单独再提醒一次","开个匿名收集箱，骂我也行"]},{"layout":"end","title":"有意见直接找我","msg":"别憋着"}]},
+{"id":"ziwo","name":"自我介绍","cat":"个人展示","theme":"pink","deco":"corner","pages":[{"layout":"cover","title":"大家好，我是周何","sub":"网媒2502班 · 班长","who":""},{"layout":"list","title":"关于我","items":["网媒2502班班长，管34个人的通知和活动","PR用了两年，剪过最长的片子11分钟","最近在学Excel数据透视表","信条：先完成，再完美"]},{"layout":"stats","title":"三个标签","stats":[{"b":"班长","d":"我的岗位"},{"b":"剪辑","d":"我的爱好"},{"b":"数据","d":"新方向"}]},{"layout":"two","title":"能帮大家做什么","c1":"想和大家一起","c2":"活动策划和执行\n通知怎么写不被吐槽\n剪片子、修图的基础问题都能问"},{"layout":"end","title":"多多关照","msg":"有事群里@我就行"}]},
+{"id":"zhaoxin","name":"社团招新","cat":"活动策划","theme":"mint","deco":"dots","pages":[{"layout":"cover","title":"新媒体运营社纳新","sub":"会拍会写会剪，或者想学都行","who":"报名找：周何"},{"layout":"list","title":"你能得到什么","items":["公众号从排版到发布的完整流程","每周一次软件培训（PS/剪映/后台数据）","作品直接发在校级平台上","学长学姐踩过的坑，全告诉你"]},{"layout":"stats","title":"去年的数字","stats":[{"b":"3.2万","d":"单篇最高阅读"},{"b":"47篇","d":"全年推送"},{"b":"12人","d":"现役成员"}]},{"layout":"two","title":"我们希望你","c1":"不强制但最好","c2":"一周能拿出3-4小时\n对热点敏感，爱刷手机也爱琢磨\n能坚持一学期以上"},{"layout":"end","title":"报名找周何","msg":"或扫码填表"}]},
+{"id":"jingpin","name":"班长述职与连任","cat":"个人展示","theme":"mono","deco":"band","pages":[{"layout":"cover","title":"班长述职 & 连任申请","sub":"网媒2502班 · 周何","who":""},{"layout":"toc","title":"目录","items":["这半年做了什么","用数字说话","没做好的","连任后想做的三件事"]},{"layout":"stats","title":"半年数字","stats":[{"b":"100+","d":"发出的通知"},{"b":"6场","d":"组织的活动"},{"b":"0次","d":"重大失误"},{"b":"8.7元","d":"班费结余"}]},{"layout":"list","title":"用数字说话","items":["重要通知建立群公告+接龙+私信三重提醒","写生出行全程跟车，零安全事故","班费每月1号公示，一笔一笔可查","辅导员交代的材料收集全部按时"]},{"layout":"text","title":"没做好的","body":"活动参与面太窄，报名的总是前几排那十几个人；4月收材料拖了两轮，是我的时间节点没掐准；和大家的生活交流太少，我的存在感只在发通知的时候。"},{"layout":"quote","q":"班长不是头衔，是34个人默认交给我的事。"},{"layout":"end","title":"请大家监督","msg":"连任与否，事我都会继续干"}]},
+{"id":"dushu","name":"读书分享","cat":"个人展示","theme":"magazine","deco":"band","pages":[{"layout":"cover","title":"读书分享","sub":"一本讲沟通的书，和我拿它干的事","who":"分享人：周何"},{"layout":"toc","title":"分享脉络","items":["印象最深的三个观点","我怎么用的","推荐给谁","怎么读"]},{"layout":"list","title":"印象最深的三个观点","items":["沟通不是说服，是让对方觉得被理解","先处理情绪，再处理事情","书面沟通里，格式本身就是态度"]},{"layout":"text","title":"我怎么用的","body":"书里说“条列式比大段落更容易被读完”。我把班群通知从三大段改成分条加粗时间，一周内“收到”的回复速度明显变快了。方法不难，但真的有用。"},{"layout":"two","title":"推荐给谁","c1":"怎么读","c2":"总觉得自己说话直的人\n经常写通知和邮件的人\n刚当上新班委的人"},{"layout":"end","title":"谢谢","msg":"欢迎交流不同看法"}]},
+{"id":"yunying","name":"校园账号起号方案","cat":"课程学习","theme":"darktech","deco":"dots","pages":[{"layout":"cover","title":"校园账号起号方案","sub":"从0到3000粉的三个月","who":"周何"},{"layout":"toc","title":"目录","items":["增长路径","账号定位","内容怎么排","三个月的目标"]},{"layout":"list","title":"增长路径","items":["第一周：班群+社团群铺转发，先破500","第2-4周：每周2篇攻略类，标题只写“看完就能用”的事","第2月：和两三个同校账号互相推","第3月：建核心读者群，往群里导流"]},{"layout":"two","title":"账号定位","c1":"内容怎么排","c2":"给本校学生看的“生活说明书”\n人设：一个爱管闲事的学长\n不发鸡汤，不发官话"},{"layout":"stats","title":"三个月目标","stats":[{"b":"3000","d":"粉丝"},{"b":"500","d":"篇均阅读"},{"b":"8%","d":"互动率"}]},{"layout":"end","title":"方案就这些","msg":"剩下的靠执行"}]},
+{"id":"wanhui","name":"迎新晚会策划","cat":"活动策划","theme":"guochao","deco":"corner","pages":[{"layout":"cover","title":"迎新晚会策划","sub":"主题：第一次的舞台","who":"网媒2502班"},{"layout":"toc","title":"目录","items":["基本信息","节目安排","分工","预算","出事了怎么办"]},{"layout":"list","title":"基本信息","items":["时间：9月底 晚7:00-8:30","地点：学院报告厅","节目12个，新生占一半以上","不搞长篇讲话，让大家看节目"]},{"layout":"two","title":"分工","c1":"预算","c2":"统筹：周何\n节目：文艺委员+2人\n宣传：拍照发推文2人\n后勤：搬东西机动4人"},{"layout":"text","title":"出问题了怎么办","body":"话筒有备用，音乐放不出来就清唱救场；有人临时不演，候补节目顶上；停电就开应急灯，大家坐着唱完最后一首。每种情况都指定了专人负责。"},{"layout":"end","title":"有更好的想法","msg":"随时来找我"}]},
+{"id":"zhiyuan","name":"支教十四天总结","cat":"工作报告","theme":"fresh","deco":"band","pages":[{"layout":"cover","title":"支教十四天总结","sub":"在XX小学的日子","who":"志愿者 周何"},{"layout":"toc","title":"目录","items":["基本情况","教了什么","孩子们","我们自己的变化"]},{"layout":"stats","title":"基本情况","stats":[{"b":"14天","d":"驻校"},{"b":"46个","d":"孩子"},{"b":"9门","d":"课程"}]},{"layout":"list","title":"教了什么","items":["绘画课：画“我的家”，收上来46张","科学课：火山喷发小实验，全场尖叫","音乐课：教了一首《夜空中最亮的星》","最后一天文艺汇演，全班上台唱完"]},{"layout":"quote","q":"第三天我就发现，是他们在教我——怎么对生活有耐心。","a":"支教日记 第4天"},{"layout":"end","title":"谢谢孩子们","msg":"明年见"}]},
+{"id":"biye","name":"毕业论文答辩","cat":"课程学习","theme":"deepnavy","deco":"band","pages":[{"layout":"cover","title":"毕业论文答辩","sub":"论文题目占位：基于XX的XX研究","who":"答辩人 周何"},{"layout":"toc","title":"答辩流程","items":["为什么做这个题","怎么做的","发现了什么","不足","致谢"]},{"layout":"text","title":"为什么做这个题","body":"大二在校园号做运营时发现：阅读量下滑的原因大家都在猜，没人用数据验证过。现有的研究多集中在机构媒体，校园场景几乎是空白，所以想把课上学的分析方法搬过来试一次。"},{"layout":"list","title":"发现了什么","items":["发布时间对阅读量的影响比内容质量更直接","学生最反感的是排版混乱，不是广告","标题带具体数字的打开率高37%"]},{"layout":"two","title":"不足","c1":"致谢","c2":"样本只有一个账号\n观察周期三个月\n结论外推要谨慎"},{"layout":"end","title":"请老师们批评","msg":""}]},
+{"id":"fupan","name":"期末经验分享","cat":"个人展示","theme":"magazine","deco":"dots","pages":[{"layout":"cover","title":"期末经验分享","sub":"我是怎么从挂科边缘爬回来的","who":"网媒2502班 周何"},{"layout":"toc","title":"目录","items":["上学期的真实情况","踩过的三个坑","现在的方法","可以直接抄的清单"]},{"layout":"stats","title":"变化","stats":[{"b":"+23分","d":"平均分"},{"b":"前10","d":"排名"},{"b":"0门","d":"挂科"}]},{"layout":"list","title":"踩过的三个坑","items":["考前三天才翻书，通宵也看不完","笔记全是抄PPT，抄完根本没看","一个人死磕，有组队机会也不去"]},{"layout":"list","title":"现在的方法","items":["当周内容当周整理，笔记只写框架关键词","每章自测10道题，错的进错题本","考前10天三轮：框架→细节→错题","拉着室友互讲，讲明白才算会"]},{"layout":"end","title":"这份清单直接抄","msg":"下学期见分晓"}]}
 ];
 
 /* ================= 幻灯片渲染 ================= */
@@ -271,23 +202,28 @@ function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").
 function E(path){return EDIT?` contenteditable="true" data-path="${path}"`:""}
 
 function slideHTML(pg,i,total,editable){
-  const num=`<div class="pagenum">${i+1} / ${total}</div>`;
-  const deco={band:`<div class="deco-band"></div>`,corner:`<div class="deco-corner"></div>`,dots:`<div class="deco-dots"></div>`}[DECO]||"";
+  const layers=`<div class="bgl"></div><div class="bgg1"></div><div class="bgg2"></div><div class="bgpat"></div><div class="foot"></div>`;
+  const num=`<div class="pgchip">${i+1} / ${total}</div>`;
   let body="";
   switch(pg.layout){
     case "cover":
       body=`<div class="inner" style="justify-content:center">
-        <div class="kicker">PRESENTATION</div>
+        <div class="kickpill">PRESENTATION</div>
         <div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="ac-line"></div>
         <div class="s-sub"${E("sub")}>${esc(pg.sub)}</div>
-        <div class="s-who"${E("who")}>${esc(pg.who)}</div></div>`;break;
+        <div class="s-who"${E("who")}>${esc(pg.who)}</div></div>
+        <div style="position:absolute;right:-9cqw;top:-16cqw;width:44cqw;height:44cqw;border-radius:50%;border:1.1cqw solid var(--ac);opacity:.16;z-index:1"></div>
+        <div style="position:absolute;right:7cqw;bottom:9cqw;width:10cqw;height:10cqw;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:2.2cqw;transform:rotate(12deg);opacity:.85;z-index:1"></div>`;break;
     case "toc":
-      body=`<div class="inner"><div class="kicker">CONTENTS</div>
+      body=`<div class="inner"><div class="kickpill">CONTENTS</div>
         <div class="s-title"${E("title")}>${esc(pg.title)}</div>
-        <ol class="toc">${(pg.items||[]).map((it,k)=>`<li><b>${String(k+1).padStart(2,"0")}</b><span${E("items."+k)}>${esc(it)}</span></li>`).join("")}</ol></div>`;break;
+        <ol class="toc" style="margin-top:3cqw">${(pg.items||[]).map((it,k)=>`<li><b>${String(k+1).padStart(2,"0")}</b><span${E("items."+k)}>${esc(it)}</span></li>`).join("")}</ol></div>`;break;
     case "section":
-      body=`<div class="inner" style="justify-content:center"><div class="big-num">${esc(pg.n||"")}</div>
-        <div class="s-title"${E("title")}>${esc(pg.title)}</div></div>`;break;
+      body=`<div class="inner" style="justify-content:center"><div class="big-num-o">${esc(pg.n||"")}</div>
+        <div class="sec-line"></div>
+        <div class="s-title" style="font-size:7cqw"${E("title")}>${esc(pg.title)}</div></div>
+        <div style="position:absolute;right:8cqw;bottom:10cqw;width:18cqw;height:18cqw;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--ac) 25%,transparent),transparent 70%);z-index:1"></div>`;break;
     case "list":
       body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div>
         <div class="body-list">${(pg.items||[]).map((it,k)=>`<div class="li"><span${E("items."+k)}>${esc(it)}</span></div>`).join("")}</div></div>`;break;
@@ -305,11 +241,11 @@ function slideHTML(pg,i,total,editable){
     case "quote":
       body=`<div class="inner"><blockquote${E("q")}>${esc(pg.q)}</blockquote><div class="attr"${E("a")}>—— ${esc(pg.a)}</div></div>`;break;
     case "end":
-      body=`<div class="inner"><div class="endmsg"><b${E("title")}>${esc(pg.title||"谢谢观看")}</b><p${E("msg")}>${esc(pg.msg)}</p></div></div>`;break;
+      body=`<div class="inner"><div class="endmsg"><div class="endkick">THANKS</div><b${E("title")}>${esc(pg.title||"谢谢观看")}</b><p${E("msg")}>${esc(pg.msg)}</p></div></div>`;break;
     default:
       body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div><div class="body-text"${E("body")}>${esc(pg.body)}</div>`;
   }
-  return `<div class="slide" style="${themeVars(THEME)}">${deco}<div class="kicker" style="position:absolute;top:3cqw;left:7cqw;opacity:.7">${esc(TPLNAME)}</div>${body}${num}</div>`;
+  return `<div class="slide" style="${themeVars(THEME)}">${layers}<div class="inner">${body}</div>${num}</div>`;
 }
 
 /* ================= 画廊 ================= */
@@ -437,8 +373,12 @@ document.getElementById("aiGo").onclick=async()=>{
   const btn=document.getElementById("aiGo");btn.disabled=true;btn.textContent="⏳ AI 生成中（约 20-60 秒）…";
   try{
     const skeleton=curPages.map((p,i)=>`第${i+1}页 layout=${p.layout}${p.layout==="section"?"（章节过渡页）":""}`);
-    const sys="你是资深 PPT 内容策划。只输出一个合法 JSON 对象，不要输出任何其他文字或代码围栏。";
-    const usr=`请为主题「${topic}」生成一份 PPT 的完整内容。\n页面结构（必须严格按此顺序与 layout 字段）：\n${skeleton.join("\n")}\n各 layout 的字段要求：\n- cover: {title(主标题), sub(副标题), who(汇报人，固定为"${who}")}\n- toc: {title, items: [4-6个目录项]}\n- section: {n(两位编号如"01"), title}\n- list: {title, items: [3-5条，每条一句话，具体有细节]}\n- text: {title, body(一段100-200字的连贯文字)}\n- two: {title, c1(格式:"小标题\\n要点\\n要点"), c2(同c1)}\n- stats: {title, stats: [{b(数字), d(说明)}×3]}\n- quote: {q(金句), a(出处)}\n- end: {title("谢谢观看"或类似), msg(一句收尾)}\n补充要求：${note||"无"}\n语言：自然、具体、有细节的中文，不要出现占位符或"XX"。\n输出：{"pages":[按上述顺序的对象数组]}`;
+    const sys="你是资深 PPT 内容策划，文案文风朴实具体，像大二学生亲手写的，绝无套话。只输出一个合法 JSON 对象，不要输出任何其他文字或代码围栏。";
+    const usr=`请为主题「${topic}」生成一份 PPT 的完整内容。\n页面结构（必须严格按此顺序与 layout 字段）：\n${skeleton.join("\n")}\n各 layout 的字段要求：\n- cover: {title(主标题), sub(副标题), who(汇报人，固定为"${who}")}\n- toc: {title, items: [4-6个目录项]}\n- section: {n(两位编号如"01"), title}\n- list: {title, items: [3-5条，每条一句话，具体有细节]}\n- text: {title, body(一段100-200字的连贯文字)}\n- two: {title, c1(格式:"小标题\\n要点\\n要点"), c2(同c1)}\n- stats: {title, stats: [{b(数字), d(说明)}×3]}\n- quote: {q(金句), a(出处)}\n- end: {title("谢谢观看"或类似), msg(一句收尾)}\n补充要求：${note||"无"}\n文风硬性要求（防AI味，逐条遵守）：
+1) 禁止出现这些词：赋能、抓手、闭环、双向奔赴、微光、星辰大海、画卷、征程、点缀、"不仅…更是…"、"让我们…"、连续三句排比
+2) 多写具体的名词和数字（几月几号、几个人、几块钱），少用形容词和抽象大词
+3) 句子有长有短，允许适度口语，像大二学生发在朋友圈的长文
+4) 每页内容要像真实发生过的事，细节具体到人、物、时间\n输出：{"pages":[按上述顺序的对象数组]}`;
     const raw=await callAI(sys,usr);
     let json=raw.replace(/```json|```/g,"").trim();
     json=json.slice(json.indexOf("{"),json.lastIndexOf("}")+1);
