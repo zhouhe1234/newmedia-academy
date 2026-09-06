@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周何的 PPT 模板工坊</title>
+<meta name="theme-color" content="#7c3aed">
+<style>
+:root{--p:#7c3aed;--p2:#a78bfa;--bg:#f5f4fa;--card:#fff;--txt:#1e1b2e;--mut:#6b6880}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 60px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+h1{font-size:22px}h1 small{display:block;font-size:12px;color:var(--mut);font-weight:normal;margin-top:2px}
+.sub{color:var(--mut);font-size:13.5px;margin-bottom:18px}
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{padding:7px 14px;border-radius:999px;border:1.5px solid #e5e0f5;background:#fff;font-size:13.5px;cursor:pointer;user-select:none}
+.chip.on{background:var(--p);border-color:var(--p);color:#fff}
+.chip:not(.on):hover{border-color:var(--p2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.tcard{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(124,58,237,.08);cursor:pointer;transition:.15s;border:1.5px solid transparent}
+.tcard:hover{transform:translateY(-3px);border-color:var(--p2)}
+.thumb{aspect-ratio:16/9;overflow:hidden;position:relative}
+.thumb .slide{transform-origin:top left;width:640px;position:absolute;top:0;left:0}
+.tmeta{padding:10px 12px}
+.tmeta b{font-size:14.5px}
+.tmeta p{font-size:12px;color:var(--mut);margin-top:3px}
+.slide{aspect-ratio:16/9;container-type:size;background:var(--bg);color:var(--fg);position:relative;overflow:hidden;font-family:var(--sfont);display:flex;flex-direction:column}
+.slide .deco-band{position:absolute;top:0;left:0;width:100%;height:4cqw;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.slide .deco-corner{position:absolute;right:-8cqw;bottom:-14cqw;width:34cqw;height:34cqw;border-radius:50%;background:var(--ac);opacity:.08}
+.slide .deco-dots{position:absolute;top:5cqw;right:5cqw;width:14cqw;height:5cqw;background-image:radial-gradient(var(--ac) 1px,transparent 1.4px);background-size:2.4cqw 2.4cqw;opacity:.5}
+.slide .pagenum{position:absolute;bottom:3cqw;right:4cqw;font-size:2.2cqw;color:var(--mut2)}
+.slide .inner{flex:1;padding:6cqw 7cqw;display:flex;flex-direction:column;min-height:0}
+.kicker{font-size:2.4cqw;letter-spacing:.4cqw;color:var(--ac);font-weight:700;margin-bottom:2cqw}
+.s-title{font-size:5.6cqw;font-weight:800;line-height:1.25}
+.s-sub{font-size:2.8cqw;color:var(--mut2);margin-top:2cqw}
+.s-who{margin-top:auto;font-size:2.4cqw;color:var(--mut2)}
+.big-num{font-size:16cqw;font-weight:800;color:var(--ac);opacity:.9;line-height:1}
+ol.toc{list-style:none;margin-top:3cqw}
+ol.toc li{font-size:3.2cqw;padding:1.6cqw 0;border-bottom:1px solid color-mix(in srgb,var(--fg) 12%,transparent);display:flex;gap:2cqw;align-items:baseline}
+ol.toc li b{color:var(--ac);font-size:3cqw}
+.body-list{margin-top:3cqw;display:flex;flex-direction:column;gap:2.2cqw}
+.body-list .li{display:flex;gap:2cqw;align-items:flex-start;font-size:3cqw;line-height:1.55}
+.body-list .li::before{content:"";flex:none;width:1.6cqw;height:1.6cqw;border-radius:50%;background:var(--ac);margin-top:1.1cqw}
+.body-text{margin-top:3cqw;font-size:3.1cqw;line-height:1.9;text-indent:2em}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:3cqw}
+.two .col{background:color-mix(in srgb,var(--ac) 7%,transparent);border-radius:2cqw;padding:3cqw;font-size:2.7cqw;line-height:1.7}
+.two .col b{display:block;color:var(--ac);margin-bottom:1.4cqw;font-size:3cqw}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3cqw;margin-top:4cqw}
+.stat{background:color-mix(in srgb,var(--ac) 8%,transparent);border-radius:2cqw;padding:3.4cqw 2cqw;text-align:center}
+.stat b{display:block;font-size:7cqw;color:var(--ac);line-height:1.1}
+.stat span{font-size:2.4cqw;color:var(--mut2)}
+blockquote{margin:auto 0;font-size:4.6cqw;line-height:1.7;font-weight:700}
+blockquote::before{content:"“";color:var(--ac);font-size:8cqw;display:block;line-height:.6}
+.attr{margin-top:3cqw;font-size:2.6cqw;color:var(--mut2);text-align:right}
+.endmsg{margin:auto;text-align:center}
+.endmsg b{font-size:9cqw;font-weight:800;color:var(--ac)}
+.endmsg p{margin-top:2cqw;font-size:3cqw;color:var(--mut2)}
+#editor{display:none}
+#editor.on{display:block}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.tb{padding:9px 14px;border-radius:10px;border:1.5px solid #e5e0f5;background:#fff;cursor:pointer;font-size:13.5px}
+.tb:hover{border-color:var(--p2)} .tb.prime{background:var(--p);border-color:var(--p);color:#fff;font-weight:600}
+.thumbbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pgbtn{padding:6px 10px;border-radius:8px;border:1.5px solid #e5e0f5;background:#fff;cursor:pointer;font-size:12px}
+.pgbtn.on{background:var(--p);border-color:var(--p);color:#fff}
+#slideBox{border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(30,27,46,.12)}
+#slideBox .slide{width:100%}
+[contenteditable]{outline:none}
+[contenteditable]:focus{background:color-mix(in srgb,var(--ac) 8%,transparent);border-radius:.6cqw}
+.hint{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.7}
+body.present .wrap,body.present #editor{display:none}
+#present{display:none;position:fixed;inset:0;background:#000;z-index:50}
+body.present #present{display:block}
+#present .slide{position:absolute;inset:0;width:100%;height:100%}
+#present .slide:not(.cur){display:none}
+#pHint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);color:#ffffff88;font-size:12px;z-index:60}
+#aiPanel{display:none;margin-bottom:12px}
+#aiPanel.on{display:block}
+#aiPanel textarea,#aiPanel input{width:100%;padding:11px;border:1.5px solid #e5e0f5;border-radius:10px;font-size:14px;font-family:inherit;outline:none;margin-top:8px}
+#aiPanel textarea{min-height:70px;resize:vertical}
+#aiPanel textarea:focus,#aiPanel input:focus{border-color:var(--p2)}
+.airow{display:flex;gap:8px;align-items:center;margin-top:8px}
+.airow input{flex:1;margin-top:0}
+#lock{position:fixed;inset:0;background:rgba(30,27,46,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:99}
+#lock .box{background:#fff;border-radius:18px;padding:26px;width:min(340px,88vw);text-align:center}
+#lock input{width:100%;padding:12px;border:1.5px solid #e5e0f5;border-radius:12px;font-size:16px;text-align:center;outline:none;margin:10px 0}
+#lock button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+#lockmsg{font-size:12.5px;color:#dc2626;min-height:18px;margin-top:8px}
+#err{display:none;margin-top:10px;font-size:13.5px;color:#dc2626;background:#fef2f2;border-radius:10px;padding:10px;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="lock">
+  <div class="box">
+    <div class="logo" style="width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px">🎨</div>
+    <div style="font-weight:600">周何的 PPT 模板工坊</div>
+    <div style="font-size:12.5px;color:#6b6880;margin-top:4px">AI 功能需要解锁（与润色助手同密码）</div>
+    <input id="pwd" type="password" placeholder="访问密码">
+    <button id="unlock">解锁</button>
+    <div id="lockmsg"></div>
+  </div>
+</div>
+
+<div class="wrap">
+<header>
+  <div class="logo">🎨</div>
+  <div><h1>周何的 PPT 模板工坊<small>选模板 · AI 填内容 · 演示 / 导出 PDF / 导出 PPTX</small></h1></div>
+</header>
+<p class="sub">全部模板本地渲染，浏览器全屏演示；文字点击即可修改；导出支持 PDF 与 PPTX。</p>
+
+<div id="home">
+  <div class="cats" id="cats"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div id="editor">
+  <div class="toolbar">
+    <button class="tb" id="backBtn">← 返回模板列表</button>
+    <button class="tb prime" id="presentBtn">▶ 全屏演示</button>
+    <button class="tb" id="aiBtn">🤖 AI 填充内容</button>
+    <button class="tb" id="pdfBtn">🖨 导出 PDF</button>
+    <button class="tb" id="pptxBtn">📦 导出 PPTX</button>
+    <button class="tb" id="resetBtn">↺ 重置为模板</button>
+  </div>
+  <div id="aiPanel">
+    <div style="background:#fff;border-radius:14px;padding:16px;border:1.5px solid #e5e0f5">
+      <div style="font-size:13px;color:#6b6880;margin-bottom:4px">输入主题（必填），AI 会按当前模板的页面结构自动生成全部内容</div>
+      <input id="aiTopic" placeholder="如：写生实践汇报 / 班级期中总结 / 新媒体运营入门分享">
+      <textarea id="aiNote" placeholder="补充要求（可选）：如“重点讲踩过的坑”“加入具体数据”“语气轻松一点”"></textarea>
+      <div class="airow">
+        <input id="aiWho" placeholder="汇报人（显示在封面）">
+        <button class="tb prime" id="aiGo">🤖 开始生成</button>
+      </div>
+      <div id="err"></div>
+    </div>
+  </div>
+  <div class="thumbbar" id="thumbbar"></div>
+  <div id="slideBox"></div>
+  <div class="hint">💡 编辑模式：直接点击幻灯片里的文字即可修改（改完自动保存草稿）；演示模式：← → 方向键翻页，Esc 退出。</div>
+</div>
+</div>
+
+<div id="present"><div id="pslides"></div><div id="pHint">← → 翻页 · Esc 退出</div></div>
+
+<script>
+/* ================= 主题 ================= */
+const THEMES={
+ academic:{name:"学术蓝",bg:"#f5f8ff",fg:"#1a2b4a",mut2:"#5b6b8c",ac:"#2563eb",ac2:"#7aa5f8",font:"sans",deco:"dots"},
+ deepnavy:{name:"深空蓝",bg:"#0e1a2f",fg:"#e8eefb",mut2:"#8fa3c4",ac:"#5b9dff",ac2:"#2e5ea8",font:"sans",deco:"band",dark:true},
+ fresh:{name:"清新绿",bg:"#f2faf4",fg:"#1c4a2c",mut2:"#5f8a70",ac:"#0f9d58",ac2:"#7fd6a4",font:"sans",deco:"corner"},
+ energy:{name:"活力橙",bg:"#fff8f0",fg:"#4a2c0f",mut2:"#9a7b57",ac:"#f97316",ac2:"#fdba74",font:"sans",deco:"dots"},
+ pink:{name:"温柔粉",bg:"#fdf5f8",fg:"#4a1f33",mut2:"#a0788d",ac:"#db2777",ac2:"#f9a8c9",font:"sans",deco:"corner"},
+ mono:{name:"简约黑白",bg:"#ffffff",fg:"#171717",mut2:"#6b6b6b",ac:"#171717",ac2:"#a3a3a3",font:"sans",deco:"band"},
+ darktech:{name:"科技暗黑",bg:"#0f1220",fg:"#e4e8f7",mut2:"#7d86a8",ac:"#22d3ee",ac2:"#6366f1",font:"sans",deco:"dots",dark:true},
+ guochao:{name:"国潮红",bg:"#fff7f2",fg:"#5a1a10",mut2:"#a3705f",ac:"#c0392b",ac2:"#e8a87c",font:"serif",deco:"corner"},
+ magazine:{name:"杂志米棕",bg:"#faf6ef",fg:"#33291c",mut2:"#8a7a63",ac:"#a16207",ac2:"#d6b98c",font:"serif",deco:"band"},
+ mint:{name:"薄荷青",bg:"#f0fafb",fg:"#0f3d42",mut2:"#5f8f95",ac:"#0891b2",ac2:"#7dd3d8",font:"sans",deco:"dots"}
+};
+const FONT={sans:'"PingFang SC","Microsoft YaHei",sans-serif',serif:'"Songti SC","STSong","SimSun",serif'};
+
+/* ================= 页面构造 ================= */
+const P={
+ cover:(title,sub,who)=>({layout:"cover",title,sub,who}),
+ toc:(title,items)=>({layout:"toc",title,items}),
+ sec:(n,title)=>({layout:"section",n,title}),
+ list:(title,items)=>({layout:"list",title,items}),
+ text:(title,body)=>({layout:"text",title,body}),
+ two:(title,c1,c2)=>({layout:"two",title,c1,c2}),
+ stats:(title,stats)=>({layout:"stats",title,stats}),
+ quote:(q,a)=>({layout:"quote",q,a}),
+ end:(msg)=>({layout:"end",msg})
+};
+
+/* ================= 模板库 ================= */
+const TPL=[
+ {id:"kecheng",name:"课程作业汇报",cat:"课程学习",theme:"academic",deco:"dots",
+  pages:[P.cover("《新媒体数据分析》课程作业汇报","数据驱动的校园媒体运营观察","网媒2502班 · 周何"),
+   P.toc("目录",["选题背景与思路","数据来源与方法","分析结果","问题与反思","下一步计划"]),
+   P.sec("01","选题背景与思路"),
+   P.list("选题背景",["校园公众号阅读量近三月持续下滑","同类高校账号均有爆款案例","希望用数据找到破局点","结合课程所学分析方法"]),
+   P.two("分析方法","数据来源","公众号后台近90天数据\n问卷星回收问卷 137 份\n3 位运营成员的深度访谈","描述统计+交叉分析\n文本情感分析\n对照爆款案例复盘"),
+   P.stats("关键数据",[{b:"137",d:"回收问卷"},{b:"-32%",d:"阅读量降幅"},{b:"3类",d:"高互动内容"}]),
+   P.text("问题与反思","样本以本班同学为主，代表性有限；情感分析的准确率依赖人工校对；下一步将扩大样本并引入更多维度的交叉验证。"),
+   P.end("谢谢观看","欢迎老师和同学们批评指正")]},
+ {id:"xiesheng",name:"写生实践汇报",cat:"课程学习",theme:"fresh",deco:"corner",
+  pages:[P.cover("写生实践汇报","从教室走向真实的田野","网媒2502班 · 周何"),
+   P.toc("目录",["写生行程回顾","作品与收获","遇到的问题","同学反馈","总结与展望"]),
+   P.list("写生行程回顾",["Day1 抵达驻地，踩点取景","Day2-4 分组外出写生与采访","Day5 素材整理与初稿","全程共完成作品 23 幅、采访音频 9 段"]),
+   P.two("最大收获","踩过的坑","学会在真实场景里找选题\n画面叙事能力明显提升\n和陌生采访对象破冰的技巧","第一天设备没电白跑一趟\n取景时忽略了光线方向\n下次要提前一天检查设备清单"),
+   P.quote("最好的选题不在教室里，而在你愿意多走的那五百米。","写生手记"),
+   P.end("感谢相遇","期待下一次出发")]},
+ {id:"banzhang",name:"班级工作总结",cat:"班级事务",theme:"energy",deco:"dots",
+  pages:[P.cover("班级工作期中总结","网媒2502班 · 班长周何","汇报人：周何"),
+   P.toc("汇报提纲",["班级整体情况","已完成的重点工作","存在的问题","下阶段计划"]),
+   P.stats("班级概况",[{b:"34",d:"班级人数"},{b:"98%",d:"关键通知触达"},{b:"12",d:"组织活动场次"}]),
+   P.list("已完成的重点工作",["建立班级通知三级触达机制（群公告+接龙+私聊提醒）","组织写生集体出行，全程零安全事故","搭建班费公示制度，每月 1 号公开明细","配合辅导员完成 3 次材料收集，按时率 100%"]),
+   P.text("存在的问题","部分同学参与积极性不高，活动报名常集中在少数人；宿舍之间的熟悉度还不均衡；个别通知的反馈时间偏长，需要在形式上做优化。"),
+   P.list("下阶段计划",["推行活动轮值制，让每个人都有参与感","以宿舍为单位开展小型团建","重要通知增加截止前 24 小时的二次提醒","建立班级意见匿名收集箱"]),
+   P.end("感谢辅导员的指导","也谢谢每一位配合工作的同学")]},
+ {id:"ziwo",name:"自我介绍",cat:"个人展示",theme:"pink",deco:"corner",
+  pages:[P.cover("你好，我是周何","一个爱折腾的网络与新媒体学生","网媒2502班"),
+   P.list("关于我",["网媒2502班班长","平时喜欢拍视频、剪片子","正在自学数据分析","座右铭：先完成，再完美"]),
+   P.stats("关键词",[{b:"班长",d:"我的角色"},{b:"剪辑",d:"我的爱好"},{b:"数据",d:"我的方向"}]),
+   P.two("我能带来什么","我期待什么","班级事务的组织与协调\n活动策划与执行\n新媒体内容的制作经验","认识更多有趣的同学\n一起做有意思的项目\n互相学习共同成长"),
+   P.end("很高兴认识大家","期待和你们的每一次合作")]},
+ {id:"zhaoxin",name:"社团招新",cat:"活动策划",theme:"mint",deco:"dots",
+  pages:[P.cover("新媒体运营社 · 招新啦","在这里，把创意变成作品","无需经验 · 只要热爱"),
+   P.list("加入我们你会得到",["从 0 到 1 的公众号运营实战","剪映/PS/数据分析工具培训","一群志同道合的伙伴","优秀作品可推荐校内平台展播"]),
+   P.stats("往届成绩",[{b:"3w+",d:"单篇最高阅读"},{b:"15+",d:"产出作品"},{b:"100%",d:"成员实践证明"}]),
+   P.two("适合谁加入","你只需要","对新媒体有好奇心\n愿意花时间学习和练习\n有责任心，能参与每周例会","带上热情来就行\n零基础没关系，我们有完整培养路径\n大二大三同样欢迎"),
+   P.end("扫码或私聊报名","期待与你在招新现场相遇")]},
+ {id:"jingpin",name:"评优/竞聘答辩",cat:"个人展示",theme:"mono",deco:"band",
+  pages:[P.cover("竞聘答辩","网媒2502班班长 · 连任申请","答辩人：周何"),
+   P.toc("答辩提纲",["过去一年做了什么","数据与结果","不足与反思","如果继续连任"]),
+   P.stats("一年成绩单",[{b:"120+",d:"发布通知"},{b:"12场",d:"组织活动"},{b:"0",d:"重大失误"}]),
+   P.list("数据背后",["建立通知三级触达机制，触达率稳定在 98% 以上","全年组织活动 12 场，覆盖学习/团建/志愿三大类","班费收支每月公示，全年账目可追溯","配合学院完成各类材料收集，按时率 100%"]),
+   P.text("不足与反思","活动参与面还不够广，存在“熟面孔”现象；对个别同学的关注不够；下一步将推动活动轮值与意见匿名箱制度。"),
+   P.quote("班长不是一个头衔，而是 34 个人的默认信任。","我的竞聘宣言"),
+   P.end("恳请各位支持","无论结果如何，服务不会停")]},
+ {id:"dushu",name:"读书分享",cat:"个人展示",theme:"magazine",deco:"band",
+  pages:[P.cover("读书分享","一本值得反复阅读的好书","分享人：周何"),
+   P.toc("分享脉络",["这本书讲了什么","最触动我的三个观点","我的实践与改变","推荐给谁读"]),
+   P.list("最触动我的三个观点",["观点一：用自己的话概括书中精华","观点二：结合书中的案例深入理解","观点三：联系现实场景学以致用"]),
+   P.text("我的实践与改变","读完之后我把书中的方法用在了班级通知的写作上：把长段落改成要点分条，把命令式语气改成邀请式表达，两周内班级反馈率提升了近三成。"),
+   P.two("推荐给谁读","阅读建议","想提升表达能力的人\n刚开始带团队的人\n对相关领域感兴趣的人","先读序言和目录建立框架\n重点读案例章节\n边读边记行动清单"),
+   P.end("谢谢聆听","愿我们都在书里遇见更好的自己")]},
+ {id:"yunying",name:"新媒体运营方案",cat:"课程学习",theme:"darktech",deco:"dots",
+  pages:[P.cover("校园新媒体运营方案","从定位到增长的完整路径","策划：周何"),
+   P.toc("方案框架",["账号定位","内容策略","增长路径","数据指标","执行排期"]),
+   P.two("账号定位","内容策略","目标人群：本校大一至大三学生\n人设：有用的校园生活管家\n差异化：只做“看完就能用”的干货","固定栏目：周历/攻略/避坑\n形式：图文为主，短视频为辅\n发布节奏：每周 3 更"),
+   P.list("增长路径",["冷启动：班级+社团群矩阵分发","裂变：攻略类内容引导转发收藏","联动：与 3 个兄弟账号互推","沉淀：核心读者群运营"]),
+   P.stats("数据指标",[{b:"3000",d:"首月粉丝目标"},{b:"8%",d:"目标互动率"},{b:"500",d:"单篇平均阅读"}]),
+   P.end("谢谢观看","方案可执行版本见附录")]},
+ {id:"wanhui",name:"迎新晚会策划",cat:"活动策划",theme:"guochao",deco:"corner",
+  pages:[P.cover("迎新晚会策划案","让新生感受到大学的第一份热情","策划：网媒2502班"),
+   P.toc("策划目录",["晚会定位与主题","节目单编排","分工与排期","预算与物料","应急预案"]),
+   P.list("晚会定位与主题",["主题：【星火初见】——每一束微光都值得被看见","基调：温暖、真诚、有参与感","时长：90 分钟，节目 12 个"]),
+   P.two("分工与排期","预算与物料","统筹组：流程把控\n节目组：节目跟进与彩排\n宣传组：预热推文与现场摄影\n后勤组：物资与场地","物料：荧光棒/气球/背景板\n预算总计：【XXXX】元\n宣传物料提前 5 天到位"),
+   P.text("应急预案","设备故障：备用话筒与音源，节目间无缝衔接；节目缺席：预留 2 个备用节目；停电：应急照明与秩序引导员。所有环节均指定第一责任人与备用方案。"),
+   P.end("预祝晚会圆满成功","欢迎提出修改意见")]},
+ {id:"zhiyuan",name:"志愿支教总结",cat:"工作报告",theme:"fresh",deco:"band",
+  pages:[P.cover("志愿支教活动总结","十四天，双向奔赴的成长","汇报：志愿者代表 周何"),
+   P.toc("总结框架",["活动概况","我们做了什么","孩子们的改变","我们的收获","建议与展望"]),
+   P.stats("活动概况",[{b:"14天",d:"服务周期"},{b:"46名",d:"服务学生"},{b:"9门",d:"开设课程"}]),
+   P.list("我们做了什么",["开设绘画、音乐、科学实验等 9 门素质课程","组织趣味运动会与文艺汇演各 1 场","完成 46 名学生的家访全覆盖","建立课后答疑群，返程后持续陪伴"]),
+   P.quote("他们教会我们的，可能比我们教他们的更多。","支教日记 · Day12"),
+   P.end("谢谢每一个用心的人","我们明年再见")]},
+ {id:"biye",name:"毕业答辩",cat:"课程学习",theme:"deepnavy",deco:"band",
+  pages:[P.cover("毕业论文答辩","【论文题目】：基于XX的XX研究","答辩人：周何 · 指导教师：【X老师】"),
+   P.toc("答辩框架",["研究背景与意义","研究方法","核心发现","创新与不足","致谢"]),
+   P.text("研究背景与意义","【用 3-4 句话说明：现实痛点是什么、现有研究缺什么、本文补了什么。数据或权威引用放这里增强说服力。】"),
+   P.list("核心发现",["发现一：【结论 + 关键数据支撑】","发现二：【结论 + 关键数据支撑】","发现三：【结论 + 关键数据支撑】"]),
+   P.two("创新点","不足与展望","研究视角的创新\n方法组合的创新\n数据层面的增量","样本规模有限\n研究周期较短\n后续可扩大样本并延长观察期"),
+   P.end("恳请各位老师批评指正","谢谢！")]},
+ {id:"fupan",name:"学习经验分享",cat:"个人展示",theme:"magazine",deco:"dots",
+  pages:[P.cover("期末复盘与学习经验分享","把踩过的坑变成你的捷径","网媒2502班 · 周何"),
+   P.toc("分享提纲",["我这学期的成绩变化","三个踩过的坑","我的四步学习法","给你的行动清单"]),
+   P.stats("成绩变化",[{b:"+23",d:"平均分提升"},{b:"前10",d:"班级排名"},{b:"0门",d:"挂科"}]),
+   P.list("三个踩过的坑",["考前一周才复习，通宵也补不完","笔记只抄不想，抄完就忘","单打独斗，从不利用小组资源"]),
+   P.list("我的四步学习法",["当周知识当周整理，笔记只记框架和关键词","每章结束自测 10 题，错的进错题本","考前 10 天启动三轮复习（框架→细节→错题）","组队互讲：能把别人讲懂才是真的懂"]),
+   P.end("祝你期末顺利","有问题随时来找我")]}
+];
+
+/* ================= 幻灯片渲染 ================= */
+let DECO="dots",THEME="academic",TPLNAME="",EDIT=false;
+let curTpl=null,curPages=null,curIdx=0,apiKey=localStorage.getItem("bw_key")||"";
+function themeVars(t){const th=THEMES[t];return `--bg:${th.bg};--fg:${th.fg};--mut2:${th.mut2};--ac:${th.ac};--ac2:${th.ac2};--sfont:${FONT[th.font]}`}
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function E(path){return EDIT?` contenteditable="true" data-path="${path}"`:""}
+
+function slideHTML(pg,i,total,editable){
+  const num=`<div class="pagenum">${i+1} / ${total}</div>`;
+  const deco={band:`<div class="deco-band"></div>`,corner:`<div class="deco-corner"></div>`,dots:`<div class="deco-dots"></div>`}[DECO]||"";
+  let body="";
+  switch(pg.layout){
+    case "cover":
+      body=`<div class="inner" style="justify-content:center">
+        <div class="kicker">PRESENTATION</div>
+        <div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="s-sub"${E("sub")}>${esc(pg.sub)}</div>
+        <div class="s-who"${E("who")}>${esc(pg.who)}</div></div>`;break;
+    case "toc":
+      body=`<div class="inner"><div class="kicker">CONTENTS</div>
+        <div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <ol class="toc">${(pg.items||[]).map((it,k)=>`<li><b>${String(k+1).padStart(2,"0")}</b><span${E("items."+k)}>${esc(it)}</span></li>`).join("")}</ol></div>`;break;
+    case "section":
+      body=`<div class="inner" style="justify-content:center"><div class="big-num">${esc(pg.n||"")}</div>
+        <div class="s-title"${E("title")}>${esc(pg.title)}</div></div>`;break;
+    case "list":
+      body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="body-list">${(pg.items||[]).map((it,k)=>`<div class="li"><span${E("items."+k)}>${esc(it)}</span></div>`).join("")}</div></div>`;break;
+    case "text":
+      body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="body-text"${E("body")}>${esc(pg.body)}</div></div>`;break;
+    case "two":{
+      const p1=(pg.c1||"").split("\n"),p2=(pg.c2||"").split("\n");
+      body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="two"><div class="col"><b${E("c1h")}>${esc(p1[0])}</b><span${E("c1")}>${esc(p1.slice(1).join("\n"))}</span></div>
+        <div class="col"><b${E("c2h")}>${esc(p2[0])}</b><span${E("c2")}>${esc(p2.slice(1).join("\n"))}</span></div></div></div>`;break}
+    case "stats":
+      body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div>
+        <div class="stats">${(pg.stats||[]).map((st,k)=>`<div class="stat"><b${E("stats."+k+".b")}>${esc(st.b)}</b><span${E("stats."+k+".d")}>${esc(st.d)}</span></div>`).join("")}</div></div>`;break;
+    case "quote":
+      body=`<div class="inner"><blockquote${E("q")}>${esc(pg.q)}</blockquote><div class="attr"${E("a")}>—— ${esc(pg.a)}</div></div>`;break;
+    case "end":
+      body=`<div class="inner"><div class="endmsg"><b${E("title")}>${esc(pg.title||"谢谢观看")}</b><p${E("msg")}>${esc(pg.msg)}</p></div></div>`;break;
+    default:
+      body=`<div class="inner"><div class="s-title"${E("title")}>${esc(pg.title)}</div><div class="body-text"${E("body")}>${esc(pg.body)}</div>`;
+  }
+  return `<div class="slide" style="${themeVars(THEME)}">${deco}<div class="kicker" style="position:absolute;top:3cqw;left:7cqw;opacity:.7">${esc(TPLNAME)}</div>${body}${num}</div>`;
+}
+
+/* ================= 画廊 ================= */
+let curCat="全部";
+function renderGallery(){
+  const grid=document.getElementById("grid");grid.innerHTML="";
+  TPL.filter(x=>curCat==="全部"||x.cat===curCat).forEach(t=>{
+    const saveD=DECO,saveT=THEME,saveN=TPLNAME,saveE=EDIT;
+    DECO=t.deco;THEME=t.theme;TPLNAME=t.name;EDIT=false;
+    const card=document.createElement("div");card.className="tcard";
+    const th=document.createElement("div");th.className="thumb";
+    th.innerHTML=slideHTML(t.pages[0],0,t.pages.length,false);
+    const sl=th.querySelector(".slide");
+    const scale=(th.clientWidth||240)/640;
+    sl.style.transform="scale("+scale+")";sl.style.transformOrigin="top left";sl.style.width="640px";
+    const meta=document.createElement("div");meta.className="tmeta";
+    meta.innerHTML="<b>"+t.name+"</b><p>"+t.cat+" · "+t.pages.length+" 页 · "+THEMES[t.theme].name+"</p>";
+    card.appendChild(th);card.appendChild(meta);
+    card.onclick=()=>openDeck(t.id);
+    grid.appendChild(card);
+    DECO=saveD;THEME=saveT;TPLNAME=saveN;EDIT=saveE;
+  });
+}
+function renderCats(){
+  const cats=["全部",...new Set(TPL.map(x=>x.cat))];
+  const box=document.getElementById("cats");box.innerHTML="";
+  cats.forEach(c=>{const s=document.createElement("span");s.className="chip"+(c===curCat?" on":"");s.textContent=c;
+    s.onclick=()=>{curCat=c;renderCats();renderGallery()};box.appendChild(s)});
+}
+
+/* ================= 编辑器 ================= */
+function openDeck(id){
+  curTpl=TPL.find(x=>x.id===id);
+  THEME=curTpl.theme;DECO=curTpl.deco;TPLNAME=curTpl.name;
+  const draft=localStorage.getItem("ppt_draft_"+id);
+  curPages=draft?JSON.parse(draft):JSON.parse(JSON.stringify(curTpl.pages));
+  document.getElementById("home").style.display="none";
+  document.getElementById("editor").classList.add("on");
+  curIdx=0;EDIT=false;renderCur();renderThumbs();
+  if(draft)toast("已自动恢复你上次编辑的草稿");
+}
+function backHome(){document.getElementById("editor").classList.remove("on");document.getElementById("home").style.display="block";curTpl=null;renderGallery()}
+function renderCur(){
+  const box=document.getElementById("slideBox");
+  box.innerHTML=slideHTML(curPages[curIdx],curIdx,curPages.length,EDIT);
+  if(EDIT)box.querySelectorAll("[data-path]").forEach(el=>{
+    el.addEventListener("input",()=>{setPath(curPages[curIdx],el.dataset.path,el.innerText);saveDraftSoon()});
+  });
+}
+function renderThumbs(){
+  const bar=document.getElementById("thumbbar");bar.innerHTML="";
+  curPages.forEach((pg,i)=>{const b=document.createElement("button");b.className="pgbtn"+(i===curIdx?" on":"");
+    b.textContent=(i+1)+" · "+(pg.title||pg.msg||pg.layout);
+    b.onclick=()=>{curIdx=i;renderCur();renderThumbs()};bar.appendChild(b)});
+}
+function setPath(obj,path,val){
+  const parts=path.split(".");let o=obj;
+  for(let i=0;i<parts.length-1;i++){o=(Array.isArray(o)?o[+parts[i]]:o[parts[i]])}
+  const last=parts[parts.length-1];
+  if(Array.isArray(o))o[+last]=val;else o[last]=val;
+  saveDraftSoon();
+}
+let draftTimer=null;
+function saveDraftSoon(){clearTimeout(draftTimer);draftTimer=setTimeout(()=>{if(curTpl)localStorage.setItem("ppt_draft_"+curTpl.id,JSON.stringify(curPages))},500)}
+
+/* ================= 演示 ================= */
+function startPresent(){
+  presentOn=true;document.body.classList.add("present");
+  const ps=document.getElementById("pslides");ps.innerHTML="";
+  curPages.forEach((pg,i)=>{const w=document.createElement("div");w.innerHTML=slideHTML(pg,i,curPages.length,false);
+    const sl=w.querySelector(".slide");if(i===curIdx)sl.classList.add("cur");ps.appendChild(sl)});
+  document.addEventListener("keydown",pKeys);
+}
+function pKeys(e){
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown")curIdx=Math.min(curPages.length-1,curIdx+1);
+  else if(e.key==="ArrowLeft"||e.key==="PageUp")curIdx=Math.max(0,curIdx-1);
+  else if(e.key==="Escape"){stopPresent();return}
+  else return;
+  document.querySelectorAll("#pslides .slide").forEach((sl,i)=>sl.classList.toggle("cur",i===curIdx));
+}
+function stopPresent(){presentOn=false;document.body.classList.remove("present");document.removeEventListener("keydown",pKeys)}
+
+/* ================= AI ================= */
+const BLOB={salt:"Z2RIQ82mf+eEowk0go8peA==",iv:"QQJlslSvcd44cpcZ",ct:"Z/h5x3JsO+IiiXOUtDslVlIvtZ5sn580T5PhzYQR+tZSqI83Zn9uFB5A7JbbZdj02+ooqJ/7k/piEKvqPJ+8oNZxqE8LLzCF2kNrDQxSweLGMcQuZYbMjc2FAranYKXPnhJxNBHfZSG3c+QqcD76K4LOk/13sO9qOQqABxKzOf76/jQM"};
+const te=new TextEncoder(),td=new TextDecoder();
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function decryptKey(pwd){
+  const km=await crypto.subtle.importKey("raw",te.encode(pwd),"PBKDF2",false,["deriveKey"]);
+  const k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64d(BLOB.salt),iterations:100000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+  return td.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(BLOB.iv)},k,b64d(BLOB.ct)));
+}
+(async()=>{
+  apiKey=localStorage.getItem("bw_key")||"";
+  if(apiKey){
+    const okk=await aiPing(apiKey).catch(()=>false);
+    if(okk){document.getElementById("lock").style.display="none";return}
+  }
+  document.getElementById("lock").style.display="flex";
+})();
+function aiPing(key){
+  return new Promise(res=>{
+    fetch("https://ws-mcyvrepj57llk2up.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions",
+      {method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json"},
+       body:JSON.stringify({model:"deepseek-v4-flash",messages:[{role:"user",content:"hi"}],max_tokens:1})})
+    .then(r=>res(r.status===200)).catch(()=>res(false));
+  });
+}
+document.getElementById("unlock").onclick=async()=>{
+  const pwd=document.getElementById("pwd").value;
+  try{apiKey=await decryptKey(pwd);localStorage.setItem("bw_key",apiKey);
+    document.getElementById("lock").style.display="none";}
+  catch{document.getElementById("lockmsg").textContent="密码不对，再试试"}
+};
+
+document.getElementById("aiBtn").onclick=()=>{
+  if(!apiKey){document.getElementById("lock").style.display="flex";return}
+  document.getElementById("aiPanel").classList.toggle("on");
+};
+document.getElementById("aiGo").onclick=async()=>{
+  const err=document.getElementById("err");err.style.display="none";
+  const topic=document.getElementById("aiTopic").value.trim();
+  if(!topic){err.style.display="block";err.textContent="先输入主题";return}
+  const note=document.getElementById("aiNote").value.trim();
+  const who=document.getElementById("aiWho").value.trim()||"网媒2502班 周何";
+  const btn=document.getElementById("aiGo");btn.disabled=true;btn.textContent="⏳ AI 生成中（约 20-60 秒）…";
+  try{
+    const skeleton=curPages.map((p,i)=>`第${i+1}页 layout=${p.layout}${p.layout==="section"?"（章节过渡页）":""}`);
+    const sys="你是资深 PPT 内容策划。只输出一个合法 JSON 对象，不要输出任何其他文字或代码围栏。";
+    const usr=`请为主题「${topic}」生成一份 PPT 的完整内容。\n页面结构（必须严格按此顺序与 layout 字段）：\n${skeleton.join("\n")}\n各 layout 的字段要求：\n- cover: {title(主标题), sub(副标题), who(汇报人，固定为"${who}")}\n- toc: {title, items: [4-6个目录项]}\n- section: {n(两位编号如"01"), title}\n- list: {title, items: [3-5条，每条一句话，具体有细节]}\n- text: {title, body(一段100-200字的连贯文字)}\n- two: {title, c1(格式:"小标题\\n要点\\n要点"), c2(同c1)}\n- stats: {title, stats: [{b(数字), d(说明)}×3]}\n- quote: {q(金句), a(出处)}\n- end: {title("谢谢观看"或类似), msg(一句收尾)}\n补充要求：${note||"无"}\n语言：自然、具体、有细节的中文，不要出现占位符或"XX"。\n输出：{"pages":[按上述顺序的对象数组]}`;
+    const raw=await callAI(sys,usr);
+    let json=raw.replace(/```json|```/g,"").trim();
+    json=json.slice(json.indexOf("{"),json.lastIndexOf("}")+1);
+    const obj=JSON.parse(json);
+    if(!Array.isArray(obj.pages)||!obj.pages.length)throw new Error("AI 返回的页面为空");
+    obj.pages.forEach((p,i)=>{if(i<curPages.length)p.layout=curPages[i].layout});
+    while(obj.pages.length<curPages.length)obj.pages.push(P.end("谢谢观看"));
+    curPages=obj.pages.slice(0,curPages.length);
+    saveDraftSoon();curIdx=0;renderCur();renderThumbs();
+    document.getElementById("aiPanel").classList.remove("on");
+    toast("✅ AI 已生成 "+curPages.length+" 页内容，可直接点击文字修改");
+  }catch(e){
+    err.style.display="block";err.textContent="生成失败："+e.message;
+  }finally{btn.disabled=false;btn.textContent="🤖 开始生成"}
+};
+function callAI(sys,usr){
+  return new Promise((res,rej)=>{
+    fetch("https://ws-mcyvrepj57llk2up.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions",
+      {method:"POST",headers:{"Authorization":"Bearer "+apiKey,"Content-Type":"application/json"},
+       body:JSON.stringify({model:"deepseek-v4-flash",messages:[{role:"system",content:sys},{role:"user",content:usr}],max_tokens:3000,temperature:0.7})})
+    .then(async r=>{
+      const d=await r.text();
+      if(r.status===429)rej(new Error("触发阿里云限流，等 1-2 分钟再试"));
+      else if(r.status===401||r.status===403)rej(new Error("Key 失效或无权限"));
+      else if(!r.ok)rej(new Error("HTTP "+r.status+" "+d.slice(0,120)));
+      else{try{res(JSON.parse(d).choices[0].message.content)}catch{rej(new Error("返回解析失败"))}}
+    }).catch(e=>rej(e));
+  });
+}
+function toast(msg){
+  const t=document.createElement("div");t.textContent=msg;
+  t.style.cssText="position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1e1b2e;color:#fff;padding:10px 18px;border-radius:10px;font-size:13.5px;z-index:80;box-shadow:0 4px 14px rgba(0,0,0,.25)";
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
+}
+
+/* ================= 导出 ================= */
+document.getElementById("pdfBtn").onclick=()=>{
+  const w=window.open("","_blank");
+  const slides=curPages.map((pg,i)=>slideHTML(pg,i,curPages.length,false)).join("");
+  w.document.write('<html><head><meta charset="utf-8"><title>打印</title><style>@page{size:A4 landscape;margin:0}body{margin:0}.slide{width:100vw;aspect-ratio:16/9;page-break-after:always;container-type:size}</style></head><body>'+slides+'<script>setTimeout(function(){window.print()},600)<\/script></body></html>');
+  w.document.close();
+};
+document.getElementById("pptxBtn").onclick=async()=>{
+  const btn=document.getElementById("pptxBtn");
+  btn.disabled=true;btn.textContent="⏳ 生成中…";
+  try{
+    if(!window.PptxGenJS){
+      await new Promise((res,rej)=>{const sc=document.createElement("script");
+        sc.src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js";
+        sc.onload=res;sc.onerror=()=>rej(new Error("pptxgenjs 加载失败，请检查网络"));document.head.appendChild(sc)});
+    }
+    const th=THEMES[THEME];
+    const pptx=new PptxGenJS();pptx.defineLayout({name:"W16x9",width:13.33,height:7.5});pptx.layout="W16x9";
+    const fg=th.fg.replace("#",""),ac=th.ac.replace("#",""),mu=th.mut2.replace("#",""),bg=th.bg.replace("#","");
+    curPages.forEach(pg=>{
+      const sl=pptx.addSlide();sl.background={color:bg};
+      const T=(txt,o)=>sl.addText(txt,Object.assign({fontFace:th.font==="serif"?"SimSun":"Microsoft YaHei"},o));
+      switch(pg.layout){
+        case "cover":
+          T(pg.title,{x:0.8,y:2.4,w:11.7,h:1.3,fontSize:40,bold:true,color:fg,align:"center"});
+          T(pg.sub,{x:0.8,y:3.8,w:11.7,h:0.6,fontSize:18,color:mu,align:"center"});
+          T(pg.who,{x:0.8,y:5.6,w:11.7,h:0.5,fontSize:14,color:mu,align:"center"});break;
+        case "toc":
+          T(pg.title,{x:0.8,y:0.6,w:8,h:0.8,fontSize:30,bold:true,color:ac});
+          T((pg.items||[]).map((it,k)=>(k+1)+". "+it).join("\n"),{x:1,y:1.8,w:10,h:5,fontSize:18,color:fg,lineSpacingMultiple:1.5});break;
+        case "section":
+          T(pg.n||"",{x:0.8,y:2,w:11.7,h:1.6,fontSize:66,bold:true,color:ac,align:"center"});
+          T(pg.title,{x:0.8,y:3.8,w:11.7,h:1,fontSize:30,bold:true,color:fg,align:"center"});break;
+        case "list":
+          T(pg.title,{x:0.8,y:0.6,w:11.7,h:0.9,fontSize:28,bold:true,color:fg});
+          T((pg.items||[]).map(x=>"• "+x).join("\n"),{x:1,y:1.8,w:11.3,h:4.8,fontSize:17,color:fg,lineSpacingMultiple:1.6});break;
+        case "text":
+          T(pg.title,{x:0.8,y:0.6,w:11.7,h:0.9,fontSize:28,bold:true,color:fg});
+          T(pg.body,{x:1,y:1.9,w:11.3,h:4.6,fontSize:16,color:fg,lineSpacingMultiple:1.6});break;
+        case "two":{
+          const p1=(pg.c1||"").split("\n"),p2=(pg.c2||"").split("\n");
+          sl.addText(p1[0]||"",{x:0.9,y:1.7,w:5.6,h:0.6,fontSize:20,bold:true,color:ac});
+          T(p1.slice(1).join("\n"),{x:0.9,y:2.4,w:5.6,h:4,fontSize:15,color:fg,lineSpacingMultiple:1.5});
+          sl.addText(p2[0]||"",{x:6.9,y:1.7,w:5.6,h:0.6,fontSize:20,bold:true,color:ac});
+          T(p2.slice(1).join("\n"),{x:6.9,y:2.4,w:5.6,h:4,fontSize:15,color:fg,lineSpacingMultiple:1.5});break}
+        case "stats":
+          T(pg.title,{x:0.8,y:0.6,w:11.7,h:0.9,fontSize:28,bold:true,color:fg});
+          (pg.stats||[]).forEach((st,k)=>{
+            sl.addText(st.b,{x:1+k*4.1,y:2.3,w:3.7,h:1.2,fontSize:48,bold:true,color:ac,align:"center"});
+            sl.addText(st.d,{x:1+k*4.1,y:3.6,w:3.7,h:0.5,fontSize:14,color:mu,align:"center"});});break;
+        case "quote":
+          T("“"+pg.q+"”",{x:1,y:2,w:11.3,h:2.6,fontSize:26,bold:true,color:fg,align:"center"});
+          T("—— "+pg.a,{x:1,y:4.8,w:11.3,h:0.5,fontSize:14,color:mu,align:"right"});break;
+        default:
+          T(pg.title||"谢谢观看",{x:0.8,y:2.2,w:11.7,h:1.4,fontSize:44,bold:true,color:ac,align:"center"});
+          if(pg.msg)T(pg.msg,{x:0.8,y:3.9,w:11.7,h:0.6,fontSize:16,color:mu,align:"center"});
+      }
+    });
+    pptx.writeFile({fileName:(curTpl?curTpl.name:"PPT")+".pptx"});
+  }catch(e){
+    document.getElementById("err").style.display="block";document.getElementById("err").textContent="导出失败："+e.message;
+  }finally{btn.disabled=false;btn.textContent="📦 导出 PPTX"}
+};
+
+/* ================= 绑定与启动 ================= */
+document.getElementById("backBtn").onclick=backHome;
+document.getElementById("presentBtn").onclick=startPresent;
+document.getElementById("resetBtn").onclick=()=>{if(curTpl){localStorage.removeItem("ppt_draft_"+curTpl.id);curPages=JSON.parse(JSON.stringify(curTpl.pages));curIdx=0;renderCur();renderThumbs();toast("已重置为模板原内容")}};
+renderCats();renderGallery();
+</script>
+</body>
+</html>
