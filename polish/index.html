@@ -38,7 +38,7 @@ button.ghost:hover{border-color:var(--p2);color:var(--p)}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:r 1s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes r{to{transform:rotate(360deg)}}
 .tip{font-size:12.5px;color:var(--mut);text-align:center;margin-top:18px;line-height:1.8}
-@media print{body{background:#fff}.wrap>*:not(#out){display:none!important}#out{display:block!important;box-shadow:none}#out .polished{border:none;background:#fff;font-size:16px;padding:0}#notes,#tune,#copy,.label .linkbtn{display:none!important}}
+@media print{body{background:#fff}body.dark{--card:#fff;--txt:#1e1b2e;--mut:#6b6880}.wrap>*:not(#out){display:none!important}#out{display:block!important;box-shadow:none}#out .polished{border:none;background:#fff;font-size:16px;padding:0}#notes,#tune,#copy,.label .linkbtn{display:none!important}}
 #lock{position:fixed;inset:0;background:rgba(30,27,46,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9}
 #lock .box{background:#fff;border-radius:18px;padding:26px;width:min(340px,88vw);text-align:center}
 #lock .box .logo{margin:0 auto 10px}
@@ -162,12 +162,13 @@ body.dark #themeBtn{background:#221e30;border-color:#3a3355}
       <span class="chip mini" data-t="把这段话改得更正式一些，适合书面提交">🎩 更正式</span>
       <span class="chip mini" data-t="把这段话改得更口语化、更亲切自然，像平时发微信">💬 更口语</span>
       <span class="chip mini" data-t="把这段话改得更委婉客气，避免生硬">🍀 更委婉</span>
+      <span class="chip mini" data-t="在保留时间、地点、事项等关键信息的前提下，把这段话压缩到100字以内">📏 压缩到100字</span>
     </div>
   </div>
 </div>
 
 <div class="card">
-  <div class="label"><span>🕘 润色历史（最多保留 10 条，存本机）</span><span class="linkbtn" id="histToggle">展开</span></div>
+  <div class="label"><span>🕘 润色历史（最多保留 10 条，存本机）</span><span style="display:flex;gap:10px"><span class="linkbtn" id="histClear">清空</span><span class="linkbtn" id="histToggle">展开</span></span></div>
   <div id="histList" style="display:none"></div>
   <div id="histEmpty">还没有历史记录</div>
 </div>
@@ -321,7 +322,9 @@ $("copy").onclick=async()=>{
 // ===== 历史记录 =====
 function getHist(){try{return JSON.parse(localStorage.getItem("bw_hist")||"[]")}catch{return[]}}
 function pushHist(input,output){
-  const h=getHist();h.unshift({t:Date.now(),scene,input,output});
+  const h=getHist();
+  if(h.some(x=>x.output===output)){h.unshift(h.splice(h.findIndex(x=>x.output===output),1)[0]);localStorage.setItem("bw_hist",JSON.stringify(h));return}
+  h.unshift({t:Date.now(),scene,input,output});
   if(h.length>10)h.length=10;
   localStorage.setItem("bw_hist",JSON.stringify(h));renderHist();
 }
@@ -339,6 +342,10 @@ function renderHist(){
   });
 }
 renderHist();
+$("histClear").onclick=()=>{
+  if($("histClear").textContent!=="确认清空？"){$("histClear").textContent="确认清空？";setTimeout(()=>{$("histClear").textContent="清空"},2500);return}
+  localStorage.removeItem("bw_hist");renderHist();$("histClear").textContent="清空";
+};
 $("histToggle").onclick=()=>{
   const l=$("histList");const open=l.style.display==="block";
   l.style.display=open?"none":"block";$("histToggle").textContent=open?"展开":"收起";
