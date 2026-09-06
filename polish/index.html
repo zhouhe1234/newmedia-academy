@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>班长文案润色助手</title>
+<meta name="theme-color" content="#7c3aed">
+<style>
+:root{--p:#7c3aed;--p2:#a78bfa;--bg:#f6f4fb;--card:#fff;--txt:#1e1b2e;--mut:#6b6880;--ok:#059669}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 60px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+h1{font-size:22px}h1 small{display:block;font-size:12px;color:var(--mut);font-weight:normal;margin-top:2px}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(124,58,237,.08);margin-bottom:16px}
+.label{font-size:13px;color:var(--mut);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+textarea{width:100%;min-height:150px;border:1.5px solid #e5e0f5;border-radius:12px;padding:12px;font-size:15px;line-height:1.7;resize:vertical;font-family:inherit;outline:none}
+textarea:focus{border-color:var(--p2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:7px 14px;border-radius:999px;border:1.5px solid #e5e0f5;background:#fff;font-size:13.5px;cursor:pointer;transition:.15s;user-select:none}
+.chip.on{background:var(--p);border-color:var(--p);color:#fff}
+.chip:not(.on):hover{border-color:var(--p2)}
+.row{display:flex;gap:10px;margin-top:14px}
+button.main{flex:1;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+button.main:disabled{opacity:.55;cursor:wait}
+button.ghost{padding:13px 18px;border-radius:12px;border:1.5px solid #e5e0f5;background:#fff;cursor:pointer;font-size:14px;color:var(--mut)}
+button.ghost:hover{border-color:var(--p2);color:var(--p)}
+#out{display:none}
+#out .polished{white-space:pre-wrap;line-height:1.8;font-size:15px;background:#faf8ff;border:1.5px dashed var(--p2);border-radius:12px;padding:14px}
+#notes{margin-top:10px;font-size:13px;color:var(--ok);line-height:1.6;white-space:pre-wrap}
+#err{display:none;margin-top:10px;font-size:13.5px;color:#dc2626;background:#fef2f2;border-radius:10px;padding:10px;line-height:1.6}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:r 1s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes r{to{transform:rotate(360deg)}}
+.tip{font-size:12.5px;color:var(--mut);text-align:center;margin-top:18px;line-height:1.8}
+#lock{position:fixed;inset:0;background:rgba(30,27,46,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9}
+#lock .box{background:#fff;border-radius:18px;padding:26px;width:min(340px,88vw);text-align:center}
+#lock .box .logo{margin:0 auto 10px}
+#lock input{width:100%;padding:12px;border:1.5px solid #e5e0f5;border-radius:12px;font-size:16px;text-align:center;outline:none;margin:10px 0}
+#lock input:focus{border-color:var(--p2)}
+#lock button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+#lockmsg{font-size:12.5px;color:#dc2626;min-height:18px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="lock">
+  <div class="box">
+    <div class="logo">✒️</div>
+    <div style="font-weight:600">班长文案润色助手</div>
+    <div style="font-size:12.5px;color:var(--mut);margin-top:4px">仅限班级内部使用，请输入访问密码</div>
+    <input id="pwd" type="password" placeholder="访问密码" autocomplete="current-password">
+    <button id="unlock">解锁使用</button>
+    <div id="lockmsg"></div>
+  </div>
+</div>
+
+<div class="wrap">
+<header>
+  <div class="logo">✒️</div>
+  <div><h1>班长文案润色助手<small>错别字 · 语病 · 语气，一键搞定</small></h1></div>
+</header>
+
+<div class="card">
+  <div class="label"><span>📋 常用模板（点一下直接填入，改掉【】里的内容再润色）</span></div>
+  <div class="chips" id="tpls"></div>
+</div>
+
+<div class="card">
+  <div class="label"><span>① 输入你想说的话（草稿就行，不用修饰）</span><span id="cnt">0 字</span></div>
+  <textarea id="in" placeholder="比如：老师您好，我是网媒2502班的周何，想问一下下周写生的集合时间是几点…"></textarea>
+</div>
+
+<div class="card">
+  <div class="label"><span>② 选择使用场景</span></div>
+  <div class="chips" id="scenes">
+    <span class="chip on" data-v="teacher">📩 发老师/辅导员</span>
+    <span class="chip" data-v="notice">📢 班级群通知</span>
+    <span class="chip" data-v="request">📝 申请/请求</span>
+    <span class="chip" data-v="casual">💬 日常沟通</span>
+  </div>
+  <div class="label" style="margin-top:14px"><span>③ 语气偏好</span></div>
+  <div class="chips" id="tones">
+    <span class="chip on" data-v="得体、真诚、有分寸">得体真诚</span>
+    <span class="chip" data-v="简洁、高效、直奔重点">简洁高效</span>
+    <span class="chip" data-v="委婉、客气、留有余地">委婉客气</span>
+  </div>
+  <div class="row">
+    <button class="main" id="go">✨ 一键润色</button>
+    <button class="ghost" id="copy" style="display:none">📋 复制</button>
+  </div>
+  <div id="err"></div>
+</div>
+
+<div class="card" id="out">
+  <div class="label"><span>④ 润色结果</span></div>
+  <div class="polished" id="polished"></div>
+  <div id="notes"></div>
+</div>
+
+<p class="tip">发送前请核对好时间、地点、人名等关键信息<br>本页可收藏到主屏幕，随时随地方便使用</p>
+</div>
+
+<script>
+const CFG={url:"https://ws-mcyvrepj57llk2up.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions",model:"deepseek-v4-flash",
+salt:"7YE/ALNlDwgmBnpQEEzGBg==",iv:"Sa8jmN0IkFPLIH5K",ct:"sGB53CaTooo7ngbhSWEB6leB3dY4XGUerckKPR9STPGo4B5/naeHc5VlsXo7oiOE9TjKJ+JTXADOpgYlKyKio3XDT7UB09HYfGWhp2OC1stx5ugbax56zXBf7Iy7jN4oUA2DnFZ8HeKshBdA+i0hfFoJa3huvnw49KiFRYIKoSF9gP2W"};
+let scene="teacher",tone="得体、真诚、有分寸";
+const $=id=>document.getElementById(id);
+const te=new TextEncoder(),td=new TextDecoder();
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+
+async function decryptKey(pwd){
+  const km=await crypto.subtle.importKey("raw",te.encode(pwd),"PBKDF2",false,["deriveKey"]);
+  const k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64d(CFG.salt),iterations:100000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+  return td.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(CFG.iv)},k,b64d(CFG.ct)));
+}
+
+(async()=>{
+  const saved=localStorage.getItem("bw_key");
+  if(saved){
+    const test=await callApi(saved,[{role:"user",content:"hi"}],1,true).catch(e=>({err:e.message}));
+    if(test&&!test.err){$("lock").style.display="none";return}
+    localStorage.removeItem("bw_key");
+  }
+})();
+$("unlock").onclick=async()=>{
+  const pwd=$("pwd").value;
+  if(!pwd){$("lockmsg").textContent="请输入密码";return}
+  try{
+    const key=await decryptKey(pwd);
+    localStorage.setItem("bw_key",key);
+    $("lock").style.display="none";
+  }catch{$("lockmsg").textContent="密码不对，再试试"}
+};
+$("pwd").addEventListener("keydown",e=>{if(e.key==="Enter")$("unlock").click()});
+
+async function callApi(key,messages,maxTokens,quiet){
+  const r=await fetch(CFG.url,{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json"},
+    body:JSON.stringify({model:CFG.model,messages,max_tokens:maxTokens,temperature:0.4})});
+  if(r.status===429)throw new Error("触发阿里云限流了，等 1-2 分钟再试");
+  if(r.status===401||r.status===403)throw new Error("Key 失效或无权限，请联系周何重新配置");
+  if(!r.ok){let d="";try{d=(await r.json()).error.message}catch{};throw new Error("HTTP "+r.status+" "+(d||"").slice(0,120))}
+  const j=await r.json();
+  if(quiet)return j.choices[0].message.content;
+  return j.choices[0].message.content;
+}
+
+document.querySelectorAll("#scenes .chip").forEach(c=>c.onclick=()=>{
+  document.querySelectorAll("#scenes .chip").forEach(x=>x.classList.remove("on"));
+  c.classList.add("on");scene=c.dataset.v;
+});
+document.querySelectorAll("#tones .chip").forEach(c=>c.onclick=()=>{
+  document.querySelectorAll("#tones .chip").forEach(x=>x.classList.remove("on"));
+  c.classList.add("on");tone=c.dataset.v;
+});
+$("in").oninput=e=>{$("cnt").textContent=e.target.value.length+" 字"};
+
+const SCENES={teacher:"这是大学班长要发给老师/辅导员的正式消息。要求：开头加得体称呼和问候，语气恭敬但不卑微，条理清晰，结尾礼貌收束（如'麻烦老师了''祝老师工作顺利'），保持学生身份的真诚。",
+notice:"这是班长要发到班群里的通知。要求：信息要点清晰、可加序号分条，重点信息（时间/地点/事项）突出，语气亲切有号召力，结尾可加收到请回复之类的提醒。",
+request:"这是班长代同学或自己向老师/学院提出的申请或请求。要求：说明事由简洁清楚，理由充分诚恳，明确诉求，语气正式礼貌，符合书面申请的格式感。",
+casual:"这是日常沟通场景（同学、群里闲聊、非正式沟通）。要求：保持原意，改掉错别字和标点，让表达通顺自然即可，不要过度正式化。"};
+
+$("go").onclick=async()=>{
+  const text=$("in").value.trim();
+  $("err").style.display="none";
+  if(!text){$("err").style.display="block";$("err").textContent="先在上面输入你想说的话~";return}
+  const key=localStorage.getItem("bw_key");
+  if(!key){$("err").style.display="block";$("err").textContent="请刷新页面输入访问密码";return}
+  $("go").disabled=true;$("go").innerHTML='<span class="spin"></span>润色中…';
+  try{
+    const out=await callApi(key,[
+      {role:"system",content:"你是细致可靠的中文文案润色助手，严格按用户要求的格式输出。"},
+      {role:"user",content:`你是"班长文案润色助手"。${SCENES[scene]||SCENES.teacher}\n润色基调：${tone}。\n任务：1) 改正所有错别字、错误的标点和语病；2) 按上述场景要求调整格式与语气；3) 不虚构、不改变事实内容（时间、地点、人名等保持原样）；4) 如果原文太口语，适度书面化，但保留个人真实感。\n\n用户原文：\n${text}\n\n严格按以下格式输出（不要输出其他内容）：\n===润色后===\n（润色后的完整文本）\n===修改说明===\n- （用一两条说明主要改了什么）`}
+    ],2000);
+    const i=out.indexOf("===修改说明===");
+    const polished=(i>=0?out.slice(0,i):out).replace(/={3,}润色后={3,}/g,"").trim();
+    const notes=i>=0?out.slice(i+9).trim():"";
+    $("polished").textContent=polished;
+    $("notes").textContent=notes?"📝 "+notes:"";
+    $("out").style.display="block";$("copy").style.display="block";
+    $("out").scrollIntoView({behavior:"smooth"});
+  }catch(e){
+    $("err").style.display="block";$("err").textContent="出错了："+e.message;
+  }finally{
+    $("go").disabled=false;$("go").textContent="✨ 一键润色";
+  }
+};
+$("copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText($("polished").textContent);$("copy").textContent="✅ 已复制";}
+  catch{$("copy").textContent="请手动选中复制";}
+  setTimeout(()=>{$("copy").textContent="📋 复制"},1500);
+};
+
+// ===== 常用模板库 =====
+const TPL=[
+ {t:"📢 集合时间通知",v:"【网媒2502班】写生集合通知\n\n各位同学：\n明天（X月X日）写生集合，请注意以下事项：\n1. 集合时间：早上【7:30】\n2. 集合地点：【学校东门】\n3. 请携带：【画板、身份证、学生证】等必要物品\n4. 大巴不等迟到同学，请务必提前10分钟到场\n\n收到请回复“收到”，谢谢配合！"},
+ {t:"📁 收材料通知",v:"【重要】关于收取【XX材料】的通知\n\n各位同学：\n现需收取【XX材料/表格】，请按以下要求提交：\n1. 提交内容：【XX复印件/电子版表格】\n2. 提交方式：【纸质版交给我 / 电子版发我QQ邮箱】\n3. 截止时间：【X月X日 晚上10点前】\n\n逾期会影响整体提交，请大家抓紧时间，谢谢配合！"},
+ {t:"💰 费用收取提醒",v:"【班费/费用收取通知】\n\n各位同学：\n现收取【XX费用】，每人【XX元】，用于【XX用途】。\n收款方式：【微信/支付宝转账给班费负责人 XXX】\n转账时请备注【姓名+用途】，截止时间【X月X日】。\n\n收到通知的同学请尽快完成，谢谢！"},
+ {t:"🏃 活动报名接龙",v:"【活动报名】\n\n【XX活动】开始报名啦！\n活动时间：【X月X日】\n活动地点：【XX】\n活动内容：【简介】\n\n有意参加的同学请在本条消息下接龙：姓名+联系方式\n截止时间：【X月X日】，先到先得！"},
+ {t:"🌧 天气/停课提醒",v:"【温馨提示】\n\n各位同学：\n【明天有暴雨/气温骤降】，请注意：\n1. 【出门带伞，注意保暖】\n2. 【XX课程/活动是否照常，以学校通知为准】\n3. 注意出行安全\n\n有最新消息我会第一时间在群里通知大家。"},
+ {t:"📝 请假条（发老师）",v:"尊敬的【X老师】：\n\n您好！我是网媒2502班学生【姓名】，学号【XXXX】。因【请假事由，如身体不适需就医】，需请假【X】天（X月X日至X月X日），请假期间落下的课程我会主动补上。\n\n恳请老师批准，谢谢老师！\n\n此致\n敬礼\n\n学生：【姓名】\n【日期】"},
+ {t:"🙏 请老师帮忙（发老师）",v:"尊敬的【X老师】：\n\n您好！打扰您了。我是网媒2502班班长周何。\n\n【说明事情背景和具体情况】\n\n想麻烦老师帮忙【具体诉求】，不知道是否方便？如有需要补充的材料，我随时提供。\n\n麻烦老师了，祝您工作顺利！"},
+ {t:"✅ 统计信息接龙",v:"【信息统计】\n\n各位同学：\n现统计【统计事项，如：身份证号/火车票需求/宿舍数量】，请大家按以下格式接龙：\n姓名+【需要的信息】\n\n截止时间：【X月X日 晚上10点】，逾期视为【放弃/默认XX】，谢谢配合！"}
+];
+const tplBox=$("tpls");
+TPL.forEach(x=>{
+  const s=document.createElement("span");
+  s.className="chip";s.textContent=x.t;
+  s.onclick=()=>{$("in").value=x.v;$("in").dispatchEvent(new Event("input"));$("in").scrollIntoView({behavior:"smooth"});$("in").focus()};
+  tplBox.appendChild(s);
+});
+</script>
+</body>
+</html>
